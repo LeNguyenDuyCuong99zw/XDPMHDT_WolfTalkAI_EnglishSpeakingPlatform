@@ -1,0 +1,278 @@
+/* Main layout */
+.dashboard-main {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+.dashboard-content {
+  margin-left: 240px;
+  flex: 1;
+  padding: 32px 72px 32px 72px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.dashboard-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #222;
+  margin-bottom: 8px;
+}
+.dashboard-desc {
+  color: #666;
+  font-size: 1.08rem;
+  margin-bottom: 0;
+}
+.dashboard-streak {
+  background: #fff7ed;
+  color: #f59e42;
+  font-weight: 700;
+  font-size: 1.08rem;
+  border-radius: 18px;
+  padding: 8px 18px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dashboard-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.dashboard-row-top > * {
+  flex: 2;
+}
+.dashboard-row-top > *:last-child {
+  flex: 3;
+}
+.dashboard-row-mid > * {
+  flex: 1;
+}
+.dashboard-row-bottom > * {
+  flex: 1;
+}
+
+/* Card styles (sample, expand as needed) */
+.dashboard-vocab-card, .dashboard-ai-card, .dashboard-dailygoals-card, .dashboard-travel-card, .dashboard-weakwords-card, .dashboard-skillbreakdown-card, .dashboard-speedchallenge-card, .dashboard-didyouknow-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dashboard-vocab-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.dashboard-vocab-percent {
+  color: #22c55e;
+  margin-left: 8px;
+}
+.dashboard-vocab-bar-bg {
+  background: #f3f4f6;
+  border-radius: 8px;
+  height: 10px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+.dashboard-vocab-bar {
+  background: #22c55e;
+  height: 10px;
+  border-radius: 8px;
+}
+.dashboard-vocab-level {
+  color: #888;
+  font-size: 0.98rem;
+}
+.dashboard-vocab-progress {
+  color: #888;
+  font-size: 0.98rem;
+  margin-bottom: 8px;
+}
+.dashboard-btn-report {
+  background: #fff;
+  color: #22c55e;
+  border: 1.5px solid #22c55e;
+  border-radius: 18px;
+  padding: 6px 18px;
+  font-size: 1.02rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.dashboard-btn-report:hover {
+  background: #22c55e;
+  color: #fff;
+}
+.dashboard-ai-card {
+  position: relative;
+}
+.dashboard-ai-badge {
+  color: #22c55e;
+  font-weight: 700;
+  font-size: 1.08rem;
+}
+.dashboard-ai-quote {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 10px 0 6px 0;
+}
+.dashboard-ai-link {
+  color: #22c55e;
+  text-decoration: underline;
+}
+.dashboard-btn-grammar {
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 8px 22px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.dashboard-btn-grammar:hover {
+  background: #16a34a;
+}
+.dashboard-ai-img {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+}
+.dashboard-dailygoals-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.dashboard-dailygoals-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dashboard-dailygoals-done {
+  color: #22c55e;
+  text-decoration: line-through;
+  font-weight: 600;
+}
+.dashboard-travel-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.dashboard-travel-desc {
+  color: #666;
+  font-size: 1.08rem;
+  margin-bottom: 8px;
+}
+.dashboard-btn-lesson {
+  background: #fff;
+  color: #22c55e;
+  border: 1.5px solid #22c55e;
+  border-radius: 18px;
+  padding: 6px 18px;
+  font-size: 1.02rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.dashboard-btn-lesson:hover {
+  background: #22c55e;
+  color: #fff;
+}
+.dashboard-travel-img img {
+  width: 100px;
+  border-radius: 12px;
+  margin-top: 8px;
+}
+.dashboard-weakwords-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.dashboard-weakwords-desc {
+  color: #888;
+  font-size: 0.98rem;
+  margin-bottom: 8px;
+}
+.dashboard-btn-practice {
+  background: #222;
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 8px 22px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.dashboard-btn-practice:hover {
+  background: #22c55e;
+}
+.dashboard-skillbreakdown-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.dashboard-skillbreakdown-chart {
+  background: #f3f4f6;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 8px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #bbb;
+  font-size: 1.2rem;
+}
+.dashboard-skillbreakdown-score {
+  color: #222;
+  font-size: 1.08rem;
+  text-align: center;
+}
+.dashboard-speedchallenge-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.dashboard-speedchallenge-best {
+  color: #22c55e;
+  font-size: 1.08rem;
+  margin-bottom: 8px;
+}
+.dashboard-btn-play {
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 8px 22px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.dashboard-btn-play:hover {
+  background: #16a34a;
+}
+.dashboard-didyouknow-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.dashboard-didyouknow-desc {
+  color: #888;
+  font-size: 0.98rem;
+}
