@@ -78,6 +78,7 @@ interface SignUpProps {
   onClose: () => void;
   onSignUp: () => void;
   onNext: () => void;
+  learningLanguage?: string;
 }
 
 const SignUp: React.FC<SignUpProps> = ({
@@ -85,6 +86,7 @@ const SignUp: React.FC<SignUpProps> = ({
   onClose,
   onSignUp,
   onNext,
+  learningLanguage,
 }) => {
   const [step, setStep] = useState<number>(1);
   const [age, setAge] = useState("");
@@ -92,6 +94,8 @@ const SignUp: React.FC<SignUpProps> = ({
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const content = translations[displayLanguage];
 
@@ -120,21 +124,38 @@ const SignUp: React.FC<SignUpProps> = ({
     return true;
   };
 
-  const handleCreateAccount = (e: React.FormEvent) => {
+  const handleCreateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateAccount()) return;
-    const payload: any = { email, password, firstName, lastName, age };
-    apiClient
-      .post<{ token: string }>("/auth/register", payload)
-      .then((res) => {
-        localStorage.setItem("accessToken", res.token);
-        setStep(3);
-        setTimeout(() => onNext(), 800);
-      })
-      .catch((err) => {
-        console.error("Register failed", err);
-        alert("Đăng ký thất bại: " + err.message);
-      });
+
+    setError("");
+    setIsLoading(true);
+
+    const payload: any = {
+      email,
+      password,
+      firstName,
+      lastName,
+      age,
+      learningLanguage: learningLanguage || "en",
+    };
+
+    try {
+      const res = await apiClient.post<{ token: string }>(
+        "/auth/register",
+        payload
+      );
+      localStorage.setItem("accessToken", res.token);
+      setStep(3);
+      setTimeout(() => onNext(), 800);
+    } catch (err: any) {
+      console.error("Register failed", err);
+      const errorMessage =
+        err.response?.data?.message || err.message || "Đăng ký thất bại";
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleGoogleSignUp = () => {
@@ -199,6 +220,24 @@ const SignUp: React.FC<SignUpProps> = ({
 
           {step === 2 && (
             <form onSubmit={handleCreateAccount} className="age-form">
+              {error && (
+                <div
+                  className="error-message"
+                  style={{
+                    backgroundColor: "#fee",
+                    border: "1px solid #fcc",
+                    borderRadius: "8px",
+                    padding: "12px",
+                    marginBottom: "16px",
+                    color: "#c33",
+                    fontSize: "14px",
+                    textAlign: "center",
+                  }}
+                >
+                  {error}
+                </div>
+              )}
+
               <div className="age-form-group">
                 <input
                   className="age-input"
@@ -206,6 +245,7 @@ const SignUp: React.FC<SignUpProps> = ({
                   placeholder="First name (optional)"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
+                  disabled={isLoading}
                 />
                 <input
                   className="age-input"
@@ -214,6 +254,7 @@ const SignUp: React.FC<SignUpProps> = ({
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   style={{ marginTop: 8 }}
+                  disabled={isLoading}
                 />
                 <input
                   id="su-email"
@@ -224,6 +265,7 @@ const SignUp: React.FC<SignUpProps> = ({
                   onChange={(e) => setEmail(e.target.value)}
                   style={{ marginTop: 8 }}
                   required
+                  disabled={isLoading}
                 />
                 <input
                   id="su-password"
@@ -234,11 +276,17 @@ const SignUp: React.FC<SignUpProps> = ({
                   onChange={(e) => setPassword(e.target.value)}
                   style={{ marginTop: 8 }}
                   required
+                  disabled={isLoading}
                 />
               </div>
 
-              <button type="submit" className="age-next-button">
-                {"TẠO TÀI KHOẢN"}
+              <button
+                type="submit"
+                className="age-next-button"
+                disabled={isLoading}
+                style={{ opacity: isLoading ? 0.6 : 1 }}
+              >
+                {isLoading ? "ĐANG XỬ LÝ..." : "TẠO TÀI KHOẢN"}
               </button>
             </form>
           )}

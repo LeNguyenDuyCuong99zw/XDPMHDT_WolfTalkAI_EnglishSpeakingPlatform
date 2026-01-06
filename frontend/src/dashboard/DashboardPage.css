@@ -5,7 +5,7 @@
   background: #1c2333;
 }
 
-.main-content {
+.app-layout .main-content {
   flex: 1;
   margin-left: 260px;
   background: #1c2333;
@@ -526,7 +526,7 @@
 }
 
 @media (max-width: 968px) {
-  .main-content {
+  .app-layout .main-content {
     margin-left: 72px;
   }
 
