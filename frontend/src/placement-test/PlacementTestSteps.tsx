@@ -88,8 +88,8 @@ const PlacementTestSteps: React.FC = () => {
       if (currentStep < 7) {
         navigate(`/placement-test/${testId}/step/${currentStep + 1}`);
       } else {
-        // Complete test
-        navigate(`/placement-test/${testId}/complete`);
+        // Navigate to questions page after step 7
+        navigate(`/placement-test/${testId}/questions`);
       }
     } catch (error) {
       console.error("Failed to save step:", error);
@@ -126,6 +126,7 @@ const PlacementTestSteps: React.FC = () => {
     if (currentStep === 4) return currentLevel !== "";
     if (currentStep === 5) return learningReasons.length > 0;
     if (currentStep === 6) return discoverySource !== "";
+    if (currentStep === 7) return true; // Step 7 is always valid (encouragement page)
     return false;
   };
 
@@ -133,10 +134,14 @@ const PlacementTestSteps: React.FC = () => {
     if (currentStep === 1) {
       return (
         <>
-          <h2 className="step-title">Bạn muốn học ngôn ngữ gì?</h2>
-          <p className="step-subtitle">
-            Chọn ngôn ngữ bạn muốn học tại WolfTalk
-          </p>
+          <div className="step-with-mascot">
+            <div className="mascot-container">
+              <div className="wolf-mascot">🐺</div>
+              <div className="speech-bubble-step">
+                Xin chào! Hãy cho tôi biết bạn muốn học ngôn ngữ gì nhé!
+              </div>
+            </div>
+          </div>
           <div className="selection-options">
             {[
               { value: "english", icon: "🇺🇸", text: "Tiếng Anh" },
@@ -165,44 +170,32 @@ const PlacementTestSteps: React.FC = () => {
     if (currentStep === 2) {
       return (
         <>
-          <h2 className="step-title">Mục tiêu học tập hàng ngày</h2>
-          <p className="step-subtitle">
-            Bạn muốn dành bao nhiêu thời gian mỗi ngày?
-          </p>
-          <div className="slider-container">
-            <div className="slider-labels">
-              <span
-                className={`slider-label ${dailyGoal === 5 ? "active" : ""}`}
-              >
-                Nhẹ nhàng
-              </span>
-              <span
-                className={`slider-label ${dailyGoal === 10 ? "active" : ""}`}
-              >
-                Bình thường
-              </span>
-              <span
-                className={`slider-label ${dailyGoal === 15 ? "active" : ""}`}
-              >
-                Nghiêm túc
-              </span>
-              <span
-                className={`slider-label ${dailyGoal === 20 ? "active" : ""}`}
-              >
-                Cường độ cao
-              </span>
+          <div className="step-with-mascot">
+            <div className="mascot-container">
+              <div className="wolf-mascot">🐺</div>
+              <div className="speech-bubble-step">
+                Hãy chọn mục tiêu học tập hàng ngày nhé!
+              </div>
             </div>
-            <input
-              type="range"
-              min="5"
-              max="20"
-              step="5"
-              value={dailyGoal}
-              onChange={(e) => setDailyGoal(parseInt(e.target.value))}
-              className="slider-input"
-              aria-label="Daily goal in minutes"
-            />
-            <div className="slider-value">{dailyGoal} phút/ngày</div>
+          </div>
+          <div className="selection-options-vertical">
+            {[
+              { minutes: 5, label: "Dễ", desc: "5 phút / ngày" },
+              { minutes: 10, label: "Vừa", desc: "10 phút / ngày" },
+              { minutes: 15, label: "Khó", desc: "15 phút / ngày" },
+              { minutes: 20, label: "Siêu khó", desc: "20 phút / ngày" },
+            ].map((option) => (
+              <div
+                key={option.minutes}
+                className={`selection-option-horizontal ${
+                  dailyGoal === option.minutes ? "selected" : ""
+                }`}
+                onClick={() => setDailyGoal(option.minutes)}
+              >
+                <span className="option-text-main">{option.desc}</span>
+                <span className="option-label-right">{option.label}</span>
+              </div>
+            ))}
           </div>
         </>
       );
@@ -211,10 +204,15 @@ const PlacementTestSteps: React.FC = () => {
     if (currentStep === 3) {
       return (
         <>
-          <h2 className="step-title">Thành quả bạn muốn đạt được</h2>
-          <p className="step-subtitle">
-            Chọn một hoặc nhiều mục tiêu (có thể chọn nhiều)
-          </p>
+          <div className="step-with-mascot">
+            <div className="mascot-container">
+              <div className="wolf-mascot">🐺</div>
+              <div className="speech-bubble-step">
+                Thành quả bạn muốn đạt được là gì? Chọn một hoặc nhiều mục tiêu
+                nhé!
+              </div>
+            </div>
+          </div>
           <div className="multi-select-options">
             {[
               {
@@ -270,10 +268,14 @@ const PlacementTestSteps: React.FC = () => {
     if (currentStep === 4) {
       return (
         <>
-          <h2 className="step-title">Trình độ hiện tại của bạn</h2>
-          <p className="step-subtitle">
-            Đánh giá thật lòng để chúng tôi tư vấn chính xác nhất
-          </p>
+          <div className="step-with-mascot">
+            <div className="mascot-container">
+              <div className="wolf-mascot">🐺</div>
+              <div className="speech-bubble-step">
+                Trình độ hiện tại của bạn như thế nào? Đánh giá thật lòng nhé!
+              </div>
+            </div>
+          </div>
           <div className="selection-options">
             {[
               {
@@ -321,8 +323,14 @@ const PlacementTestSteps: React.FC = () => {
     if (currentStep === 5) {
       return (
         <>
-          <h2 className="step-title">Tại sao bạn học tiếng Anh?</h2>
-          <p className="step-subtitle">Chọn một hoặc nhiều lý do</p>
+          <div className="step-with-mascot">
+            <div className="mascot-container">
+              <div className="wolf-mascot">🐺</div>
+              <div className="speech-bubble-step">
+                Tại sao bạn muốn học tiếng Anh? Hãy chia sẻ với tôi nhé!
+              </div>
+            </div>
+          </div>
           <div className="multi-select-options">
             {[
               { value: "career", icon: "💼", text: "Phát triển sự nghiệp" },
@@ -363,10 +371,14 @@ const PlacementTestSteps: React.FC = () => {
     if (currentStep === 6) {
       return (
         <>
-          <h2 className="step-title">Bạn biết tới WolfTalk từ đâu?</h2>
-          <p className="step-subtitle">
-            Giúp chúng tôi hiểu bạn tìm thấy chúng tôi như thế nào
-          </p>
+          <div className="step-with-mascot">
+            <div className="mascot-container">
+              <div className="wolf-mascot">🐺</div>
+              <div className="speech-bubble-step">
+                Bạn biết tới WolfTalk từ đâu? Tôi rất tò mò đấy!
+              </div>
+            </div>
+          </div>
           <div className="selection-options">
             {[
               { value: "google", icon: "🔍", text: "Google" },
@@ -396,17 +408,15 @@ const PlacementTestSteps: React.FC = () => {
     if (currentStep === 7) {
       return (
         <div className="encouragement-screen">
-          <div className="encouragement-mascot">
-            <div className="wolf-circle">
-              <span className="wolf-emoji">🐺</span>
+          <div className="step-with-mascot">
+            <div className="mascot-container">
+              <div className="wolf-mascot">🐺</div>
+              <div className="speech-bubble-step">
+                Tuyệt vời! Bạn đã sẵn sàng rồi! Hãy cùng bắt đầu hành trình
+                chinh phục ngôn ngữ mới nào! 🎉
+              </div>
             </div>
           </div>
-          <h2 className="encouragement-title">Tuyệt vời! Bạn đã sẵn sàng!</h2>
-          <p className="encouragement-text">
-            Chúng ta đã hiểu rõ về bạn rồi. Giờ hãy cùng bắt đầu hành trình
-            <br />
-            chinh phục ngôn ngữ mới nào! 🎉
-          </p>
         </div>
       );
     }
@@ -418,8 +428,8 @@ const PlacementTestSteps: React.FC = () => {
   const progress = (currentStep / totalSteps) * 100;
 
   return (
-    <div className="placement-test-container">
-      <div className="placement-test-step">
+    <div className="placement-test-container-dark">
+      <div className="placement-test-card placement-test-step">
         <div className="test-progress">
           <div className="progress-bar-container">
             <div className="progress-bar-fill" data-progress={progress}></div>

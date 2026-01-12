@@ -11,6 +11,7 @@ export const apiClient = {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: "GET",
       headers,
+      credentials: "omit", // "omit" | "same-origin" | "include" - set to "include" for cross-origin credentials
     });
     if (!response.ok) {
       const errorData = await response
@@ -35,6 +36,7 @@ export const apiClient = {
       method: "POST",
       headers,
       body: JSON.stringify(data),
+      credentials: "omit", // "omit" | "same-origin" | "include"
     });
     if (!response.ok) {
       const errorData = await response

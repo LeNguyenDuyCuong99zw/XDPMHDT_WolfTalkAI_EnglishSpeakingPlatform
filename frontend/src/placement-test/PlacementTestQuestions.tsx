@@ -1,147 +1,414 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { placementTestService } from "./api";
+import axios from "axios";
 import "./PlacementTest.css";
 
-interface Question {
+interface QuestionOption {
   id: number;
-  question: string;
-  type: string; // 'multiple_choice', 'word_bank', 'translate', 'listen'
-  options?: string[];
-  correctAnswer: string;
+  optionText: string;
+  imageUrl?: string;
+  displayOrder: number;
+}
+
+interface PlacementQuestion {
+  id: number;
+  level: string;
+  type: string;
+  questionText: string;
   audioUrl?: string;
   imageUrl?: string;
+  options: QuestionOption[];
+  difficulty: number;
 }
 
 const PlacementTestQuestions: React.FC = () => {
   const { testId } = useParams<{ testId: string }>();
   const navigate = useNavigate();
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<PlacementQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string>("");
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const [hearts, setHearts] = useState(5);
-  const [streak, setStreak] = useState(0);
-  const [showResult, setShowResult] = useState(false);
+  const [userAnswer, setUserAnswer] = useState<string>("");
+  const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [wordBankAnswer, setWordBankAnswer] = useState<string[]>([]);
+  const [isChecking, setIsChecking] = useState(false);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [hearts, setHearts] = useState(3);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [correctAnswer, setCorrectAnswer] = useState<string>("");
 
   useEffect(() => {
-    loadQuestions();
+    loadQuestionsAndProgress();
   }, []);
 
-  const loadQuestions = async () => {
+  const loadQuestionsAndProgress = async () => {
     try {
-      setIsLoading(true);
-      // Get current test to determine level
-      const test = await placementTestService.getCurrentTest();
-      
-      // Determine number of questions based on level
-      const questionCount = test.currentLevel === "beginner" ? 5 : 10;
-      
-      // Fetch questions from backend
-      const response = await fetch(
-        `/api/placement-test/${testId}/questions?level=${test.currentLevel}&count=${questionCount}`,
+      const token = localStorage.getItem("accessToken");
+
+      // Load questions
+      const questionsResponse = await axios.get(
+        `http://localhost:8080/api/placement-test/${testId}/questions`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      let loadedQuestions = questionsResponse.data;
+
+      // Load progress
+      const progressResponse = await axios.get(
+        `http://localhost:8080/api/placement-test/${testId}/progress`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const currentIndex = progressResponse.data.currentQuestionIndex || 0;
+
+      // Shuffle options for questions after index 6 (after 7/7)
+      loadedQuestions = loadedQuestions.map(
+        (q: PlacementQuestion, index: number) => {
+          if (index > 6) {
+            const shuffledOptions = [...q.options].sort(
+              () => Math.random() - 0.5
+            );
+            return { ...q, options: shuffledOptions };
+          }
+          return q;
+        }
+      );
+
+      setQuestions(loadedQuestions);
+      setCurrentQuestionIndex(currentIndex);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Failed to load questions:", error);
+      alert("Không thể tải câu hỏi. Vui lòng thử lại!");
+    }
+  };
+
+  const handleCheckAnswer = async () => {
+    if (!userAnswer && selectedWords.length === 0) {
+      alert("Vui lòng chọn câu trả lời!");
+      return;
+    }
+
+    setIsChecking(true);
+    const currentQuestion = questions[currentQuestionIndex];
+    const answerToSubmit =
+      currentQuestion.type === "WORD_ORDER" ||
+      currentQuestion.type === "TRANSLATE"
+        ? selectedWords.join(" ")
+        : userAnswer;
+
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios.post(
+        "http://localhost:8080/api/placement-test/submit-answer",
+        {
+          testId: Number(testId),
+          questionId: Number(currentQuestion.id),
+          userAnswer: answerToSubmit,
+          timeSpentSeconds: 0,
+        },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
-      
-      if (!response.ok) throw new Error("Failed to load questions");
-      
-      const data = await response.json();
-      setQuestions(data);
-    } catch (error) {
-      console.error("Failed to load questions:", error);
-      alert("Lỗi khi tải câu hỏi!");
-    } finally {
-      setIsLoading(false);
+
+      const correct = response.data.isCorrect;
+      setIsCorrect(correct);
+
+      if (correct) {
+        setCorrectCount(correctCount + 1);
+      } else {
+        setHearts(hearts - 1);
+        // Set correct answer for display (from backend or current question)
+        setCorrectAnswer(
+          response.data.correctAnswer || currentQuestion.questionText
+        );
+      }
+
+      // Auto-advance after 1.5 seconds
+      setTimeout(() => {
+        handleNext();
+      }, 1500);
+    } catch (error: any) {
+      console.error("Failed to submit answer:", error);
+      console.error("Error details:", error.response?.data);
+      alert(
+        `Lỗi khi gửi câu trả lời: ${
+          error.response?.data?.error || error.message
+        }`
+      );
+      setIsChecking(false);
     }
   };
 
-  const handleCheckAnswer = () => {
-    const currentQuestion = questions[currentQuestionIndex];
-    let userAnswer = selectedAnswer;
-    
-    if (currentQuestion.type === "word_bank") {
-      userAnswer = wordBankAnswer.join(" ");
-    }
-    
-    const correct = userAnswer.toLowerCase().trim() === 
-                   currentQuestion.correctAnswer.toLowerCase().trim();
-    
-    setIsCorrect(correct);
-    setShowResult(true);
-    
-    if (correct) {
-      setStreak(streak + 1);
-    } else {
-      setHearts(hearts - 1);
-      setStreak(0);
-    }
-  };
-
-  const handleContinue = () => {
-    if (hearts <= 0) {
-      // Game over
-      navigate(`/placement-test/${testId}/complete`);
-      return;
-    }
-    
+  const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
-      // Next question
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedAnswer("");
-      setWordBankAnswer([]);
+      setUserAnswer("");
+      setSelectedWords([]);
       setIsCorrect(null);
-      setShowResult(false);
+      setIsChecking(false);
     } else {
-      // All questions completed
+      // Navigate to results page
       navigate(`/placement-test/${testId}/complete`);
     }
   };
 
-  const handleSkip = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedAnswer("");
-      setWordBankAnswer([]);
-      setIsCorrect(null);
-      setShowResult(false);
+  const playAudio = (audioUrl: string) => {
+    const audio = new Audio(audioUrl);
+    audio.play();
+  };
+
+  const toggleWord = (word: string) => {
+    if (selectedWords.includes(word)) {
+      setSelectedWords(selectedWords.filter((w) => w !== word));
+    } else {
+      setSelectedWords([...selectedWords, word]);
     }
   };
 
-  const addWordToBankAnswer = (word: string) => {
-    setWordBankAnswer([...wordBankAnswer, word]);
+  const handleReset = () => {
+    setUserAnswer("");
+    setSelectedWords([]);
   };
 
-  const removeWordFromBankAnswer = (index: number) => {
-    setWordBankAnswer(wordBankAnswer.filter((_, i) => i !== index));
-  };
+  const renderQuestion = () => {
+    const question = questions[currentQuestionIndex];
 
-  const playAudio = () => {
-    const currentQuestion = questions[currentQuestionIndex];
-    if (currentQuestion.audioUrl) {
-      const audio = new Audio(currentQuestion.audioUrl);
-      audio.play();
+    if (question.type === "LISTEN_TYPE") {
+      return (
+        <div className="question-content-modern">
+          <div className="question-header">
+            <span className="question-type-badge">🎧 TỪ VỰNG MỚI</span>
+            <h2 className="question-title-modern">Nghe và điền</h2>
+          </div>
+          {question.audioUrl && (
+            <div className="audio-section">
+              <button
+                className="audio-button-modern"
+                onClick={() => playAudio(question.audioUrl!)}
+              >
+                <span className="audio-icon">🔊</span>
+              </button>
+              <button
+                className="audio-button-slow"
+                onClick={() => playAudio(question.audioUrl!)}
+              >
+                <span className="turtle-icon">🐢</span>
+              </button>
+            </div>
+          )}
+          <div className="answer-area">
+            <div className="selected-words-box">
+              {selectedWords.length > 0 ? (
+                selectedWords.map((word, idx) => (
+                  <span key={idx} className="selected-word-chip">
+                    {word}
+                  </span>
+                ))
+              ) : (
+                <span className="placeholder-text">Chọn các từ phía dưới</span>
+              )}
+            </div>
+          </div>
+          <div className="word-bank-modern">
+            {question.options.map((option) => (
+              <button
+                key={option.id}
+                className={`word-chip ${
+                  selectedWords.includes(option.optionText) ? "selected" : ""
+                }`}
+                onClick={() => toggleWord(option.optionText)}
+              >
+                {option.optionText}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
     }
+
+    if (question.type === "TRANSLATE") {
+      return (
+        <div className="question-content-modern">
+          <div className="question-header">
+            <span className="question-type-badge">✏️ TỪ VỰNG MỚI</span>
+            <h2 className="question-title-modern">Viết lại bằng tiếng Việt</h2>
+          </div>
+          <div className="translation-prompt">
+            {question.audioUrl && (
+              <button
+                className="word-audio-button"
+                onClick={() => playAudio(question.audioUrl!)}
+              >
+                <span className="speaker-icon">🔊</span>
+                <span className="word-to-translate">
+                  {question.questionText}
+                </span>
+              </button>
+            )}
+            {!question.audioUrl && (
+              <div className="word-display">
+                <span className="word-to-translate">
+                  {question.questionText}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="answer-area">
+            <div className="selected-words-box">
+              {selectedWords.length > 0 ? (
+                selectedWords.map((word, idx) => (
+                  <span key={idx} className="selected-word-chip">
+                    {word}
+                  </span>
+                ))
+              ) : (
+                <span className="placeholder-text">Chọn các từ phía dưới</span>
+              )}
+            </div>
+          </div>
+          <div className="word-bank-modern">
+            {question.options.map((option) => (
+              <button
+                key={option.id}
+                className={`word-chip ${
+                  selectedWords.includes(option.optionText) ? "selected" : ""
+                }`}
+                onClick={() => toggleWord(option.optionText)}
+              >
+                {option.optionText}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    if (question.type === "MULTIPLE_CHOICE") {
+      return (
+        <div className="question-content-modern">
+          <div className="question-header">
+            <h2 className="question-title-modern">Chọn nghĩa đúng</h2>
+          </div>
+          <div className="prompt-with-image">
+            {question.imageUrl && (
+              <div className="character-container">
+                <img
+                  src={question.imageUrl}
+                  alt="Character"
+                  className="character-image"
+                />
+                <div className="speech-bubble">{question.questionText}</div>
+              </div>
+            )}
+            {!question.imageUrl && (
+              <p className="prompt-text">{question.questionText}</p>
+            )}
+          </div>
+          <div className="choice-options">
+            {question.options.map((option, index) => (
+              <button
+                key={option.id}
+                className={`choice-button ${
+                  userAnswer === option.optionText ? "selected" : ""
+                }`}
+                onClick={() => setUserAnswer(option.optionText)}
+              >
+                <span className="choice-number">{index + 1}</span>
+                <span className="choice-text">{option.optionText}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    if (question.type === "IMAGE_MATCH") {
+      return (
+        <div className="question-content-modern">
+          <div className="question-header">
+            <span className="question-type-badge">🖼️ TỪ VỰNG MỚI</span>
+            <h2 className="question-title-modern">{question.questionText}</h2>
+          </div>
+          <div className="image-grid">
+            {question.options.map((option, index) => (
+              <button
+                key={option.id}
+                className={`image-card ${
+                  userAnswer === option.optionText ? "selected" : ""
+                }`}
+                onClick={() => setUserAnswer(option.optionText)}
+              >
+                {option.imageUrl && (
+                  <div className="image-wrapper">
+                    <img
+                      src={option.imageUrl}
+                      alt={option.optionText}
+                      className="option-image-modern"
+                    />
+                  </div>
+                )}
+                <span className="image-label">{option.optionText}</span>
+                <span className="choice-number-badge">{index + 1}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    if (question.type === "WORD_ORDER") {
+      return (
+        <div className="question-content-modern">
+          <div className="question-header">
+            <h2 className="question-title-modern">Sắp xếp từ thành câu đúng</h2>
+          </div>
+          <p className="prompt-text">{question.questionText}</p>
+          <div className="answer-area">
+            <div className="selected-words-box">
+              {selectedWords.length > 0 ? (
+                selectedWords.map((word, idx) => (
+                  <span key={idx} className="selected-word-chip">
+                    {word}
+                  </span>
+                ))
+              ) : (
+                <span className="placeholder-text">
+                  Chọn các từ theo thứ tự
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="word-bank-modern">
+            {question.options.map((option) => (
+              <button
+                key={option.id}
+                className={`word-chip ${
+                  selectedWords.includes(option.optionText) ? "selected" : ""
+                }`}
+                onClick={() => toggleWord(option.optionText)}
+              >
+                {option.optionText}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    return null;
   };
 
   if (isLoading) {
     return (
       <div className="placement-test-container">
-        <div className="placement-test-step">
-          <div className="loading-screen">
-            <div className="wolf-mascot-large">
-              <div className="wolf-circle">
-                <span className="wolf-emoji">🐺</span>
-              </div>
-            </div>
-            <h2>Đang chuẩn bị câu hỏi...</h2>
-          </div>
-        </div>
+        <div className="loading">Đang tải câu hỏi...</div>
       </div>
     );
   }
@@ -149,196 +416,93 @@ const PlacementTestQuestions: React.FC = () => {
   if (questions.length === 0) {
     return (
       <div className="placement-test-container">
-        <div className="placement-test-step">
-          <div className="error-screen">
-            <h2>Không tìm thấy câu hỏi</h2>
-            <button className="btn-start-test" onClick={() => navigate("/dashboard")}>
-              Quay lại Dashboard
-            </button>
-          </div>
-        </div>
+        <div className="no-questions">Không có câu hỏi nào.</div>
       </div>
     );
   }
 
-  const currentQuestion = questions[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-
   return (
-    <div className="questions-container">
-      {/* Header with progress and hearts */}
-      <div className="questions-header">
-        <button className="exit-button" onClick={() => navigate("/dashboard")}>
+    <div className="placement-test-container-dark">
+      <div className="test-header-top">
+        <button className="close-button" onClick={() => navigate(-1)}>
           ✕
         </button>
-        <div className="progress-bar-container">
-          <div 
-            className="progress-bar-fill" 
-            style={{ width: `${progress}%` }}
-          ></div>
+        <div className="progress-bar-top">
+          <div
+            className="progress-fill-top"
+            style={{
+              width: `${
+                ((currentQuestionIndex + 1) / questions.length) * 100
+              }%`,
+            }}
+          />
         </div>
-        <div className="hearts-container">
+        <div className="hearts-container-top">
           <span className="heart-icon">❤️</span>
-          <span className="hearts-count">{hearts}</span>
+          <span className="heart-count">{hearts}</span>
         </div>
       </div>
 
-      {streak >= 3 && !showResult && (
-        <div className="streak-banner">
-          🔥 {streak} LẦN LIÊN TIẾP
-        </div>
-      )}
+      <div className="question-card">
+        {renderQuestion()}
 
-      {/* Question Content */}
-      <div className="question-content">
-        {/* Multiple Choice */}
-        {currentQuestion.type === "multiple_choice" && (
-          <>
-            <h2 className="question-title">{currentQuestion.question}</h2>
-            {currentQuestion.imageUrl && (
-              <div className="question-image-container">
-                <img src={currentQuestion.imageUrl} alt="Question" className="question-image" />
-              </div>
-            )}
-            <div className="answer-options">
-              {currentQuestion.options?.map((option, index) => (
-                <div
-                  key={index}
-                  className={`answer-option ${selectedAnswer === option ? "selected" : ""}`}
-                  onClick={() => !showResult && setSelectedAnswer(option)}
-                >
-                  <span className="option-number">{index + 1}</span>
-                  <span className="option-text">{option}</span>
+        <div className="bottom-section">
+          {isCorrect !== null && (
+            <div
+              className={`feedback-banner ${
+                isCorrect ? "correct" : "incorrect"
+              }`}
+            >
+              <div className="feedback-content">
+                <div className="feedback-icon">
+                  {isCorrect ? (
+                    <div className="check-circle">✓</div>
+                  ) : (
+                    <div className="x-circle">✗</div>
+                  )}
                 </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* Word Bank (Arrange words) */}
-        {currentQuestion.type === "word_bank" && (
-          <>
-            <div className="question-badge">
-              <span className="badge-icon">🔤</span>
-              <span>TỪ VỰNG MỚI</span>
-            </div>
-            <h2 className="question-title">{currentQuestion.question}</h2>
-            
-            {currentQuestion.audioUrl && (
-              <div className="audio-controls">
-                <button className="audio-button primary" onClick={playAudio}>
-                  🔊
-                </button>
-                <button className="audio-button secondary" onClick={playAudio}>
-                  🐢
-                </button>
+                <div className="feedback-text">
+                  <h3>{isCorrect ? "Giỏi quá!" : "Đáp án đúng:"}</h3>
+                  {!isCorrect && (
+                    <p className="correct-answer">{correctAnswer}</p>
+                  )}
+                  {isCorrect && (
+                    <p className="correct-message">Nghĩa là: Chào mừng.</p>
+                  )}
+                </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {currentQuestion.imageUrl && (
-              <div className="character-display">
-                <img src={currentQuestion.imageUrl} alt="Character" className="character-image" />
-                <div className="speech-bubble">{currentQuestion.correctAnswer}</div>
-              </div>
-            )}
-
-            {/* Answer area */}
-            <div className="word-bank-answer-area">
-              {wordBankAnswer.length === 0 ? (
-                <div className="empty-answer-placeholder"></div>
-              ) : (
-                wordBankAnswer.map((word, index) => (
-                  <div 
-                    key={index} 
-                    className="word-chip selected"
-                    onClick={() => removeWordFromBankAnswer(index)}
-                  >
-                    {word}
-                  </div>
-                ))
+          <div className="button-container">
+            {!isChecking &&
+              isCorrect === null &&
+              (userAnswer || selectedWords.length > 0) && (
+                <button className="reset-button" onClick={handleReset}>
+                  <span className="reset-icon">↺</span>
+                </button>
               )}
-            </div>
-
-            {/* Word bank */}
-            <div className="word-bank">
-              {currentQuestion.options?.filter(opt => !wordBankAnswer.includes(opt)).map((word, index) => (
-                <div
-                  key={index}
-                  className="word-chip"
-                  onClick={() => addWordToBankAnswer(word)}
-                >
-                  {word}
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* Listen and type/select */}
-        {currentQuestion.type === "listen" && (
-          <>
-            <h2 className="question-title">Nghe và điền</h2>
-            <div className="audio-controls">
-              <button className="audio-button primary" onClick={playAudio}>
-                🔊
+            {!isChecking && !isCorrect && (
+              <button className="skip-button" onClick={handleNext}>
+                BỎ QUA
               </button>
-              <button className="audio-button secondary" onClick={playAudio}>
-                🐢
-              </button>
-            </div>
-            
-            {currentQuestion.options && (
-              <div className="answer-options">
-                {currentQuestion.options.map((option, index) => (
-                  <div
-                    key={index}
-                    className={`answer-option ${selectedAnswer === option ? "selected" : ""}`}
-                    onClick={() => !showResult && setSelectedAnswer(option)}
-                  >
-                    <span className="option-text">{option}</span>
-                  </div>
-                ))}
-              </div>
             )}
-          </>
-        )}
+            <button
+              className={`check-button ${
+                (userAnswer || selectedWords.length > 0) && !isChecking
+                  ? "active"
+                  : "disabled"
+              }`}
+              onClick={handleCheckAnswer}
+              disabled={
+                (!userAnswer && selectedWords.length === 0) || isChecking
+              }
+            >
+              {isChecking ? "..." : "KIỂM TRA"}
+            </button>
+          </div>
+        </div>
       </div>
-
-      {/* Result feedback */}
-      {showResult && (
-        <div className={`result-feedback ${isCorrect ? "correct" : "incorrect"}`}>
-          <div className="result-icon">
-            {isCorrect ? "✓" : "✗"}
-          </div>
-          <div className="result-text">
-            <h3>{isCorrect ? "Giỏi quá!" : "Đáp án đúng:"}</h3>
-            {!isCorrect && <p>{currentQuestion.correctAnswer}</p>}
-            <button className="report-button">📢 BÁO CÁO</button>
-          </div>
-          <button className="btn-continue" onClick={handleContinue}>
-            TIẾP TỤC
-          </button>
-        </div>
-      )}
-
-      {/* Bottom navigation */}
-      {!showResult && (
-        <div className="question-navigation">
-          <button className="btn-skip" onClick={handleSkip}>
-            BỎ QUA
-          </button>
-          <button 
-            className="btn-check" 
-            onClick={handleCheckAnswer}
-            disabled={
-              (currentQuestion.type === "word_bank" && wordBankAnswer.length === 0) ||
-              (currentQuestion.type !== "word_bank" && !selectedAnswer)
-            }
-          >
-            KIỂM TRA
-          </button>
-        </div>
-      )}
     </div>
   );
 };
