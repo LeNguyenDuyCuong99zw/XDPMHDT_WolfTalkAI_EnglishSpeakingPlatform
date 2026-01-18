@@ -18,13 +18,15 @@ import { SharedExperiencePage } from "../pages/mentor/SharedExperiencePage/Share
 import { PrivateRoute } from "./PrivateRoute";
 import { MentorLayout } from "../components/templates/MentorLayout/MentorLayout";
 import { MentorDashboardPage } from "../pages/mentor/MentorDashboardPage/MentorDashboardPage";
-import { HealthCheckPage } from "../../pages/HealthCheckPage";
-
+import { ConversationPracticePage } from "../pages/mentor/ConversationPracticePage/ConversationPracticePage";
+import { LiveSessionPage } from "../pages/mentor/LiveSessionPage/LiveSessionPage";
+import { ProgressTrackingPage } from "../pages/mentor/ProgressTrackingPage/ProgressTrackingPage";
+import { PronunciationAnalysisPage } from "../pages/mentor/PronunciationAnalysisPage/PronunciationAnalysisPage"
+import { VocabularyManagementPage } from "../pages/mentor/VocabularyManagementPage/VocabularyManagementPage";
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/connect" element={<HealthCheckPage />} />
 
       <Route path="/login" element={<LoginPage />} />
 
@@ -171,7 +173,56 @@ export const AppRoutes: React.FC = () => {
           </PrivateRoute>
         }
       />
-
+      <Route
+        path="/mentor/conversationpractice"
+        element={
+          <PrivateRoute requiredRole="Mentor">
+            <MentorLayout>
+              <ConversationPracticePage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/livesession"
+        element={
+          <PrivateRoute requiredRole="Mentor">
+            <MentorLayout>
+              <LiveSessionPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/progresstracking"
+        element={
+          <PrivateRoute requiredRole="Mentor">
+            <MentorLayout>
+              <ProgressTrackingPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/pronunciationanalysis"
+        element={
+          <PrivateRoute requiredRole="Mentor">
+            <MentorLayout>
+              <PronunciationAnalysisPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/vocabularymanagement"
+        element={
+          <PrivateRoute requiredRole="Mentor">
+            <MentorLayout>
+              <VocabularyManagementPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
       {/* Default redirect */}
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
