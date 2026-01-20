@@ -62,7 +62,7 @@ const DashboardPage: React.FC = () => {
 
         {/* Quick Actions */}
         <div className="quick-actions">
-          <div className="action-card" onClick={() => navigate("/learning")}> 
+          <div className="action-card" onClick={() => navigate("/learning")}>
             <div className="action-icon">📚</div>
             <h3>Bài học mới</h3>
             <p>Học từ vựng và ngữ pháp</p>
@@ -74,6 +74,16 @@ const DashboardPage: React.FC = () => {
             <h3>Luyện nói</h3>
             <p>Cải thiện phát âm</p>
             <button className="action-btn">LUYỆN TẬP</button>
+          </div>
+
+          <div
+            className="action-card"
+            onClick={() => navigate("/diagnostic-test")}
+          >
+            <div className="action-icon">✅</div>
+            <h3>Kiểm tra trình độ</h3>
+            <p>Đánh giá trình độ của bạn</p>
+            <button className="action-btn">LÀM TEST</button>
           </div>
 
           <div className="action-card" onClick={() => navigate("/progress")}>

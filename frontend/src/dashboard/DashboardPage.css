@@ -791,7 +791,9 @@
   font-size: 1.02rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 .dashboard-btn-report:hover {
   background: #22c55e;
@@ -870,7 +872,9 @@
   font-size: 1.02rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 .dashboard-btn-lesson:hover {
   background: #22c55e;

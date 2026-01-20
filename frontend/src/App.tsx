@@ -23,6 +23,9 @@ import {
 } from "./placement-test";
 import PlacementTestQuestions from "./placement-test/PlacementTestQuestions";
 import LearningPage from "./presentation/learning/pages/LearningPage";
+import PackageSelectionPage from "./pages/PackageSelectionPage";
+import SubscriptionPage from "./pages/SubscriptionPage";
+import DiagnosticTestPage from "./diagnostic-test/DiagnosticTestPage";
 
 function App() {
   const token =
@@ -54,6 +57,9 @@ function App() {
             {/* Alphabet Quiz - Full Screen without Sidebar */}
             <Route path="/alphabet/quiz" element={<AlphabetQuiz />} />
 
+            {/* Diagnostic Test - Full Screen without Sidebar */}
+            <Route path="/diagnostic-test" element={<DiagnosticTestPage />} />
+
             {/* DIRECT ACCESS TO LEARNING (Bypassing Placement Test for Testing) */}
             <Route
               path="/learning/*"
@@ -65,6 +71,16 @@ function App() {
                   </main>
                 </div>
               }
+            />
+
+            {/* Package & Subscription Routes - Full Screen */}
+            <Route
+              path="/packages/:userId"
+              element={<PackageSelectionPage />}
+            />
+            <Route
+              path="/subscriptions/:userId"
+              element={<SubscriptionPage />}
             />
 
             {/* Dashboard Routes - With Sidebar - Protected by Placement Test */}
@@ -149,10 +165,7 @@ function App() {
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </>
         ) : (
-          <>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </>
+          <Route path="*" element={<Navigate to="/" replace />} />
         )}
       </Routes>
     </Router>
