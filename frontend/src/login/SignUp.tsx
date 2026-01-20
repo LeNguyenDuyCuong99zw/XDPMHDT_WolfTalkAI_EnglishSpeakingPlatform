@@ -143,7 +143,7 @@ const SignUp: React.FC<SignUpProps> = ({
     try {
       const res = await apiClient.post<{ token: string }>(
         "/auth/register",
-        payload
+        payload,
       );
       localStorage.setItem("accessToken", res.token);
       setStep(3);
