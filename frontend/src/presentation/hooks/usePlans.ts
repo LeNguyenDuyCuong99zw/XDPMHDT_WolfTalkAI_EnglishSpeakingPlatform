@@ -1,12 +1,7 @@
-import { useState, useEffect } from 'react';
-import { PlanRepository } from '../../infrastructure/repositories/PlanRepository';
-import { httpClient } from '../../infrastructure/http/AxiosHttpClient';
-import { PlanDTO, CreatePlanDTO, UpdatePlanDTO } from '../../application/dto/PlanDTO';
-
-const planRepository = new PlanRepository(httpClient);
+import { useState, useEffect } from "react";
 
 export const usePlans = () => {
-  const [plans, setPlans] = useState<PlanDTO[]>([]);
+  const [plans, setPlans] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,7 +12,7 @@ export const usePlans = () => {
       const data = await planRepository.findAll();
       setPlans(data);
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch plans');
+      setError(err.message || "Failed to fetch plans");
     } finally {
       setLoading(false);
     }
@@ -28,7 +23,7 @@ export const usePlans = () => {
       await planRepository.create(data);
       await fetchPlans();
     } catch (err: any) {
-      throw new Error(err.message || 'Failed to create plan');
+      throw new Error(err.message || "Failed to create plan");
     }
   };
 
@@ -37,7 +32,7 @@ export const usePlans = () => {
       await planRepository.update(id, data);
       await fetchPlans();
     } catch (err: any) {
-      throw new Error(err.message || 'Failed to update plan');
+      throw new Error(err.message || "Failed to update plan");
     }
   };
 
@@ -46,7 +41,7 @@ export const usePlans = () => {
       await planRepository.delete(id);
       await fetchPlans();
     } catch (err: any) {
-      throw new Error(err.message || 'Failed to delete plan');
+      throw new Error(err.message || "Failed to delete plan");
     }
   };
 
@@ -59,7 +54,7 @@ export const usePlans = () => {
       }
       await fetchPlans();
     } catch (err: any) {
-      throw new Error(err.message || 'Failed to update plan status');
+      throw new Error(err.message || "Failed to update plan status");
     }
   };
 

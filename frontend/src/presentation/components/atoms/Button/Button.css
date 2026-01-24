@@ -13,8 +13,11 @@
   font-size: var(--font-size-md);
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.16s ease, color 0.16s ease,
-    box-shadow 0.16s ease, transform 0.08s ease;
+  transition:
+    background-color 0.16s ease,
+    color 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.08s ease;
   outline: none;
   font-family: var(--font-sans);
   line-height: 1.2;
@@ -31,7 +34,7 @@
 /* PRIMARY */
 .btn--primary {
   background-color: var(--color-primary);
-  color: var(--color-text-inverse);
+  color: #0f172a;
   box-shadow: 0 4px 10px rgba(0, 86, 210, 0.25);
 }
 
@@ -49,7 +52,7 @@
 /* SECONDARY */
 .btn--secondary {
   background-color: var(--color-surface);
-  color: var(--color-primary);
+  color: #0f172a;
   border-color: var(--color-border-subtle);
   box-shadow: var(--shadow-soft);
 }
@@ -61,7 +64,7 @@
 /* DANGER */
 .btn--danger {
   background-color: var(--color-danger);
-  color: var(--color-text-inverse);
+  color: #0f172a;
 }
 
 .btn--danger:hover:not(:disabled) {
@@ -71,7 +74,7 @@
 /* SUCCESS */
 .btn--success {
   background-color: var(--color-success);
-  color: var(--color-text-inverse);
+  color: #0f172a;
 }
 
 .btn--success:hover:not(:disabled) {

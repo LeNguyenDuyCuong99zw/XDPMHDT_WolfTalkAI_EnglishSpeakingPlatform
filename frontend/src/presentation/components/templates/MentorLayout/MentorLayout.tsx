@@ -1,9 +1,9 @@
 // src/presentation/components/templates/MentorLayout/MentorLayout.tsx
-import React, { useState } from 'react';
-import { Sidebar } from '../../organisms/Sidebar/Sidebar';
-import { Header } from '../../organisms/Header/Header';
-import { useAuth } from '../../../contexts/AuthContext';
-import './MentorLayout.css';
+import React, { useState } from "react";
+import { Sidebar } from "../../organisms/Sidebar/Sidebar";
+import { Header } from "../../organisms/Header/Header";
+import { useAuth } from "../../../contexts/AuthContext";
+import "./MentorLayout.css";
 
 interface MentorLayoutProps {
   children: React.ReactNode;
@@ -22,15 +22,13 @@ export const MentorLayout: React.FC<MentorLayoutProps> = ({ children }) => {
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
-        role="Mentor"
+        role="MENTOR"
       />
 
       <div className="mentor-layout__content">
         <Header onMenuClick={toggleSidebar} />
 
-        <main className="mentor-layout__main">
-          {children}
-        </main>
+        <main className="mentor-layout__main">{children}</main>
       </div>
     </div>
   );

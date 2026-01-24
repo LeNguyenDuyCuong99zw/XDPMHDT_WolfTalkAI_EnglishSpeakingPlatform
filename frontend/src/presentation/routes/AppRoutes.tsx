@@ -34,7 +34,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/admin/dashboard"
         element={
-          <PrivateRoute requiredRole="Admin">
+          <PrivateRoute requiredRole="ADMIN">
             <AdminLayout>
               <DashboardPage />
             </AdminLayout>
@@ -44,7 +44,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/admin/users"
         element={
-          <PrivateRoute requiredRole="Admin">
+          <PrivateRoute requiredRole="ADMIN">
             <AdminLayout>
               <UsersPage />
             </AdminLayout>
@@ -54,7 +54,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/admin/mentors"
         element={
-          <PrivateRoute requiredRole="Admin">
+          <PrivateRoute requiredRole="ADMIN">
             <AdminLayout>
               <MentorsPage />
             </AdminLayout>
@@ -64,7 +64,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/admin/plans"
         element={
-          <PrivateRoute requiredRole="Admin">
+          <PrivateRoute requiredRole="ADMIN">
             <AdminLayout>
               <PlansPage />
             </AdminLayout>
@@ -74,7 +74,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/admin/transactions"
         element={
-          <PrivateRoute requiredRole="Admin">
+          <PrivateRoute requiredRole="ADMIN">
             <AdminLayout>
               <TransactionsPage />
             </AdminLayout>
@@ -84,7 +84,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/admin/moderation"
         element={
-          <PrivateRoute requiredRole="Admin">
+          <PrivateRoute requiredRole="ADMIN">
             <AdminLayout>
               <ModerationPage />
             </AdminLayout>
@@ -94,7 +94,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/admin/support"
         element={
-          <PrivateRoute requiredRole="Admin">
+          <PrivateRoute requiredRole="ADMIN">
             <AdminLayout>
               <SupportPage />
             </AdminLayout>
@@ -104,7 +104,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/admin/policys"
         element={
-          <PrivateRoute requiredRole="Admin">
+          <PrivateRoute requiredRole="ADMIN">
             <AdminLayout>
               <PolicyPage />
             </AdminLayout>
@@ -116,7 +116,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/mentor/dashboard"
         element={
-          <PrivateRoute requiredRole="Mentor">
+          <PrivateRoute requiredRole="MENTOR">
             <MentorLayout>
               <MentorDashboardPage />
             </MentorLayout>
@@ -126,7 +126,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/mentor/learners"
         element={
-          <PrivateRoute requiredRole="Mentor">
+          <PrivateRoute requiredRole="MENTOR">
             <MentorLayout>
               <LearnersPage />
             </MentorLayout>
@@ -136,7 +136,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/mentor/assessment"
         element={
-          <PrivateRoute requiredRole="Mentor">
+          <PrivateRoute requiredRole="MENTOR">
             <MentorLayout>
               <AssessmentPage />
             </MentorLayout>
@@ -146,7 +146,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/mentor/feedback"
         element={
-          <PrivateRoute requiredRole="Mentor">
+          <PrivateRoute requiredRole="MENTOR">
             <MentorLayout>
               <FeedbackPage />
             </MentorLayout>
@@ -156,7 +156,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/mentor/materials"
         element={
-          <PrivateRoute requiredRole="Mentor">
+          <PrivateRoute requiredRole="MENTOR">
             <MentorLayout>
               <MaterialsPage />
             </MentorLayout>
@@ -166,7 +166,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/mentor/sharedexperience"
         element={
-          <PrivateRoute requiredRole="Mentor">
+          <PrivateRoute requiredRole="MENTOR">
             <MentorLayout>
               <SharedExperiencePage />
             </MentorLayout>
@@ -176,7 +176,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/mentor/conversationpractice"
         element={
-          <PrivateRoute requiredRole="Mentor">
+          <PrivateRoute requiredRole="MENTOR">
             <MentorLayout>
               <ConversationPracticePage />
             </MentorLayout>
@@ -186,7 +186,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/mentor/livesession"
         element={
-          <PrivateRoute requiredRole="Mentor">
+          <PrivateRoute requiredRole="MENTOR">
             <MentorLayout>
               <LiveSessionPage />
             </MentorLayout>
@@ -196,7 +196,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/mentor/progresstracking"
         element={
-          <PrivateRoute requiredRole="Mentor">
+          <PrivateRoute requiredRole="MENTOR">
             <MentorLayout>
               <ProgressTrackingPage />
             </MentorLayout>
@@ -206,7 +206,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/mentor/pronunciationanalysis"
         element={
-          <PrivateRoute requiredRole="Mentor">
+          <PrivateRoute requiredRole="MENTOR">
             <MentorLayout>
               <PronunciationAnalysisPage />
             </MentorLayout>
@@ -216,7 +216,7 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/mentor/vocabularymanagement"
         element={
-          <PrivateRoute requiredRole="Mentor">
+          <PrivateRoute requiredRole="MENTOR">
             <MentorLayout>
               <VocabularyManagementPage />
             </MentorLayout>

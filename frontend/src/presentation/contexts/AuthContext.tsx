@@ -1,56 +1,66 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { LoginUseCase } from '../../application/use-cases/auth/LoginUseCase';
-import { LogoutUseCase } from '../../application/use-cases/auth/LogoutUseCase';
-import { httpClient } from '../../infrastructure/http/AxiosHttpClient';
-import { storageService } from '../../infrastructure/services/StorageService';
-import { LoginDTO, UserDTO } from '../../application/dto/LoginDTO';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 
 interface AuthContextType {
-  user: UserDTO | null;
+  user: any | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (credentials: LoginDTO) => Promise<UserDTO>;
+  login: (credentials: any) => Promise<any>;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Initialize use cases
-const loginUseCase = new LoginUseCase(httpClient);
-const logoutUseCase = new LogoutUseCase();
-
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserDTO | null>(null);
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [user, setUser] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check if user is already logged in on mount
   useEffect(() => {
-    const savedUser = storageService.getUser();
-    console.log('Authcontext - User from storage:', savedUser);
-    const token = storageService.getAccessToken();
-    
-    if (savedUser && token) {
-      setUser(savedUser);
-    }
-    
     setIsLoading(false);
   }, []);
 
-  const login = async (credentials: LoginDTO): Promise<UserDTO> => {
-  try {
-    console.log('AuthContext: Attempting login with', credentials);
-    const response = await loginUseCase.execute(credentials);
-    console.log('AuthContext: Login successful, user =', response.user);
-    setUser(response.user);
-    return response.user;
-  } catch (error) {
-    console.error('AuthContext: Login failed with error', error);
-    throw error;
-  }
-};
+  const login = async (credentials: any): Promise<any> => {
+    try {
+      console.log("AuthContext: Attempting login with", credentials);
+
+      // Call backend API
+      const response = await fetch("http://localhost:8080/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Login failed");
+      }
+
+      const data = await response.json();
+      console.log("AuthContext: Login successful", data);
+
+      // Store token & user info
+      if (data.token) {
+        localStorage.setItem("accessToken", data.token);
+      }
+
+      setUser(data.user);
+      return data.user;
+    } catch (error) {
+      console.error("AuthContext: Login failed with error", error);
+      throw error;
+    }
+  };
 
   const logout = (): void => {
-    logoutUseCase.execute();
     setUser(null);
   };
 
@@ -69,11 +79,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-// Custom hook to use auth context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return context;
 };

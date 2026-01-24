@@ -170,7 +170,6 @@ const SignUp: React.FC<SignUpProps> = ({
     window.location.href = googleAuthUrl;
   };
 
-
   const handleFacebookSignUp = () => {
     const fbClientId = "YOUR_FACEBOOK_APP_ID";
     const url1 = "/placement-test"; // URL sau khi signup thành công

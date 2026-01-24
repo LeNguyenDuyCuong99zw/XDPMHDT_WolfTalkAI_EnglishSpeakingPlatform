@@ -1,16 +1,7 @@
-import { useState, useEffect } from 'react';
-import { GetMentorsUseCase } from '../../application/use-cases/admin/mentor/GetMentorsUseCase';
-import { UpdateMentorSkillsUseCase } from '../../application/use-cases/admin/mentor/UpdateMentorSkillsUseCase';
-import { MentorRepository } from '../../infrastructure/repositories/MentorRepository';
-import { httpClient } from '../../infrastructure/http/AxiosHttpClient';
-import { MentorDTO } from '../../application/dto/MentorDTO';
-
-const mentorRepository = new MentorRepository(httpClient);
-const getMentorsUseCase = new GetMentorsUseCase(mentorRepository);
-const updateMentorSkillsUseCase = new UpdateMentorSkillsUseCase(mentorRepository);
+import { useState, useEffect } from "react";
 
 export const useMentors = () => {
-  const [mentors, setMentors] = useState<MentorDTO[]>([]);
+  const [mentors, setMentors] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState({
@@ -19,9 +10,9 @@ export const useMentors = () => {
     total: 0,
     totalPages: 0,
   });
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const fetchMentors = async (page: number = 1, search: string = '') => {
+  const fetchMentors = async (page: number = 1, search: string = "") => {
     try {
       setLoading(true);
       setError(null);
@@ -40,7 +31,7 @@ export const useMentors = () => {
         totalPages: response.totalPages,
       });
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch mentors');
+      setError(err.message || "Failed to fetch mentors");
     } finally {
       setLoading(false);
     }
@@ -51,7 +42,7 @@ export const useMentors = () => {
       await mentorRepository.approve(mentorId);
       await fetchMentors(pagination.page, searchQuery);
     } catch (err: any) {
-      throw new Error(err.message || 'Failed to approve mentor');
+      throw new Error(err.message || "Failed to approve mentor");
     }
   };
 
@@ -60,19 +51,19 @@ export const useMentors = () => {
       await mentorRepository.reject(mentorId);
       await fetchMentors(pagination.page, searchQuery);
     } catch (err: any) {
-      throw new Error(err.message || 'Failed to reject mentor');
+      throw new Error(err.message || "Failed to reject mentor");
     }
   };
 
   const updateSkills = async (
     mentorId: string,
-    skills: { name: string; level: string }[]
+    skills: { name: string; level: string }[],
   ) => {
     try {
       await updateMentorSkillsUseCase.execute(mentorId, { skills });
       await fetchMentors(pagination.page, searchQuery);
     } catch (err: any) {
-      throw new Error(err.message || 'Failed to update skills');
+      throw new Error(err.message || "Failed to update skills");
     }
   };
 
