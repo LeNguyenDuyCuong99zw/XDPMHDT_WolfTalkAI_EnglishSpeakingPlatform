@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.wolftalk.backend.entity.User;
 import com.wolftalk.backend.repository.UserRepository;
+import com.wolftalk.backend.controller.GoogleLogin;
 
 @RestController
 public class GoogleCallbackController {
@@ -32,20 +33,18 @@ public class GoogleCallbackController {
         String name = userInfo.get("name").getAsString();
         String picture = userInfo.get("picture").getAsString();
 
-        // Nếu email đã tồn tại thì trả về lỗi, không cho đăng ký lại
-        if (userRepository.existsByEmail(email)) {
-            return "<script>alert('Tài khoản đã tồn tại. Vui lòng đăng nhập!'); window.location.href='/login';</script>";
-        }
-
         // Tách firstName, lastName nếu muốn
         String firstName = name.split(" ")[0];
         String lastName = name.contains(" ") ? name.substring(name.indexOf(" ") + 1) : "";
 
         // Lưu vào database
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(""); // Google user không cần password
-        user.setRoles("ROLE_USER");
+        User user = userRepository.findByEmailIgnoreCase(email).orElseGet(() -> {
+            User u = new User();
+            u.setEmail(email);
+            u.setPassword(""); // Google user không cần password
+            u.setRoles("ROLE_USER");
+            return u;
+        });
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setAvatar(picture);
@@ -75,7 +74,7 @@ public class GoogleCallbackController {
         String lastName = name.contains(" ") ? name.substring(name.indexOf(" ") + 1) : "";
 
         // Lưu vào database
-        User user = userRepository.findByEmail(email).orElseGet(() -> {
+        User user = userRepository.findByEmailIgnoreCase(email).orElseGet(() -> {
             User u = new User();
             u.setEmail(email);
             u.setPassword(""); // Google user không cần password

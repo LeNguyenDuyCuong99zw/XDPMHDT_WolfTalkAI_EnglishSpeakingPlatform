@@ -255,11 +255,32 @@
 }
 
 .social-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.4);
-  color: #fff;
   transform: translateY(-3px);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+}
+
+.google-btn {
+  background: #fff;
+  color: #333;
+  border-color: #fff;
+}
+
+.google-btn:hover {
+  background: #f2f2f2;
+  border-color: #f2f2f2;
+  color: #000;
+}
+
+.facebook-btn {
+  background: #1877F2;
+  color: #fff;
+  border-color: #1877F2;
+}
+
+.facebook-btn:hover {
+  background: #166fe5;
+  border-color: #166fe5;
+  color: #fff;
 }
 
 .google-icon {

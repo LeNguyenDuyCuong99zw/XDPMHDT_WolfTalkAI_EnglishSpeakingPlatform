@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Level, Unit } from '../../../../domain/learning/entities/Syllabus';
-import { syllabusService } from '../../../../application/learning/services/MockSyllabusService';
+import { syllabusService } from '../../../../application/learning/services/SyllabusService';
 import { UnitNode } from './UnitNode';
 import { GlobalLoader } from '../../../components/molecules/GlobalLoader/GlobalLoader';
 import '../../styles/LearningPath.css';
@@ -159,7 +159,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({ on
                                 <div key={unit.id} className="path-step">
                                     <UnitNode
                                         unit={unit}
-                                        onClick={isDragging ? undefined : onSelectUnit} // Prevent click when dragging
+                                        onClick={isDragging ? () => { } : onSelectUnit} // Prevent click when dragging
                                         levelColor={levels.find(l => l.id === selectedLevelId)?.color || '#4CAF50'}
                                     />
                                     {/* Connector Line (except for last item) */}

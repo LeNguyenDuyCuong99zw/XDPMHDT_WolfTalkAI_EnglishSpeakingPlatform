@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { PlacementQuestion, TestResult } from '../../../../domain/learning/entities/PlacementTest';
-import { placementService } from '../../../../application/learning/services/MockPlacementService';
+import { placementService } from '../../../../application/learning/services/PlacementService';
 import '../../styles/Learning.css';
 
 interface PlacementTestViewProps {
@@ -24,7 +24,7 @@ export const PlacementTestView: React.FC<PlacementTestViewProps> = ({ onComplete
         setIsLoading(false);
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (selectedOption === null) return;
 
         const newAnswers = [...answers, {
@@ -38,8 +38,15 @@ export const PlacementTestView: React.FC<PlacementTestViewProps> = ({ onComplete
             setCurrentIdx(currentIdx + 1);
         } else {
             // Finish Test
-            const result = placementService.calculateResult(newAnswers);
-            onComplete(result);
+            setIsLoading(true);
+            try {
+                const result = await placementService.submitTest(newAnswers);
+                onComplete(result);
+            } catch (error) {
+                console.error("Failed to submit placement test", error);
+                // Handle error visually if needed
+            }
+            setIsLoading(false);
         }
     };
 

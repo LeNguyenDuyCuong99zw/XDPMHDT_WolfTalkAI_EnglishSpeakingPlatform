@@ -29,30 +29,35 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 1.5rem 2rem 1.5rem 3rem;
+  align-items: center;
+  /* Center content within the container */
+  padding: 1.5rem 2rem;
   overflow-y: auto;
   overflow-x: hidden;
   max-width: calc(100% - 380px);
   min-width: 0;
   width: 100%;
   height: 100vh;
-  margin-left: 30px;
+  margin-left: 0;
 
   /* Hide scrollbar */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
 .learning-path-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 /* Welcome Header */
 .welcome-header {
   width: 100%;
-  max-width: 750px;
-  margin-bottom: 1.5rem;
+  max-width: 1000px;
+  /* Increased from 750px */
+  margin-bottom: 2rem;
   flex-shrink: 0;
   box-sizing: border-box;
 }
@@ -73,11 +78,12 @@
 /* Today's Progress Card */
 .today-progress-card {
   width: 100%;
-  max-width: 750px;
+  max-width: 1000px;
+  /* Increased from 750px */
   background: linear-gradient(135deg, #58cc02, #46a302);
   border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
   box-shadow: 0 4px 12px rgba(88, 204, 2, 0.3);
   flex-shrink: 0;
   box-sizing: border-box;
@@ -135,11 +141,13 @@
 /* Quick Actions */
 .quick-actions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  /* Wider cards */
+  gap: 1.5rem;
   width: 100%;
-  max-width: 750px;
-  margin-bottom: 1.5rem;
+  max-width: 1000px;
+  /* Increased from 750px */
+  margin-bottom: 2rem;
   flex-shrink: 0;
   box-sizing: border-box;
 }
@@ -208,11 +216,12 @@
 /* Stats Grid */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+  /* 4 columns on desktop */
+  gap: 1.5rem;
   width: 100%;
-  max-width: 750px;
-  margin-bottom: 1.5rem;
+  max-width: 1000px;
+  margin-bottom: 2.5rem;
   flex-shrink: 0;
   box-sizing: border-box;
 }
@@ -258,8 +267,8 @@
 /* Suggested Section */
 .suggested-section {
   width: 100%;
-  max-width: 750px;
-  margin-bottom: 1.5rem;
+  max-width: 1000px;
+  margin-bottom: 3rem;
   flex-shrink: 0;
   box-sizing: border-box;
 }
@@ -782,6 +791,7 @@
     font-size: 1.1rem;
   }
 }
+
 .dashboard-btn-report {
   background: #fff;
   color: #22c55e;
@@ -795,27 +805,33 @@
     background 0.2s,
     color 0.2s;
 }
+
 .dashboard-btn-report:hover {
   background: #22c55e;
   color: #fff;
 }
+
 .dashboard-ai-card {
   position: relative;
 }
+
 .dashboard-ai-badge {
   color: #22c55e;
   font-weight: 700;
   font-size: 1.08rem;
 }
+
 .dashboard-ai-quote {
   font-size: 1.15rem;
   font-weight: 600;
   margin: 10px 0 6px 0;
 }
+
 .dashboard-ai-link {
   color: #22c55e;
   text-decoration: underline;
 }
+
 .dashboard-btn-grammar {
   background: #22c55e;
   color: #fff;
@@ -827,19 +843,23 @@
   cursor: pointer;
   margin-top: 8px;
 }
+
 .dashboard-btn-grammar:hover {
   background: #16a34a;
 }
+
 .dashboard-ai-img {
   position: absolute;
   top: 18px;
   right: 24px;
 }
+
 .dashboard-dailygoals-title {
   font-weight: 700;
   font-size: 1.1rem;
   margin-bottom: 6px;
 }
+
 .dashboard-dailygoals-list {
   list-style: none;
   padding: 0;
@@ -848,21 +868,25 @@
   flex-direction: column;
   gap: 8px;
 }
+
 .dashboard-dailygoals-done {
   color: #22c55e;
   text-decoration: line-through;
   font-weight: 600;
 }
+
 .dashboard-travel-title {
   font-weight: 700;
   font-size: 1.1rem;
   margin-bottom: 6px;
 }
+
 .dashboard-travel-desc {
   color: #666;
   font-size: 1.08rem;
   margin-bottom: 8px;
 }
+
 .dashboard-btn-lesson {
   background: #fff;
   color: #22c55e;
@@ -876,25 +900,30 @@
     background 0.2s,
     color 0.2s;
 }
+
 .dashboard-btn-lesson:hover {
   background: #22c55e;
   color: #fff;
 }
+
 .dashboard-travel-img img {
   width: 100px;
   border-radius: 12px;
   margin-top: 8px;
 }
+
 .dashboard-weakwords-title {
   font-weight: 700;
   font-size: 1.1rem;
   margin-bottom: 6px;
 }
+
 .dashboard-weakwords-desc {
   color: #888;
   font-size: 0.98rem;
   margin-bottom: 8px;
 }
+
 .dashboard-btn-practice {
   background: #222;
   color: #fff;
@@ -906,14 +935,17 @@
   cursor: pointer;
   transition: background 0.2s;
 }
+
 .dashboard-btn-practice:hover {
   background: #22c55e;
 }
+
 .dashboard-skillbreakdown-title {
   font-weight: 700;
   font-size: 1.1rem;
   margin-bottom: 6px;
 }
+
 .dashboard-skillbreakdown-chart {
   background: #f3f4f6;
   border-radius: 50%;
@@ -926,21 +958,25 @@
   color: #bbb;
   font-size: 1.2rem;
 }
+
 .dashboard-skillbreakdown-score {
   color: #222;
   font-size: 1.08rem;
   text-align: center;
 }
+
 .dashboard-speedchallenge-title {
   font-weight: 700;
   font-size: 1.1rem;
   margin-bottom: 6px;
 }
+
 .dashboard-speedchallenge-best {
   color: #22c55e;
   font-size: 1.08rem;
   margin-bottom: 8px;
 }
+
 .dashboard-btn-play {
   background: #22c55e;
   color: #fff;
@@ -952,14 +988,17 @@
   cursor: pointer;
   transition: background 0.2s;
 }
+
 .dashboard-btn-play:hover {
   background: #16a34a;
 }
+
 .dashboard-didyouknow-title {
   font-weight: 700;
   font-size: 1.1rem;
   margin-bottom: 6px;
 }
+
 .dashboard-didyouknow-desc {
   color: #888;
   font-size: 0.98rem;

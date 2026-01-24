@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { GetTopicsUseCase } from '../../../application/learning/use-cases/GetTopicsUseCase';
 import { GetScenarioDetailUseCase } from '../../../application/learning/use-cases/GetScenarioDetailUseCase';
 import { GetScenariosByTopicUseCase } from '../../../application/learning/use-cases/GetScenariosByTopicUseCase';
-import { learningService } from '../../../application/learning/services/MockLearningService';
+import { learningService } from '../../../application/learning/services/LearningService';
+import { apiClient } from '../../../services/api';
 import { TopicSelector } from '../components/TopicSelector';
 import { VocabularyCard } from '../components/VocabularyCard';
 import { GrammarCard } from '../components/GrammarCard';
@@ -22,6 +23,7 @@ import '../styles/Learning.css';
 import type { Topic, ScenarioDetail } from '../../../domain/learning/entities/LearningMaterial';
 import type { Unit } from '../../../domain/learning/entities/Syllabus';
 import type { TestResult } from '../../../domain/learning/entities/PlacementTest';
+import { FaTimes } from 'react-icons/fa';
 
 // Define the stages of the new learning flow
 type LearningStage = 'MODE_SELECTION' | 'TOPIC_SELECTION' | 'PATH_DASHBOARD' | 'PREPARATION' | 'SESSION' | 'SUMMARY' | 'PLACEMENT_INTRO' | 'PLACEMENT_TEST' | 'PLACEMENT_RESULT' | 'CHECKPOINT';
@@ -137,24 +139,30 @@ export const LearningPage: React.FC = () => {
     // Handle Unit Selection from Learning Path
     const handleSelectUnit = async (unit: Unit) => {
         setCurrentUnitId(unit.id); // Track current unit ID
+        setScenarioDetail(null);
+        setStage('PREPARATION');
 
-        // Map Unit ID to Scenario ID (Mock logic)
-        // In real app, Unit would have a direct link to a scenario or learning content
-        let targetScenario = 'Greetings & Introductions'; // Default fall back
-        if (unit.id === 'u1_greet') targetScenario = 'Greetings & Introductions';
-        else if (unit.id === 'u2_family') targetScenario = 'Mô tả gia đình';
-        else if (unit.id === 'u3_market') targetScenario = 'Đi siêu thị';
-        else if (unit.id === 'u4_home') targetScenario = 'Mô tả nhà cửa';
-        else if (unit.id === 'u5_routine') targetScenario = 'Thói quen hàng ngày';
-        else if (unit.id === 'u6_hobby') targetScenario = 'Nói về sở thích';
-        else if (unit.id === 'u7_food') targetScenario = 'Thức ăn & Đồ uống';
-        else if (unit.id === 'u8_city') targetScenario = 'Thành phố của tôi';
-        else if (unit.id === 'u9_job') targetScenario = 'Công việc & Nghề nghiệp';
-        else if (unit.id === 'u10_holiday') targetScenario = 'Lễ hội & Kỳ nghỉ';
+        try {
+            setIsLoading(true);
+            setError(null);
 
-        // Auto-start the session, skipping the preparation screen
-        handleSelectScenario(targetScenario, true);
+            // Fetch content from backend via learningService
+            const detail = await learningService.getUnitContent(unit);
+            setScenarioDetail(detail);
+
+            // Auto-start the session
+            setStage('SESSION');
+            setSessionStep('vocab');
+            setPracticeScore(0);
+        } catch (err) {
+            console.error("Error loading unit content:", err);
+            setError(`Không thể tải nội dung cho bài học "${unit.title}".`);
+            setStage('PATH_DASHBOARD');
+        } finally {
+            setIsLoading(false);
+        }
     };
+
 
     const handleStartSession = () => {
         setStage('SESSION');
@@ -169,7 +177,7 @@ export const LearningPage: React.FC = () => {
         if (currentUnitId) {
             try {
                 // Determine if pass? For now assume completion is enough.
-                const { syllabusService } = await import('../../../application/learning/services/MockSyllabusService');
+                const { syllabusService } = await import('../../../application/learning/services/SyllabusService');
                 // Calculate percentage score roughly. Assuming max score is usually total questions * 10
                 // For simplicity, we just pass the raw score or normalize it. 
                 // Let's normalize to 0-100 based on scenarioDetail if available.
@@ -181,6 +189,9 @@ export const LearningPage: React.FC = () => {
 
                 await syllabusService.completeUnit(currentUnitId, normalizedScore);
                 console.log(`Unit ${currentUnitId} marked as completed with score ${normalizedScore}.`);
+
+                // Fetch updated stats (optional here, Dashboard will reload)
+                await apiClient.get<any>('/dashboard/stats');
             } catch (err) {
                 console.error("Failed to update unit progress:", err);
             }
@@ -254,7 +265,7 @@ export const LearningPage: React.FC = () => {
         console.log('Checkpoint complete:', result);
         if (result.isPassed) {
             // Unlock next level logic here (mock)
-            const { syllabusService } = await import('../../../application/learning/services/MockSyllabusService');
+            const { syllabusService } = await import('../../../application/learning/services/SyllabusService');
             // Assuming next level is A2 for now, logic could be dynamic
             await syllabusService.unlockLevel('A2');
             alert("Chúc mừng! Bạn đã hoàn thành cấp độ A1 và mở khóa A2.");
@@ -358,26 +369,38 @@ export const LearningPage: React.FC = () => {
                 {/* Stage: Learning Session */}
                 {stage === 'SESSION' && scenarioDetail && (
                     <div className="learning-session">
-                        <div className="session-progress">
-                            <button
-                                className={`step-btn ${sessionStep === 'vocab' ? 'active' : ''}`}
-                                onClick={() => setSessionStep('vocab')}
-                            >
-                                Từ vựng
+                        <header className="session-header">
+                            <button className="exit-btn" onClick={handleBackToTopics} title="Thoát bài học">
+                                <FaTimes />
                             </button>
-                            <button
-                                className={`step-btn ${sessionStep === 'grammar' ? 'active' : ''}`}
-                                onClick={() => setSessionStep('grammar')}
-                            >
-                                Ngữ pháp
-                            </button>
-                            <button
-                                className={`step-btn ${sessionStep === 'conversation' ? 'active' : ''}`}
-                                onClick={() => setSessionStep('conversation')}
-                            >
-                                Hội thoại
-                            </button>
-                        </div>
+
+                            <div className="session-progress-container">
+                                <div
+                                    className={`progress-segment ${sessionStep === 'vocab' ? 'active' : 'completed'}`}
+                                    onClick={() => setSessionStep('vocab')}
+                                >
+                                    <span className="progress-segment-label">Từ vựng</span>
+                                </div>
+                                <div
+                                    className={`progress-segment ${sessionStep === 'grammar' ? 'active' : (['conversation', 'practice'].includes(sessionStep) ? 'completed' : '')}`}
+                                    onClick={() => setSessionStep('grammar')}
+                                >
+                                    <span className="progress-segment-label">Ngữ pháp</span>
+                                </div>
+                                <div
+                                    className={`progress-segment ${sessionStep === 'conversation' ? 'active' : (sessionStep === 'practice' ? 'completed' : '')}`}
+                                    onClick={() => setSessionStep('conversation')}
+                                >
+                                    <span className="progress-segment-label">Hội thoại</span>
+                                </div>
+                                <div
+                                    className={`progress-segment ${sessionStep === 'practice' ? 'active' : ''}`}
+                                    onClick={() => setSessionStep('practice')}
+                                >
+                                    <span className="progress-segment-label">Luyện tập</span>
+                                </div>
+                            </div>
+                        </header>
 
                         <div className="session-content">
                             {sessionStep === 'vocab' && (

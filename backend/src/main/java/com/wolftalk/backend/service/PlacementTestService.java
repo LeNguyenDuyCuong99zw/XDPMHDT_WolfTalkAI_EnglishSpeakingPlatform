@@ -31,7 +31,7 @@ public class PlacementTestService {
 
     @Transactional
     public PlacementTestDTO startTest(String userEmail) {
-        User user = userRepository.findByEmail(userEmail)
+        User user = userRepository.findByEmailIgnoreCase(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Check if user already has an incomplete test
@@ -52,7 +52,7 @@ public class PlacementTestService {
 
     @Transactional
     public PlacementTestDTO updateTestStep(String userEmail, PlacementTestStepRequest request) {
-        User user = userRepository.findByEmail(userEmail)
+        User user = userRepository.findByEmailIgnoreCase(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         PlacementTest test = placementTestRepository.findById(request.getTestId())
@@ -214,7 +214,7 @@ public class PlacementTestService {
     }
 
     public PlacementTestDTO getCurrentTest(String userEmail) {
-        User user = userRepository.findByEmail(userEmail)
+        User user = userRepository.findByEmailIgnoreCase(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         PlacementTest test = placementTestRepository.findByUserAndIsCompletedFalse(user)
@@ -224,7 +224,7 @@ public class PlacementTestService {
     }
 
     public boolean hasCompletedTest(String userEmail) {
-        User user = userRepository.findByEmail(userEmail)
+        User user = userRepository.findByEmailIgnoreCase(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Check user flag first (faster)

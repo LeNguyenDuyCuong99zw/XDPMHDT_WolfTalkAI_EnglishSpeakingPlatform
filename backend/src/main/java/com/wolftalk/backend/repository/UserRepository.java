@@ -7,6 +7,7 @@ import com.wolftalk.backend.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    java.util.Optional<User> findByEmail(String email);
-    boolean existsByEmail(String email);
+    java.util.Optional<User> findByEmailIgnoreCase(String email);
+
+    boolean existsByEmailIgnoreCase(String email);
 }

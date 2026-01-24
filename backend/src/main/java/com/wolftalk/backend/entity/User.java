@@ -1,6 +1,7 @@
 package com.wolftalk.backend.entity;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,13 +27,16 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String password;
+
+    private String provider; // google, facebook, local
+
+    private String providerId;
 
     private String firstName;
 
     private String lastName;
-
 
     private String roles; // comma separated roles
 
@@ -48,7 +52,20 @@ public class User {
 
     private Instant createdAt = Instant.now();
 
+<<<<<<< HEAD
     @Column(name = "updated_at")
     private Instant updatedAt = Instant.now();
+=======
+    // Gamification
+    private Integer streak = 0;
+
+    private Instant lastActiveDate;
+
+    private Integer points = 0;
+
+    private Integer todayLearningMinutes = 0;
+
+    private LocalDate lastLearningDate;
+>>>>>>> cc38da3 (sửa database , login , thêm thời gian thực dashboard)
 
 }

@@ -1,28 +1,83 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiClient } from "../services/api";
 import "./DashboardPage.css";
+import "./Notification.css";
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
   const [streak, setStreak] = useState(0);
-  const [todayGoal, setTodayGoal] = useState(0);
+  const [wordsLearned, setWordsLearned] = useState(0);
+  const [unitsCompleted, setUnitsCompleted] = useState(0);
+  const [points, setPoints] = useState(0);
+
+  const [todayGoal] = useState(20);
   const [todayProgress, setTodayProgress] = useState(0);
+  const [showNotification, setShowNotification] = useState(false);
   const userName = localStorage.getItem("userName") || "Học viên";
 
   useEffect(() => {
-    // Load user stats from API
+    // Initial load
     loadUserStats();
+
+    // Stats polling (less frequent)
+    const statsInterval = setInterval(loadUserStats, 10000);
+
+    // Heartbeat: Increment learning time every 1 minute
+    const heartbeatInterval = setInterval(async () => {
+      try {
+        await apiClient.post('/dashboard/heartbeat', {});
+        // After heartbeat, refresh local view
+        loadUserStats();
+      } catch (e) {
+        console.error("Heartbeat failed", e);
+      }
+    }, 60000);
+
+    return () => {
+      clearInterval(statsInterval);
+      clearInterval(heartbeatInterval);
+    };
   }, []);
 
   const loadUserStats = async () => {
-    // TODO: Call API to get user stats
-    setStreak(3);
-    setTodayGoal(20); // minutes
-    setTodayProgress(8); // minutes completed
+    try {
+      const data = await apiClient.get<any>('/dashboard/stats');
+      console.log("Dashboard Stats loaded:", data);
+      setStreak(data.streak);
+      setWordsLearned(data.wordsLearned);
+      setUnitsCompleted(data.unitsCompleted);
+      setPoints(data.points);
+
+      // Progress calculation: direct from backend
+      const currentProgress = data.todayLearningMinutes || 0;
+
+      // Goal Achievement Notification
+      // Only show if we go from NOT achieved to ACHIEVED in this session
+      setTodayProgress(prev => {
+        if (currentProgress >= todayGoal && prev < todayGoal && prev !== 0) {
+          setShowNotification(true);
+          setTimeout(() => setShowNotification(false), 5000);
+        }
+        return Math.min(currentProgress, todayGoal);
+      });
+    } catch (error) {
+      console.error("Failed to load stats", error);
+    }
   };
 
   return (
     <div className="duolingo-dashboard">
+      {showNotification && (
+        <div className="goal-notification">
+          <div className="notification-icon-wrap">🎉</div>
+          <div className="notification-details">
+            <h4>Mục tiêu đã đạt!</h4>
+            <p>Tuyệt vời! Bạn đã hoàn thành mục tiêu học tập hôm nay.</p>
+          </div>
+        </div>
+      )}
+
       {/* Main Content Area */}
       <div className="learning-path-container">
         {/* Welcome Header */}
@@ -54,9 +109,8 @@ const DashboardPage: React.FC = () => {
           <p className="progress-message">
             {todayProgress >= todayGoal
               ? "🎉 Xuất sắc! Bạn đã hoàn thành mục tiêu hôm nay!"
-              : `Còn ${
-                  todayGoal - todayProgress
-                } phút nữa để hoàn thành mục tiêu!`}
+              : `Còn ${todayGoal - todayProgress
+              } phút nữa để hoàn thành mục tiêu!`}
           </p>
         </div>
 
@@ -107,7 +161,7 @@ const DashboardPage: React.FC = () => {
           <div className="stat-card">
             <div className="stat-icon-large">⭐</div>
             <div className="stat-content">
-              <h3 className="stat-number">128</h3>
+              <h3 className="stat-number">{wordsLearned}</h3>
               <p className="stat-label">Từ đã học</p>
             </div>
           </div>
@@ -115,7 +169,7 @@ const DashboardPage: React.FC = () => {
           <div className="stat-card">
             <div className="stat-icon-large">🏆</div>
             <div className="stat-content">
-              <h3 className="stat-number">12</h3>
+              <h3 className="stat-number">{unitsCompleted}</h3>
               <p className="stat-label">Bài hoàn thành</p>
             </div>
           </div>
@@ -123,7 +177,7 @@ const DashboardPage: React.FC = () => {
           <div className="stat-card">
             <div className="stat-icon-large">💎</div>
             <div className="stat-content">
-              <h3 className="stat-number">500</h3>
+              <h3 className="stat-number">{points}</h3>
               <p className="stat-label">Điểm thưởng</p>
             </div>
           </div>
@@ -172,11 +226,11 @@ const DashboardPage: React.FC = () => {
           </div>
           <div className="stat-item">
             <div className="stat-icon flame">🔥</div>
-            <span className="stat-value">0</span>
+            <span className="stat-value">{streak}</span>
           </div>
           <div className="stat-item">
             <div className="stat-icon gem">💎</div>
-            <span className="stat-value">500</span>
+            <span className="stat-value">{points}</span>
           </div>
           <div className="stat-item">
             <div className="stat-icon heart">❤️</div>

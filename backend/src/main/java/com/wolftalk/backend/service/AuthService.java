@@ -26,7 +26,7 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
     public AuthResponse register(RegisterRequest req) {
-        if (userRepository.existsByEmail(req.getEmail())) {
+        if (userRepository.existsByEmailIgnoreCase(req.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }
         User u = new User();
@@ -42,7 +42,7 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest req) {
-        Optional<User> found = userRepository.findByEmail(req.getEmail());
+        Optional<User> found = userRepository.findByEmailIgnoreCase(req.getEmail());
         if (found.isEmpty()) throw new IllegalArgumentException("Invalid credentials");
         User u = found.get();
         if (!passwordEncoder.matches(req.getPassword(), u.getPassword())) {
