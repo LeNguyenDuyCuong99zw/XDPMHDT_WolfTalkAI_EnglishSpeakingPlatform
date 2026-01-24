@@ -52,10 +52,9 @@ public class User {
 
     private Instant createdAt = Instant.now();
 
-<<<<<<< HEAD
     @Column(name = "updated_at")
     private Instant updatedAt = Instant.now();
-=======
+
     // Gamification
     private Integer streak = 0;
 
@@ -66,6 +65,5 @@ public class User {
     private Integer todayLearningMinutes = 0;
 
     private LocalDate lastLearningDate;
->>>>>>> cc38da3 (sửa database , login , thêm thời gian thực dashboard)
 
 }
