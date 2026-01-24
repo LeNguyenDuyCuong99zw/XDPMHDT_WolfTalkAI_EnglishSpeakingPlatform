@@ -42,6 +42,13 @@ public class User {
 
     private Boolean hasCompletedPlacementTest = false;
 
+    private Boolean isFirstLogin = true;
+
+    private Boolean isEnabled = true; // Để quản lý bật/tắt tài khoản
+
     private Instant createdAt = Instant.now();
+
+    @Column(name = "updated_at")
+    private Instant updatedAt = Instant.now();
 
 }
