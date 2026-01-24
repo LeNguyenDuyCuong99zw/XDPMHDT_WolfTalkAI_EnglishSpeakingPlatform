@@ -35,8 +35,10 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(java.util.Arrays.asList(
             "http://localhost:5173",
             "http://localhost:3000",
+            "http://localhost:3001",
             "http://127.0.0.1:5173",
-            "http://127.0.0.1:3000"
+            "http://127.0.0.1:3000",
+            "http://127.0.0.1:3001"
         ));
         configuration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(java.util.Arrays.asList("*"));
@@ -61,6 +63,8 @@ public class SecurityConfig {
                     // Allow public access to package listings (GET)
                     .requestMatchers(HttpMethod.GET, "/api/packages/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                    // Admin endpoints - require ROLE_ADMIN
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                 );
         // Add JWT filter to validate tokens and set SecurityContext

@@ -37,7 +37,7 @@ public class AuthService {
         u.setLearningLanguage(req.getLearningLanguage());
         u.setRoles("ROLE_USER");
         userRepository.save(u);
-        String token = jwtUtil.generateToken(u.getEmail());
+        String token = jwtUtil.generateToken(u.getEmail(), "ROLE_USER");
         return new AuthResponse(token);
     }
 
@@ -48,7 +48,7 @@ public class AuthService {
         if (!passwordEncoder.matches(req.getPassword(), u.getPassword())) {
             throw new IllegalArgumentException("Invalid credentials");
         }
-        String token = jwtUtil.generateToken(u.getEmail());
-        return new AuthResponse(token);
+        String token = jwtUtil.generateToken(u.getEmail(), u.getRoles());
+        return new AuthResponse(token, u);
     }
 }

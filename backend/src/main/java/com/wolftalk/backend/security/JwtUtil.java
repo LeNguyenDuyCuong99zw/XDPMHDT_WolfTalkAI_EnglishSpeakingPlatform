@@ -26,13 +26,22 @@ public class JwtUtil {
     }
 
     public String generateToken(String subject) {
+        return generateToken(subject, null);
+    }
+
+    public String generateToken(String subject, String roles) {
         Date now = new Date();
         Date exp = new Date(now.getTime() + expirationMs);
-        return Jwts.builder()
+        var builder = Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(now)
-                .setExpiration(exp)
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setExpiration(exp);
+        
+        if (roles != null && !roles.isEmpty()) {
+            builder.claim("roles", roles);
+        }
+        
+        return builder.signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
