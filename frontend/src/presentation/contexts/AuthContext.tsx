@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import type { ReactNode } from 'react';
-import { storageService } from '../../infrastructure/services/StorageService'; // Correctly points to the file I made/verified
-import { apiClient } from '../../services/api'; // Assuming this exists
+import React, { createContext, useContext, useState, useEffect } from "react";
+import type { ReactNode } from "react";
+import { storageService } from "../../infrastructure/services/StorageService"; // Correctly points to the file I made/verified
+import { apiClient } from "../../services/api"; // Assuming this exists
 
 export interface UserDTO {
   id?: string;
@@ -30,7 +30,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<UserDTO | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,6 +40,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const token = storageService.getAccessToken();
     if (token) {
       try {
+<<<<<<< HEAD
         // Nếu là bypass token, lấy user từ localStorage (đã có role)
         const userFromStorage = storageService.getUser();
         if (userFromStorage && (token === 'bypass-token-admin' || token === 'bypass-token-mentor')) {
@@ -48,6 +51,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           // setUser(profile);
           setUser({ email: 'user@example.com' }); // Placeholder until we fetch real profile
         }
+=======
+        // Optional: Verify token with backend or fetch user profile
+        // const profile = await apiClient.get('/auth/me');
+        // setUser(profile);
+
+        // For now, if we have a token, we assume logged in.
+        // We can decode JWT here if we want user info immediately.
+        // Let's at least set a placeholder user if we don't fetch.
+        // Or try to fetch profile.
+        setUser({ email: "user@example.com" }); // Placeholder until we fetch real profile
+>>>>>>> 94e84d9fe7549095ff0f8caa70e511619dc5a451
       } catch (e) {
         console.error(e);
         // storageService.removeAccessToken();
@@ -83,15 +97,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
     try {
       // If login with credentials
-      const res: any = await apiClient.post('/auth/login', credentials);
+      const res: any = await apiClient.post("/auth/login", credentials);
       if (res.token) {
         storageService.setAccessToken(res.token);
-        await checkAuth();
-        return { email: credentials.email || '' };
+
+        // Extract user data from response
+        const userData = res.user || { email: credentials.email || "" };
+
+        // Set user with role information
+        setUser({
+          id: userData.id,
+          email: userData.email,
+          name: `${userData.firstName || ""} ${userData.lastName || ""}`.trim(),
+          role: userData.role,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+        });
+
+        // Return user with role for navigation
+        return {
+          email: userData.email,
+          role: userData.role,
+          id: userData.id,
+          name: `${userData.firstName || ""} ${userData.lastName || ""}`.trim(),
+        };
       }
-      throw new Error('No token returned');
+      throw new Error("No token returned");
     } catch (error) {
-      console.error('AuthContext: Login failed with error', error);
+      console.error("AuthContext: Login failed with error", error);
       throw error;
     }
   };
@@ -100,7 +133,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     storageService.removeAccessToken();
     storageService.removeUser();
     setUser(null);
-    window.location.href = '/login';
+    window.location.href = "/login";
   };
 
   return (
@@ -111,7 +144,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isLoading,
         login,
         logout,
-        checkAuth
+        checkAuth,
       }}
     >
       {children}
