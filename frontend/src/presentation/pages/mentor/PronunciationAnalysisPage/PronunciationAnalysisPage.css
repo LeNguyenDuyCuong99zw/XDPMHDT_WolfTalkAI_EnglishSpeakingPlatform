@@ -1,0 +1,471 @@
+/* src/presentation/pages/mentor/PronunciationAnalysisPage/PronunciationAnalysisPage.css */
+
+.pronunciation-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 8px 32px;
+}
+
+/* Glass card base */
+.glass-card {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.14);
+}
+
+/* Header */
+.pronunciation-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+}
+
+.pronunciation-page__header-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pronunciation-page__header-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #0369a1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pronunciation-page__title {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.pronunciation-page__subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Actions */
+.pronunciation-page__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pronunciation-page__icon-button {
+  border: none;
+  outline: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.12);
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.pronunciation-page__icon-button:hover {
+  background: rgba(148, 163, 184, 0.2);
+  transform: translateY(-1px);
+}
+
+.pronunciation-page__primary-button {
+  border: none;
+  outline: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(14, 165, 233, 0.35);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  white-space: nowrap;
+}
+
+.pronunciation-page__primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 40px rgba(14, 165, 233, 0.45);
+}
+
+.pronunciation-page__primary-button--empty {
+  margin-top: 16px;
+}
+
+/* Loading */
+.pronunciation-page--loading {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pronunciation-page__spinner {
+  color: #0ea5e9;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pronunciation-page__loading-text {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Search controls */
+.pronunciation-page__controls {
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.pronunciation-page__search {
+  position: relative;
+  max-width: 420px;
+}
+
+.pronunciation-page__search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.pronunciation-page__search-input {
+  width: 100%;
+  padding: 9px 12px 9px 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(156, 163, 175, 0.45);
+  font-size: 13px;
+  background: rgba(248, 250, 252, 0.95);
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.pronunciation-page__search-input::placeholder {
+  color: #9ca3af;
+}
+
+.pronunciation-page__search-input:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+  background: #ffffff;
+}
+
+/* Content */
+.pronunciation-page__content {
+  padding: 32px 24px;
+}
+
+.pronunciation-page__empty {
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.pronunciation-page__empty-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 0, #dbeafe, #bfdbfe);
+  color: #0369a1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pronunciation-page__empty-title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.pronunciation-page__empty-text {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* Hint */
+.pronunciation-page__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.08);
+  color: #0369a1;
+  font-size: 12px;
+}
+
+/* List & card */
+.pronunciation-page__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 18px;
+}
+
+.pronunciation-page__card {
+  position: relative;
+  padding: 18px 18px 16px;
+}
+
+/* Status badge */
+.pronunciation-page__status-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pronunciation-page__status--pending {
+  background: rgba(251, 191, 36, 0.12);
+  color: #b45309;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+}
+
+.pronunciation-page__status--analyzed {
+  background: rgba(59, 130, 246, 0.12);
+  color: #1e40af;
+  border: 1px solid rgba(59, 130, 246, 0.45);
+}
+
+.pronunciation-page__status--reviewed {
+  background: rgba(34, 197, 94, 0.12);
+  color: #15803d;
+  border: 1px solid rgba(34, 197, 94, 0.45);
+}
+
+/* Card header */
+.pronunciation-page__card-header {
+  padding-right: 100px;
+  margin-bottom: 14px;
+}
+
+.pronunciation-page__card-learner {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.pronunciation-page__card-text {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Score section */
+.pronunciation-page__card-score {
+  display: flex;
+  gap: 16px;
+  padding: 14px;
+  margin-bottom: 14px;
+  background: rgba(248, 250, 252, 0.9);
+  border-radius: 12px;
+}
+
+.pronunciation-page__score-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 3px solid currentColor;
+}
+
+.pronunciation-page__score--good {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.pronunciation-page__score--medium {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.pronunciation-page__score--poor {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.pronunciation-page__score-value {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pronunciation-page__score-label {
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.pronunciation-page__score-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+}
+
+.pronunciation-page__score-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pronunciation-page__score-item-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.pronunciation-page__score-item-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Meta */
+.pronunciation-page__card-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  background: rgba(248, 250, 252, 0.9);
+  border-radius: 12px;
+}
+
+.pronunciation-page__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pronunciation-page__meta-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+.pronunciation-page__meta-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Card actions */
+.pronunciation-page__card-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.pronunciation-page__action-btn {
+  flex: 1;
+  padding: 7px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease, transform 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.pronunciation-page__action-btn--primary {
+  background: rgba(14, 165, 233, 0.08);
+  color: #0369a1;
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+.pronunciation-page__action-btn--primary:hover {
+  background: rgba(14, 165, 233, 0.15);
+  transform: translateY(-1px);
+}
+
+.pronunciation-page__action-btn--secondary {
+  background: rgba(148, 163, 184, 0.06);
+  color: #4b5563;
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+.pronunciation-page__action-btn--secondary:hover {
+  background: rgba(148, 163, 184, 0.12);
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pronunciation-page {
+    padding: 16px;
+  }
+
+  .pronunciation-page__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .pronunciation-page__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .pronunciation-page__list {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,4 +1,5 @@
 import React from "react";
+import { useAuth } from "./presentation/contexts/AuthContext";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { LoginPage } from "./presentation/pages/auth/LoginPage/LoginPage";
 import { DashboardPage } from "./presentation/pages/admin/DashboardPage/DashboardPage";
@@ -16,7 +17,7 @@ import { PrivateRoute } from "./presentation/routes/PrivateRoute";
  * Admin-only routes for http://admin.localhost:5173
  * This app only shows admin interface
  */
-export const AdminApp: React.FC = () => {
+  const { user } = useAuth();
   return (
     <Routes>
       {/* Public Route */}
@@ -147,8 +148,26 @@ export const AdminApp: React.FC = () => {
       />
 
       {/* Default redirects - if admin is logged in and authorized, send to dashboard; otherwise send to login */}
-      <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
-      <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
+      <Route
+        path="/"
+        element={
+          user && user.role === "ADMIN" ? (
+            <Navigate to="/admin/dashboard" replace />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="*"
+        element={
+          user && user.role === "ADMIN" ? (
+            <Navigate to="/admin/dashboard" replace />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
     </Routes>
   );
 };

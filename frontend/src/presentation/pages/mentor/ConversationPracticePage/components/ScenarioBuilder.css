@@ -1,0 +1,307 @@
+/* src/presentation/pages/mentor/ConversationPracticePage/components/ScenarioBuilder.css */
+
+.scenario-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Header */
+.scenario-builder__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.scenario-builder__header-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+  color: #be123c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.scenario-builder__title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.scenario-builder__subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Section */
+.scenario-builder__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scenario-builder__section-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 10px;
+  background: rgba(248, 250, 252, 0.8);
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scenario-builder__section-toggle:hover {
+  background: rgba(252, 231, 243, 0.3);
+  border-color: rgba(236, 72, 153, 0.3);
+}
+
+.scenario-builder__chevron {
+  transition: transform 0.2s ease;
+}
+
+.scenario-builder__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* Templates */
+.scenario-builder__templates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.scenario-builder__template-card {
+  padding: 14px;
+  border-radius: 12px;
+  border: 2px solid rgba(226, 232, 240, 0.8);
+  background: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scenario-builder__template-card:hover {
+  border-color: #ec4899;
+  background: rgba(252, 231, 243, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+}
+
+.scenario-builder__template-name {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.scenario-builder__template-desc {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.scenario-builder__template-steps {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(236, 72, 153, 0.1);
+  color: #be123c;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Field */
+.scenario-builder__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scenario-builder__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.scenario-builder__textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(156, 163, 175, 0.4);
+  font-size: 13px;
+  font-family: inherit;
+  background: rgba(248, 250, 252, 0.95);
+  color: #0f172a;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.scenario-builder__textarea:focus {
+  border-color: #ec4899;
+  box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.15);
+  background: #ffffff;
+}
+
+/* Section header */
+.scenario-builder__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.scenario-builder__section-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.scenario-builder__add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.scenario-builder__add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+}
+
+/* Steps */
+.scenario-builder__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scenario-builder__step {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: rgba(248, 250, 252, 0.6);
+}
+
+.scenario-builder__step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.scenario-builder__step-number {
+  font-size: 13px;
+  font-weight: 600;
+  color: #be123c;
+}
+
+.scenario-builder__remove-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scenario-builder__remove-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  transform: scale(1.1);
+}
+
+.scenario-builder__step-field {
+  margin-bottom: 8px;
+}
+
+.scenario-builder__step-field:last-child {
+  margin-bottom: 0;
+}
+
+.scenario-builder__input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(156, 163, 175, 0.35);
+  font-size: 13px;
+  background: #ffffff;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.scenario-builder__input:focus {
+  border-color: #ec4899;
+}
+
+.scenario-builder__input--example {
+  font-style: italic;
+  color: #6b7280;
+}
+
+/* Empty */
+.scenario-builder__empty {
+  text-align: center;
+  padding: 24px;
+  color: #9ca3af;
+  font-size: 13px;
+  background: rgba(248, 250, 252, 0.8);
+  border-radius: 12px;
+  border: 1px dashed rgba(156, 163, 175, 0.4);
+}
+
+/* Actions */
+.scenario-builder__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 12px;
+  border-top: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.scenario-builder__save-btn {
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.scenario-builder__save-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35);
+}
+
+.scenario-builder__save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

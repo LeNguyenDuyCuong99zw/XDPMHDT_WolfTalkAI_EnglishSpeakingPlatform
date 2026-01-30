@@ -1,0 +1,269 @@
+/* src/presentation/pages/mentor/ProgressTrackingPage/components/WeakPointsAnalysis.css */
+
+.weak-points-analysis {
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.weak-points-analysis__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(226, 232, 240, 0.8);
+}
+
+.weak-points-analysis__header-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  color: #dc2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.weak-points-analysis__title {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.weak-points-analysis__subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* Stats */
+.weak-points-analysis__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.weak-point-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px;
+  border-radius: 10px;
+  border: 2px solid;
+}
+
+.weak-point-stat--high {
+  background: rgba(254, 226, 226, 0.3);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.weak-point-stat--medium {
+  background: rgba(254, 243, 199, 0.3);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.weak-point-stat--low {
+  background: rgba(219, 234, 254, 0.3);
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+.weak-point-stat__value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.weak-point-stat__label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* List */
+.weak-points-analysis__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* Weak Point Card */
+.weak-point-card {
+  padding: 18px;
+  border-radius: 12px;
+  border: 2px solid;
+  transition: all 0.2s ease;
+}
+
+.weak-point-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
+}
+
+.weak-point-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.weak-point-card__skill-tag {
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.weak-point-card__severity {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.weak-point-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.weak-point-card__section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weak-point-card__section-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+}
+
+.weak-point-card__section-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.weak-point-card__text {
+  margin: 0;
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.6;
+  padding-left: 22px;
+}
+
+.weak-point-card__examples {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 22px;
+}
+
+.weak-point-card__example {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  color: #4b5563;
+  font-family: 'Courier New', monospace;
+  line-height: 1.5;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.weak-point-card__action-btn {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(14, 165, 233, 0.3);
+  background: rgba(14, 165, 233, 0.05);
+  color: #0369a1;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.weak-point-card__action-btn:hover {
+  background: rgba(14, 165, 233, 0.1);
+  border-color: #0ea5e9;
+  transform: translateY(-1px);
+}
+
+/* Action Buttons */
+.weak-points-analysis__actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.weak-points-analysis__action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.weak-points-analysis__action-btn--primary {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.weak-points-analysis__action-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
+}
+
+.weak-points-analysis__action-btn--secondary {
+  background: rgba(248, 250, 252, 0.9);
+  color: #0369a1;
+  border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+.weak-points-analysis__action-btn--secondary:hover {
+  background: rgba(219, 234, 254, 0.5);
+  border-color: #0ea5e9;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .weak-points-analysis {
+    padding: 16px;
+  }
+
+  .weak-points-analysis__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .weak-points-analysis__actions {
+    grid-template-columns: 1fr;
+  }
+
+  .weak-point-card__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

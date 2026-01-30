@@ -1,0 +1,330 @@
+/* src/presentation/pages/mentor/VocabularyManagementPage/components/CollocationLibrary.css */
+
+.collocation-library {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Header */
+.collocation-library__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.collocation-library__header-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+  color: #be123c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.collocation-library__title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.collocation-library__subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Stats */
+.collocation-library__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.collocation-library__stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.collocation-library__stat strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+/* Controls */
+.collocation-library__controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.collocation-library__search {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.collocation-library__search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.collocation-library__search-input {
+  width: 100%;
+  padding: 9px 12px 9px 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(156, 163, 175, 0.45);
+  font-size: 13px;
+  background: rgba(248, 250, 252, 0.95);
+  color: #0f172a;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.collocation-library__search-input:focus {
+  border-color: #ec4899;
+  box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.15);
+  background: #ffffff;
+}
+
+.collocation-library__filters {
+  display: flex;
+  gap: 8px;
+}
+
+.collocation-library__select {
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(156, 163, 175, 0.45);
+  font-size: 13px;
+  background: rgba(248, 250, 252, 0.95);
+  color: #0f172a;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.collocation-library__select:focus {
+  border-color: #ec4899;
+  box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.15);
+}
+
+.collocation-library__add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.collocation-library__add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(236, 72, 153, 0.4);
+}
+
+/* List */
+.collocation-library__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.collocation-library__list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.collocation-library__list::-webkit-scrollbar-track {
+  background: rgba(248, 250, 252, 0.8);
+  border-radius: 10px;
+}
+
+.collocation-library__list::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 10px;
+}
+
+/* Item */
+.collocation-library__item {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.collocation-library__item:hover {
+  background: rgba(252, 231, 243, 0.3);
+  border-color: rgba(236, 72, 153, 0.3);
+  transform: translateX(4px);
+}
+
+.collocation-library__item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.collocation-library__phrase {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.collocation-library__badges {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.collocation-library__type {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(236, 72, 153, 0.12);
+  color: #be123c;
+  white-space: nowrap;
+}
+
+.collocation-library__frequency {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.collocation-library__frequency--common {
+  background: rgba(34, 197, 94, 0.12);
+  color: #15803d;
+}
+
+.collocation-library__frequency--medium {
+  background: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+}
+
+.collocation-library__frequency--rare {
+  background: rgba(148, 163, 184, 0.12);
+  color: #475569;
+}
+
+.collocation-library__meaning {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.collocation-library__example {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  margin-bottom: 10px;
+}
+
+.collocation-library__example-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.collocation-library__example-text {
+  font-size: 13px;
+  color: #0f172a;
+  font-style: italic;
+}
+
+.collocation-library__related {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.collocation-library__related-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+
+.collocation-library__related-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.collocation-library__tag {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(236, 72, 153, 0.08);
+  color: #be123c;
+  border: 1px solid rgba(236, 72, 153, 0.2);
+}
+
+/* Empty */
+.collocation-library__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 20px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .collocation-library__controls {
+    flex-direction: column;
+  }
+
+  .collocation-library__search,
+  .collocation-library__filters,
+  .collocation-library__add-btn {
+    width: 100%;
+  }
+
+  .collocation-library__stats {
+    grid-template-columns: 1fr;
+  }
+}
