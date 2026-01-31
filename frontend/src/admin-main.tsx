@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./presentation/contexts/AuthContext";
-import { AdminApp } from "./AdminApp";
+import AdminApp from "./AdminApp";
 import "./index.css";
 
 const adminRoot = document.getElementById("admin-root");

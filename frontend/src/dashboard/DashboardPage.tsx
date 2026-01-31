@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "../services/api";
+import WeeklyLeaderboardWidget from "../components/listening/WeeklyLeaderboardWidget";
 import "./DashboardPage.css";
 import "./Notification.css";
 
@@ -26,7 +27,7 @@ const DashboardPage: React.FC = () => {
     // Heartbeat: Increment learning time every 1 minute
     const heartbeatInterval = setInterval(async () => {
       try {
-        await apiClient.post('/dashboard/heartbeat', {});
+        await apiClient.post("/dashboard/heartbeat", {});
         // After heartbeat, refresh local view
         loadUserStats();
       } catch (e) {
@@ -42,7 +43,7 @@ const DashboardPage: React.FC = () => {
 
   const loadUserStats = async () => {
     try {
-      const data = await apiClient.get<any>('/dashboard/stats');
+      const data = await apiClient.get<any>("/dashboard/stats");
       console.log("Dashboard Stats loaded:", data);
       setStreak(data.streak);
       setWordsLearned(data.wordsLearned);
@@ -54,7 +55,7 @@ const DashboardPage: React.FC = () => {
 
       // Goal Achievement Notification
       // Only show if we go from NOT achieved to ACHIEVED in this session
-      setTodayProgress(prev => {
+      setTodayProgress((prev) => {
         if (currentProgress >= todayGoal && prev < todayGoal && prev !== 0) {
           setShowNotification(true);
           setTimeout(() => setShowNotification(false), 5000);
@@ -109,8 +110,9 @@ const DashboardPage: React.FC = () => {
           <p className="progress-message">
             {todayProgress >= todayGoal
               ? "🎉 Xuất sắc! Bạn đã hoàn thành mục tiêu hôm nay!"
-              : `Còn ${todayGoal - todayProgress
-              } phút nữa để hoàn thành mục tiêu!`}
+              : `Còn ${
+                  todayGoal - todayProgress
+                } phút nữa để hoàn thành mục tiêu!`}
           </p>
         </div>
 
@@ -123,11 +125,28 @@ const DashboardPage: React.FC = () => {
             <button className="action-btn">BẮT ĐẦU</button>
           </div>
 
+          <div
+            className="action-card highlight"
+            onClick={() => navigate("/practice")}
+          >
+            <div className="action-icon">✏️</div>
+            <h3>Luyện tập</h3>
+            <p>Trắc nghiệm, điền từ để kiếm XP</p>
+            <button className="action-btn">LUYỆN TẬP</button>
+          </div>
+
           <div className="action-card" onClick={() => navigate("/speaking")}>
             <div className="action-icon">🎤</div>
             <h3>Luyện nói</h3>
             <p>Cải thiện phát âm</p>
-            <button className="action-btn">LUYỆN TẬP</button>
+            <button className="action-btn">BẮT ĐẦU</button>
+          </div>
+
+          <div className="action-card" onClick={() => navigate("/listening")}>
+            <div className="action-icon">🎧</div>
+            <h3>Thử thách nghe</h3>
+            <p>Nâng cao kỹ năng nghe</p>
+            <button className="action-btn">NGHE NGAY</button>
           </div>
 
           <div
@@ -239,11 +258,7 @@ const DashboardPage: React.FC = () => {
         </div>
 
         {/* Unlock Leaderboard Card */}
-        <div className="side-card">
-          <div className="card-icon">🔒</div>
-          <h3>Mở khóa Băng xếp hạng!</h3>
-          <p>Hoàn thành thêm 10 bài học để bắt đầu thi đua</p>
-        </div>
+        <WeeklyLeaderboardWidget />
 
         {/* Daily Quest Card */}
         <div className="side-card daily-quest">

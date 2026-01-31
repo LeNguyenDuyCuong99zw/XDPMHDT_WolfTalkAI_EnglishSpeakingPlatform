@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 import logo from "../assets/wolftalk/logo_wolf.png";
+import homeIcon from "../assets/icon/house.png";
+import coursesIcon from "../assets/icon/project-management.png";
+import rankingIcon from "../assets/icon/ranking.png";
+import questsIcon from "../assets/icon/treasure-chest.png";
+import userIcon from "../assets/icon/user.png";
 import { apiClient } from "../services/api";
 
 interface UserProfile {
@@ -24,7 +29,7 @@ const defaultItems: MenuItem[] = [
   {
     id: "dashboard",
     label: "HỌC",
-    icon: "🏠",
+    icon: "home-icon",
   },
   {
     id: "alphabet",
@@ -32,19 +37,24 @@ const defaultItems: MenuItem[] = [
     icon: "あ",
   },
   {
+    id: "vocabulary",
+    label: "TỪ VỰNG",
+    icon: "📚",
+  },
+  {
     id: "plans",
     label: "CÁC KHÓA HỌC",
-    icon: "�",
+    icon: "courses-icon",
   },
   {
     id: "leaderboard",
     label: "BẢNG XẾP HẠNG",
-    icon: "🏆",
+    icon: "ranking-icon",
   },
   {
     id: "quests",
     label: "NHIỆM VỤ",
-    icon: "👑",
+    icon: "quests-icon",
   },
   {
     id: "shop",
@@ -54,7 +64,7 @@ const defaultItems: MenuItem[] = [
   {
     id: "profile",
     label: "HỒ SƠ",
-    icon: "👤",
+    icon: "profile-icon",
   },
   {
     id: "more",
@@ -90,7 +100,10 @@ const Sidebar: React.FC<{ items?: MenuItem[] }> = ({
   // Map id to route path
   const idToPath: Record<string, string> = {
     dashboard: "/dashboard",
+    practice: "/practice",
     alphabet: "/alphabet",
+    vocabulary: "/vocabulary",
+    listening: "/listening",
     plans: user?.id ? `/packages/${user.id}` : "/packages/1",
     leaderboard: "/leaderboard",
     quests: "/quests",
@@ -134,20 +147,10 @@ const Sidebar: React.FC<{ items?: MenuItem[] }> = ({
             <img src={logo} alt="WolfTalk" />
           </div>
           <div className="title">
-            <strong>wolftalk</strong>
+            <strong>Wolftalk</strong>
           </div>
         </div>
       </div>
-
-      {/* User Profile Section */}
-      {user && (
-        <div className="sidebar-user-profile">
-          <div className="user-avatar">{getInitials()}</div>
-          <div className="user-info">
-            <div className="user-name">{getDisplayName()}</div>
-          </div>
-        </div>
-      )}
 
       <nav className="sidebar-nav">
         {items.map((it) => {
@@ -208,8 +211,46 @@ const Sidebar: React.FC<{ items?: MenuItem[] }> = ({
               title={it.label}
               style={{ textDecoration: "none" }}
             >
-              <span className="icon" aria-hidden>
-                {it.icon}
+              <span className={`icon icon-${it.id}`} aria-hidden>
+                {it.icon === "home-icon" ? (
+                  <img
+                    src={homeIcon}
+                    alt="Home"
+                    className="sidebar-icon-img icon-home"
+                  />
+                ) : it.icon === "courses-icon" ? (
+                  <img
+                    src={coursesIcon}
+                    alt="Courses"
+                    className="sidebar-icon-img icon-courses"
+                  />
+                ) : it.icon === "ranking-icon" ? (
+                  <img
+                    src={rankingIcon}
+                    alt="Ranking"
+                    className="sidebar-icon-img icon-ranking"
+                  />
+                ) : it.icon === "quests-icon" ? (
+                  <img
+                    src={questsIcon}
+                    alt="Quests"
+                    className="sidebar-icon-img icon-quests"
+                  />
+                ) : it.icon === "profile-icon" ? (
+                  <img
+                    src={userIcon}
+                    alt="Profile"
+                    className="sidebar-icon-img icon-profile"
+                  />
+                ) : it.icon === "🛒" ? (
+                  <span className="icon-shop">{it.icon}</span>
+                ) : it.icon === "あ" ? (
+                  <span className="icon-alphabet">{it.icon}</span>
+                ) : it.icon === "⋯" ? (
+                  <span className="icon-more">{it.icon}</span>
+                ) : (
+                  it.icon
+                )}
               </span>
               <span className="label">{it.label}</span>
             </Link>

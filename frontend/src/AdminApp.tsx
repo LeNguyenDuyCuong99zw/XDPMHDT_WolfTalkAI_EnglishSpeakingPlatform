@@ -17,6 +17,7 @@ import { PrivateRoute } from "./presentation/routes/PrivateRoute";
  * Admin-only routes for http://admin.localhost:5173
  * This app only shows admin interface
  */
+const AdminApp: React.FC = () => {
   const { user } = useAuth();
   return (
     <Routes>
@@ -171,3 +172,5 @@ import { PrivateRoute } from "./presentation/routes/PrivateRoute";
     </Routes>
   );
 };
+
+export default AdminApp;

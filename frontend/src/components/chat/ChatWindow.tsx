@@ -40,12 +40,34 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
             // Remove deleted message
             setMessages((prev) => prev.filter((m) => m.id !== message.id));
           } else {
-            // Add new message
+            // Add new message or replace temp message
             setMessages((prev) => {
-              // Check if message already exists to avoid duplicates
-              if (prev.some((m) => m.id === message.id)) {
+              // Check if message already exists (by real message id, not temp id)
+              const messageExists = prev.some(
+                (m) => m.id === message.id && m.id > 0,
+              );
+
+              if (messageExists) {
                 return prev;
               }
+
+              // If this is from server (real id > 0), check for temp message from same sender with same content
+              if (message.id > 0) {
+                const tempMessageIndex = prev.findIndex(
+                  (m) =>
+                    m.senderId === message.senderId &&
+                    m.content === message.content &&
+                    m.id < 0,
+                );
+
+                if (tempMessageIndex !== -1) {
+                  // Replace temp message with real one
+                  const updated = [...prev];
+                  updated[tempMessageIndex] = message;
+                  return updated;
+                }
+              }
+
               return [...prev, message];
             });
           }
@@ -95,11 +117,28 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   };
 
   const handleSendMessage = async (content: string) => {
+    // Add message optimistically to UI immediately
+    const tempMessage: Message = {
+      id: Date.now(),
+      conversationId: conversation.id,
+      senderId: currentUserId,
+      senderName: "Bạn",
+      senderAvatar: "",
+      content: content,
+      createdAt: new Date().toISOString(),
+      isDeleted: false,
+    };
+
+    // Show message immediately
+    setMessages((prev) => [...prev, tempMessage]);
+
     try {
       await chatService.sendMessage(conversation.id, content);
       // Message will be received via WebSocket subscription
     } catch (error) {
       console.error("Error sending message:", error);
+      // Remove the temp message if sending failed
+      setMessages((prev) => prev.filter((m) => m.id !== tempMessage.id));
       throw error;
     }
   };

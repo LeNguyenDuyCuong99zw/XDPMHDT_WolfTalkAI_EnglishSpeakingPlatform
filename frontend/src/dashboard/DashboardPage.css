@@ -170,6 +170,36 @@
   border-color: #58cc02;
 }
 
+/* Highlight card for Practice */
+.action-card.highlight {
+  background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+  border-color: #ff9600;
+  position: relative;
+  overflow: hidden;
+}
+
+.action-card.highlight::before {
+  content: "⭐ XP";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ff9600;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.action-card.highlight:hover {
+  border-color: #ffb300;
+  box-shadow: 0 8px 24px rgba(255, 150, 0, 0.3);
+}
+
+.action-card.highlight .action-btn {
+  background: linear-gradient(180deg, #ff9600 0%, #e67e00 100%);
+}
+
 .action-icon {
   font-size: 2.5rem;
   margin-bottom: 0.75rem;

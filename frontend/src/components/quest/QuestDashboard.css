@@ -1,0 +1,966 @@
+/* QuestDashboard.css - Duolingo-style Design */
+
+/* Base styles */
+.quest-dashboard {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 20px;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #3c3c3c;
+}
+
+/* Main Layout - Two Columns */
+.quest-layout {
+  display: flex;
+  gap: 80px;
+  align-items: flex-start;
+}
+
+.quest-main-content {
+  flex: 1;
+  max-width: 1200px;
+}
+
+/* Right Sidebar */
+.quest-sidebar {
+  width: 450px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 24px;
+}
+
+.sidebar-card {
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  border: 2px solid #e5e5e5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Unlock Leaderboard Card */
+.unlock-card {
+  text-align: center;
+  background: linear-gradient(180deg, #fff 0%, #f8f8f8 100%);
+}
+
+.unlock-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.unlock-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #3c3c3c;
+  margin: 0 0 8px;
+}
+
+.unlock-description {
+  font-size: 14px;
+  color: #777;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.unlock-progress-container {
+  padding: 0 10px;
+}
+
+.unlock-progress-bar {
+  height: 10px;
+  background: #e5e5e5;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.unlock-progress-fill {
+  width: 20%;
+  height: 100%;
+  background: linear-gradient(90deg, #58cc02, #4caf00);
+  border-radius: 5px;
+}
+
+.unlock-lessons {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.lesson-dot {
+  font-size: 20px;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+}
+
+.lesson-dot.completed {
+  opacity: 1;
+}
+
+/* Daily Goal Card */
+.daily-goal-card {
+  background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
+  border-color: #ffd54f;
+}
+
+.daily-goal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.goal-icon {
+  font-size: 24px;
+}
+
+.goal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #3c3c3c;
+}
+
+.daily-goal-content {
+  text-align: center;
+}
+
+.goal-xp {
+  margin-bottom: 12px;
+}
+
+.goal-current {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ff9600;
+}
+
+.goal-separator {
+  font-size: 20px;
+  color: #afafaf;
+  margin: 0 4px;
+}
+
+.goal-target {
+  font-size: 20px;
+  font-weight: 600;
+  color: #afafaf;
+}
+
+.goal-progress-bar {
+  height: 12px;
+  background: #e5e5e5;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.goal-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff9600, #ff7800);
+  border-radius: 6px;
+  transition: width 0.4s ease;
+  min-width: 4px;
+}
+
+/* Profile Card */
+.profile-card {
+  text-align: center;
+  background: linear-gradient(180deg, #e8f5e9 0%, #fff 100%);
+  border-color: #81c784;
+  padding-top: 70px;
+  position: relative;
+}
+
+.profile-avatar {
+  font-size: 56px;
+  margin-bottom: 12px;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.profile-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #3c3c3c;
+  margin: 0 0 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.profile-description {
+  font-size: 14px;
+  color: #777;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.profile-button {
+  width: 100%;
+  background: linear-gradient(180deg, #58cc02 0%, #4caf00 100%);
+  color: white;
+  border: none;
+  border-bottom: 4px solid #3d9400;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  transition: all 0.15s ease;
+}
+
+.profile-button:hover {
+  filter: brightness(1.05);
+}
+
+.profile-button:active {
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+}
+
+.profile-button-secondary {
+  width: 100%;
+  background: transparent;
+  color: #1cb0f6;
+  border: 2px solid #1cb0f6;
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.15s ease;
+}
+
+.profile-button-secondary:hover {
+  background: rgba(28, 176, 246, 0.1);
+}
+
+/* Responsive - Hide sidebar on smaller screens */
+@media (max-width: 1024px) {
+  .quest-layout {
+    flex-direction: column;
+  }
+
+  .quest-main-content {
+    max-width: 100%;
+  }
+
+  .quest-sidebar {
+    width: 100%;
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .sidebar-card {
+    flex: 1;
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 640px) {
+  .quest-sidebar {
+    flex-direction: column;
+  }
+
+  .sidebar-card {
+    min-width: 100%;
+  }
+}
+
+.quest-dashboard.loading,
+.quest-dashboard.error,
+.quest-dashboard.needs-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+/* Loading state */
+.loading-container {
+  text-align: center;
+  color: #4b4b4b;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(88, 204, 2, 0.2);
+  border-top-color: #58cc02;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+.loading-spinner-small {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Login prompt */
+.login-prompt-container {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.login-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.login-prompt-container h3 {
+  color: #3c3c3c;
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.login-prompt-container p {
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.login-button {
+  background: linear-gradient(180deg, #58cc02 0%, #4caf00 100%);
+  color: white;
+  border: none;
+  border-bottom: 4px solid #3d9400;
+  padding: 14px 32px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.15s ease;
+}
+
+.login-button:hover {
+  filter: brightness(1.05);
+}
+
+.login-button:active {
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+}
+
+/* Error state */
+.error-container {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.error-container p {
+  color: #e53935;
+}
+
+.retry-button {
+  background: #e53935;
+  color: white;
+  border: none;
+  border-bottom: 4px solid #b71c1c;
+  padding: 12px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-top: 16px;
+}
+
+/* Notification */
+.quest-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 16px 24px;
+  border-radius: 16px;
+  font-weight: 700;
+  z-index: 1000;
+  animation: slideIn 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.quest-notification.success {
+  background: #58cc02;
+  color: white;
+}
+
+.quest-notification.error {
+  background: #e53935;
+  color: white;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Stats Header - Compact Design */
+.quest-stats-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 120px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 2px solid #e5e5e5;
+}
+
+.stat-icon {
+  font-size: 24px;
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #3c3c3c;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #afafaf;
+  font-weight: 600;
+}
+
+/* Monthly Challenge Section */
+.monthly-section {
+  margin-bottom: 28px;
+}
+
+.monthly-section .section-title {
+  color: #3c3c3c;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.monthly-challenge-card {
+  background: linear-gradient(135deg, #00b8a9 0%, #00897b 100%);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 184, 169, 0.3);
+  position: relative;
+}
+
+.monthly-header {
+  padding: 20px 20px 0;
+}
+
+.month-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 6px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.monthly-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.monthly-title {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.monthly-timer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.monthly-timer svg,
+.monthly-timer .timer-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Monthly Progress Box */
+.monthly-progress-box {
+  margin: 16px 20px 20px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.monthly-progress-bar-container {
+  flex: 1;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.monthly-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffc107, #ffb300);
+  border-radius: 7px;
+  transition: width 0.5s ease;
+  min-width: 2px;
+}
+
+.monthly-progress-text {
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.monthly-mascot {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  width: 50px;
+  height: 50px;
+  font-size: 40px;
+  opacity: 0.9;
+}
+
+/* Hide old monthly elements in favor of new layout */
+.monthly-footer,
+.badge-preview,
+.monthly-info,
+.monthly-progress,
+.monthly-rewards,
+.monthly-deadline,
+.claim-monthly-button,
+.monthly-claimed-badge,
+.monthly-description {
+  display: none;
+}
+
+/* Daily Quests Section */
+.daily-quests-section {
+  background: white;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 2px solid #e5e5e5;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e5e5e5;
+}
+
+.section-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.daily-quests-section .section-title {
+  color: #3c3c3c;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.daily-timer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #ff9600;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.claim-all-button {
+  background: linear-gradient(180deg, #ffc800 0%, #ffb300 100%);
+  color: #5a4800;
+  border: none;
+  border-bottom: 4px solid #d99f00;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.15s ease;
+}
+
+.claim-all-button:hover {
+  filter: brightness(1.05);
+}
+
+.claim-all-button:active {
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+}
+
+.claim-all-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Quest Cards - New Duolingo Style */
+.quests-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.quest-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 0;
+  border-bottom: 2px solid #e5e5e5;
+  transition: background 0.15s ease;
+}
+
+.quest-card:last-child {
+  border-bottom: none;
+}
+
+.quest-card:hover {
+  background: #f7f7f7;
+  margin: 0 -28px;
+  padding: 20px 28px;
+}
+
+.quest-card.completed {
+  background: linear-gradient(
+    90deg,
+    rgba(88, 204, 2, 0.08) 0%,
+    transparent 100%
+  );
+}
+
+.quest-card.claimed {
+  opacity: 0.6;
+}
+
+/* Quest Icon */
+.quest-icon-container {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  border-bottom: 4px solid rgba(0, 0, 0, 0.15);
+}
+
+.quest-icon-container.xp-quest {
+  background: linear-gradient(180deg, #ffc800 0%, #ffb300 100%);
+}
+
+.quest-icon-container.lesson-quest {
+  background: linear-gradient(180deg, #58cc02 0%, #4caf00 100%);
+}
+
+.quest-icon-container.streak-quest {
+  background: linear-gradient(180deg, #ff9600 0%, #e67e00 100%);
+}
+
+.quest-icon-container.time-quest {
+  background: linear-gradient(180deg, #ce82ff 0%, #a855f7 100%);
+}
+
+.quest-icon-container.default-quest {
+  background: linear-gradient(180deg, #1cb0f6 0%, #0095d9 100%);
+}
+
+/* Quest Content */
+.quest-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.quest-dashboard .quest-title,
+.daily-quests-section .quest-title {
+  color: #1f1b1b !important;
+  font-size: 17px;
+  font-weight: 400;
+  margin: 0 0 12px;
+  line-height: 1.3;
+}
+
+/* Quest Progress Row */
+.quest-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quest-progress-bar-container {
+  flex: 1;
+  height: 12px;
+  background: #e5e5e5;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.quest-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffc800, #ffb300);
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+
+.quest-progress-bar-fill.completed {
+  background: linear-gradient(90deg, #58cc02, #4caf00);
+}
+
+.quest-progress-text {
+  color: #afafaf;
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 45px;
+}
+
+/* Quest Reward Badge */
+.quest-reward-badge {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(180deg, #ff9600 0%, #e67e00 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.15);
+  font-size: 16px;
+}
+
+/* Quest Action Button */
+.quest-action {
+  flex-shrink: 0;
+}
+
+.claim-button {
+  background: linear-gradient(180deg, #58cc02 0%, #4caf00 100%);
+  color: white;
+  border: none;
+  border-bottom: 4px solid #3d9400;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.15s ease;
+}
+
+.claim-button:hover {
+  filter: brightness(1.05);
+}
+
+.claim-button:active {
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+}
+
+.claim-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.status-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: #e5e5e5;
+  color: #777;
+}
+
+.status-badge.claimed {
+  color: #58cc02;
+  background: rgba(88, 204, 2, 0.1);
+}
+
+/* Hide old quest card elements */
+.quest-header,
+.quest-icon-wrapper,
+.quest-tier-badge,
+.quest-info,
+.quest-description,
+.quest-progress-section,
+.quest-rewards,
+.xp-reward,
+.gems-reward {
+  display: none;
+}
+
+/* Daily Reset Notice */
+.daily-reset-notice {
+  text-align: center;
+  color: #afafaf;
+  font-size: 13px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 2px solid #e5e5e5;
+  font-weight: 600;
+}
+
+/* No Quests Message */
+.no-quests-message {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.no-quests-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.no-quests-message p {
+  color: #777;
+  margin: 0;
+  font-weight: 600;
+}
+
+.no-quests-hint {
+  font-size: 13px;
+  margin-top: 8px !important;
+  color: #afafaf !important;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .quest-dashboard {
+    padding: 16px;
+  }
+
+  .quest-stats-header {
+    gap: 8px;
+  }
+
+  .stat-card {
+    min-width: 100px;
+    padding: 10px 12px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+
+  .monthly-title {
+    font-size: 16px;
+  }
+
+  .daily-quests-section {
+    padding: 16px;
+  }
+
+  .quest-card {
+    gap: 12px;
+  }
+
+  .quest-card:hover {
+    margin: 0 -16px;
+    padding: 16px 16px;
+  }
+
+  .quest-icon-container {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .quest-title {
+    font-size: 14px;
+  }
+
+  .claim-button {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+}

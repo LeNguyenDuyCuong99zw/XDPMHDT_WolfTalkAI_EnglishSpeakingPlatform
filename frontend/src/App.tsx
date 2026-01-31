@@ -13,6 +13,10 @@ import CertificatesPage from "./certificat/CertificatesPage";
 import ProgressPage from "./progress/ProgressPage";
 import AlphabetPage from "./alphabet/AlphabetPage";
 import AlphabetQuiz from "./alphabet/AlphabetQuiz";
+import ListeningChallengePage from "./pages/ListeningChallengePage";
+import LeaderboardPage from "./pages/LeaderboardPage";
+import QuestsPage from "./pages/QuestsPage";
+import PracticePage from "./pages/LearningPage";
 import "./App.css";
 import DashboardPage from "./dashboard/DashboardPage";
 import LandingPage from "./pages/LandingPage";
@@ -29,6 +33,7 @@ import SubscriptionPage from "./pages/SubscriptionPage";
 import ChatPage from "./pages/ChatPage";
 import { OAuthCallback } from "./presentation/pages/auth/OAuthCallback";
 import { LoginPage } from "./presentation/pages/auth/LoginPage/LoginPage";
+import { VocabularyLearning } from "./vocabulary";
 
 function App() {
   const token =
@@ -139,6 +144,19 @@ function App() {
               }
             />
             <Route
+              path="/listening"
+              element={
+                <RequirePlacementTest>
+                  <div className="app-layout">
+                    <Sidebar />
+                    <main className="main-content">
+                      <ListeningChallengePage />
+                    </main>
+                  </div>
+                </RequirePlacementTest>
+              }
+            />
+            <Route
               path="/certificates"
               element={
                 <RequirePlacementTest>
@@ -172,6 +190,58 @@ function App() {
                     <Sidebar />
                     <main className="main-content">
                       <ChatPage />
+                    </main>
+                  </div>
+                </RequirePlacementTest>
+              }
+            />
+            <Route
+              path="/leaderboard"
+              element={
+                <RequirePlacementTest>
+                  <div className="app-layout">
+                    <Sidebar />
+                    <main className="main-content">
+                      <LeaderboardPage />
+                    </main>
+                  </div>
+                </RequirePlacementTest>
+              }
+            />
+            <Route
+              path="/quests"
+              element={
+                <RequirePlacementTest>
+                  <div className="app-layout">
+                    <Sidebar />
+                    <main className="main-content">
+                      <QuestsPage />
+                    </main>
+                  </div>
+                </RequirePlacementTest>
+              }
+            />
+            <Route
+              path="/practice"
+              element={
+                <RequirePlacementTest>
+                  <div className="app-layout">
+                    <Sidebar />
+                    <main className="main-content">
+                      <PracticePage />
+                    </main>
+                  </div>
+                </RequirePlacementTest>
+              }
+            />
+            <Route
+              path="/vocabulary"
+              element={
+                <RequirePlacementTest>
+                  <div className="app-layout">
+                    <Sidebar />
+                    <main className="main-content">
+                      <VocabularyLearning />
                     </main>
                   </div>
                 </RequirePlacementTest>

@@ -39,25 +39,42 @@ const MessageList: React.FC<MessageListProps> = ({
           key={`${msg.id}-${idx}`}
           className={`message ${
             msg.senderId === currentUserId ? "sent" : "received"
-          } ${msg.isDeleted ? "deleted" : ""}`}
+          } ${msg.isDeleted ? "deleted" : ""} ${msg.id < 0 ? "pending" : ""}`}
         >
-          {msg.senderId !== currentUserId && msg.senderAvatar && (
+          {msg.senderAvatar && (
             <img
               src={msg.senderAvatar}
               alt={msg.senderName}
               className="avatar"
+              title={msg.senderName}
             />
           )}
           <div className="message-content">
-            <div className="sender-info">
-              <span className="sender-name">{msg.senderName}</span>
-              <span className="timestamp">
-                {new Date(msg.createdAt).toLocaleTimeString("vi-VN")}
-              </span>
-            </div>
+            {msg.senderId !== currentUserId && (
+              <div className="sender-info">
+                <span className="sender-name">{msg.senderName}</span>
+                <span className="timestamp">
+                  {new Date(msg.createdAt).toLocaleTimeString("vi-VN", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
+              </div>
+            )}
             <div className="message-text">
               {msg.isDeleted ? <em>Tin nhắn đã bị xóa</em> : msg.content}
+              {msg.id < 0 && <span className="sending">. . .</span>}
             </div>
+            {msg.senderId === currentUserId && (
+              <span className="timestamp">
+                {msg.id < 0
+                  ? "Đang gửi..."
+                  : new Date(msg.createdAt).toLocaleTimeString("vi-VN", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+              </span>
+            )}
           </div>
         </div>
       ))}
