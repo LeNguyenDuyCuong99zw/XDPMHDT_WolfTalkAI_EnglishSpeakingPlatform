@@ -4,6 +4,20 @@ import axios from "axios";
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8080/api";
 
+// Types
+export interface LearningPackageDTO {
+  id: number;
+  name: string;
+  description: string;
+  level: string;
+  price: number;
+  currency: string;
+  features: string[];
+  hasMentor: boolean;
+  duration?: number;
+  isActive: boolean;
+}
+
 // Package endpoints
 export const getPackages = async () => {
   try {

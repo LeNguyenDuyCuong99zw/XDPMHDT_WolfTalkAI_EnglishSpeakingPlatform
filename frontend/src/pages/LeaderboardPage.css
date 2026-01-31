@@ -1,0 +1,54 @@
+/* Leaderboard Page */
+.leaderboard-page {
+  display: flex;
+  height: 100vh;
+  background: #1c2333;
+  color: white;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Learning Path Container */
+.learning-path-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: calc(100% - 580px);
+  min-width: 0;
+  width: 100%;
+  height: 100vh;
+  margin-left: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.learning-path-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Welcome Header */
+.welcome-header {
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 2rem;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.greeting h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-subtitle {
+  font-size: 1rem;
+  color: #9ca3af;
+  font-weight: 500;
+}

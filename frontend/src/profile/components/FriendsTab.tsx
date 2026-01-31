@@ -17,8 +17,9 @@ const FriendsTab: React.FC<FriendsTabProps> = ({
   onRefresh,
 }) => {
   const [removingFriendId, setRemovingFriendId] = useState<number | null>(null);
-  const [activeChatFriend, setActiveChatFriend] =
-    useState<UserFriendDTO | null>(null);
+  const [activeChatFriends, setActiveChatFriends] = useState<
+    Map<number, UserFriendDTO>
+  >(new Map());
 
   const handleRemoveFriend = async (friendId: number) => {
     if (!window.confirm("Bạn có chắc muốn xóa bạn bè này?")) return;
@@ -116,10 +117,22 @@ const FriendsTab: React.FC<FriendsTabProps> = ({
             <div className="friend-actions">
               <button
                 className="btn-chat-friend"
-                onClick={() => setActiveChatFriend(friend)}
-                title="Chat với bạn bè"
+                onClick={() => {
+                  const newMap = new Map(activeChatFriends);
+                  if (newMap.has(friend.id)) {
+                    newMap.delete(friend.id);
+                  } else {
+                    newMap.set(friend.id, friend);
+                  }
+                  setActiveChatFriends(newMap);
+                }}
+                title={
+                  activeChatFriends.has(friend.id)
+                    ? "Đóng chat"
+                    : "Chat với bạn bè"
+                }
               >
-                💬
+                {activeChatFriends.has(friend.id) ? "💬✕" : "💬"}
               </button>
               <button
                 className="btn-remove-friend"
@@ -134,19 +147,24 @@ const FriendsTab: React.FC<FriendsTabProps> = ({
         ))}
       </div>
 
-      {activeChatFriend && (
+      {Array.from(activeChatFriends.values()).map((friend) => (
         <FloatingChatWindow
+          key={friend.id}
           friend={{
-            id: activeChatFriend.id,
-            email: activeChatFriend.email,
-            firstName: activeChatFriend.firstName,
-            lastName: activeChatFriend.lastName,
-            avatar: activeChatFriend.avatar,
+            id: friend.id,
+            email: friend.email,
+            firstName: friend.firstName,
+            lastName: friend.lastName,
+            avatar: friend.avatar,
           }}
           currentUserId={parseInt(localStorage.getItem("userId") || "0")}
-          onClose={() => setActiveChatFriend(null)}
+          onClose={() => {
+            const newMap = new Map(activeChatFriends);
+            newMap.delete(friend.id);
+            setActiveChatFriends(newMap);
+          }}
         />
-      )}
+      ))}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { Client } from "@stomp/stompjs";
 
 export interface Message {
   id: number;
+  conversationId?: number;
   senderId: number;
   senderName: string;
   senderAvatar?: string;

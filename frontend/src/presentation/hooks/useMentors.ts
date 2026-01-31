@@ -1,4 +1,46 @@
 import { useState, useEffect } from "react";
+import { apiClient } from "../../services/api";
+
+// Types
+interface MentorResponse {
+  items: any[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+// Mock implementations - replace with real use cases when available
+const getMentorsUseCase = {
+  execute: async (params: {
+    page: number;
+    limit: number;
+    search: string;
+  }): Promise<MentorResponse> => {
+    const response = await apiClient.get<MentorResponse>(
+      `/admin/mentors?page=${params.page}&limit=${params.limit}&search=${params.search}`,
+    );
+    return response;
+  },
+};
+
+const mentorRepository = {
+  approve: async (mentorId: string) => {
+    await apiClient.post(`/admin/mentors/${mentorId}/approve`, {});
+  },
+  reject: async (mentorId: string) => {
+    await apiClient.post(`/admin/mentors/${mentorId}/reject`, {});
+  },
+};
+
+const updateMentorSkillsUseCase = {
+  execute: async (
+    mentorId: string,
+    data: { skills: { name: string; level: string }[] },
+  ) => {
+    await apiClient.put(`/admin/mentors/${mentorId}/skills`, data);
+  },
+};
 
 export const useMentors = () => {
   const [mentors, setMentors] = useState<any[]>([]);

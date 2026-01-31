@@ -40,28 +40,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     const token = storageService.getAccessToken();
     if (token) {
       try {
-<<<<<<< HEAD
         // Nếu là bypass token, lấy user từ localStorage (đã có role)
         const userFromStorage = storageService.getUser();
-        if (userFromStorage && (token === 'bypass-token-admin' || token === 'bypass-token-mentor')) {
+        if (
+          userFromStorage &&
+          (token === "bypass-token-admin" || token === "bypass-token-mentor")
+        ) {
           setUser(userFromStorage);
         } else {
           // Optional: Verify token with backend or fetch user profile
           // const profile = await apiClient.get('/auth/me');
           // setUser(profile);
-          setUser({ email: 'user@example.com' }); // Placeholder until we fetch real profile
+          setUser({ email: "user@example.com" }); // Placeholder until we fetch real profile
         }
-=======
-        // Optional: Verify token with backend or fetch user profile
-        // const profile = await apiClient.get('/auth/me');
-        // setUser(profile);
-
-        // For now, if we have a token, we assume logged in.
-        // We can decode JWT here if we want user info immediately.
-        // Let's at least set a placeholder user if we don't fetch.
-        // Or try to fetch profile.
-        setUser({ email: "user@example.com" }); // Placeholder until we fetch real profile
->>>>>>> 94e84d9fe7549095ff0f8caa70e511619dc5a451
       } catch (e) {
         console.error(e);
         // storageService.removeAccessToken();
@@ -79,19 +70,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const login = async (credentials: LoginDTO): Promise<UserDTO> => {
     // BYPASS: Nếu email là 'admin@bypass' hoặc 'mentor@bypass', trả về user tương ứng, không gọi API
-    if (credentials.email === 'admin@bypass') {
-      const fakeUser = { email: 'admin@bypass', role: 'ADMIN', name: 'Bypass Admin' };
+    if (credentials.email === "admin@bypass") {
+      const fakeUser = {
+        email: "admin@bypass",
+        role: "ADMIN",
+        name: "Bypass Admin",
+      };
       setUser(fakeUser);
       storageService.setUser(fakeUser);
-      storageService.setAccessToken('bypass-token-admin');
+      storageService.setAccessToken("bypass-token-admin");
       // Đảm bảo trả về đúng role để LoginPage chuyển hướng về /admin/dashboard
       return fakeUser;
     }
-    if (credentials.email === 'mentor@bypass') {
-      const fakeUser = { email: 'mentor@bypass', role: 'MENTOR', name: 'Bypass Mentor' };
+    if (credentials.email === "mentor@bypass") {
+      const fakeUser = {
+        email: "mentor@bypass",
+        role: "MENTOR",
+        name: "Bypass Mentor",
+      };
       setUser(fakeUser);
       storageService.setUser(fakeUser);
-      storageService.setAccessToken('bypass-token-mentor');
+      storageService.setAccessToken("bypass-token-mentor");
       // Đảm bảo trả về đúng role để LoginPage chuyển hướng về /mentor/learners
       return fakeUser;
     }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { friendshipAPI } from "../../services/friendshipAPI";
-import type { UserFriendDTO } from "../../services/friendshipAPI";
+import { friendshipAPI } from "../services/friendshipAPI";
+import type { UserFriendDTO } from "../services/friendshipAPI";
 
 const ApiDebugPage: React.FC = () => {
   const [loading, setLoading] = useState(false);

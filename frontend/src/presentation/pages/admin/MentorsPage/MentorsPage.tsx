@@ -19,6 +19,19 @@ import { Input } from "../../../components/atoms/Input/Input";
 import { useMentors } from "../../../hooks/useMentors";
 import "./MentorsPage.css";
 
+// Types
+interface MentorDTO {
+  id: string;
+  name: string;
+  email: string;
+  skills: { name: string; level: string }[];
+  status: string;
+  rating: number;
+  studentsCount: number;
+  joinedAt: string;
+  avatar?: string;
+}
+
 export const MentorsPage: React.FC = () => {
   const {
     mentors,

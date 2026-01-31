@@ -1,0 +1,42 @@
+.quests-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7f7f7 0%, #ffffff 100%);
+}
+
+.quests-page .learning-path-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.quests-page .welcome-header {
+  margin-bottom: 32px;
+}
+
+.quests-page .greeting h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #3c3c3c;
+  margin: 0 0 8px 0;
+}
+
+.quests-page .welcome-subtitle {
+  font-size: 16px;
+  color: #777;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .quests-page .learning-path-container {
+    padding: 16px;
+  }
+
+  .quests-page .greeting h1 {
+    font-size: 24px;
+  }
+
+  .quests-page .welcome-subtitle {
+    font-size: 14px;
+  }
+}

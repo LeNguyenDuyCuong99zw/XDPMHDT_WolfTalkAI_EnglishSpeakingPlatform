@@ -1,4 +1,41 @@
 import { useState, useEffect } from "react";
+import { apiClient } from "../../services/api";
+
+// Types
+export interface CreatePlanDTO {
+  name: string;
+  description: string;
+  price: number;
+  currency: string;
+  duration: number;
+  features: string[];
+}
+
+export interface UpdatePlanDTO extends Partial<CreatePlanDTO> {
+  isActive?: boolean;
+}
+
+// Mock repository - replace with real implementation when available
+const planRepository = {
+  findAll: async () => {
+    return await apiClient.get<any[]>("/admin/plans");
+  },
+  create: async (data: CreatePlanDTO) => {
+    return await apiClient.post("/admin/plans", data);
+  },
+  update: async (id: string, data: UpdatePlanDTO) => {
+    return await apiClient.put(`/admin/plans/${id}`, data);
+  },
+  delete: async (id: string) => {
+    return await apiClient.delete(`/admin/plans/${id}`);
+  },
+  activate: async (id: string) => {
+    return await apiClient.patch(`/admin/plans/${id}/activate`);
+  },
+  deactivate: async (id: string) => {
+    return await apiClient.patch(`/admin/plans/${id}/deactivate`);
+  },
+};
 
 export const usePlans = () => {
   const [plans, setPlans] = useState<any[]>([]);
