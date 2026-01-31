@@ -26,7 +26,7 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
     public AuthResponse register(RegisterRequest req) {
-        if (userRepository.existsByEmail(req.getEmail())) {
+        if (userRepository.existsByEmailIgnoreCase(req.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }
         User u = new User();
@@ -37,18 +37,18 @@ public class AuthService {
         u.setLearningLanguage(req.getLearningLanguage());
         u.setRoles("ROLE_USER");
         userRepository.save(u);
-        String token = jwtUtil.generateToken(u.getEmail());
+        String token = jwtUtil.generateToken(u.getEmail(), "ROLE_USER");
         return new AuthResponse(token);
     }
 
     public AuthResponse login(LoginRequest req) {
-        Optional<User> found = userRepository.findByEmail(req.getEmail());
+        Optional<User> found = userRepository.findByEmailIgnoreCase(req.getEmail());
         if (found.isEmpty()) throw new IllegalArgumentException("Invalid credentials");
         User u = found.get();
         if (!passwordEncoder.matches(req.getPassword(), u.getPassword())) {
             throw new IllegalArgumentException("Invalid credentials");
         }
-        String token = jwtUtil.generateToken(u.getEmail());
-        return new AuthResponse(token);
+        String token = jwtUtil.generateToken(u.getEmail(), u.getRoles());
+        return new AuthResponse(token, u);
     }
 }

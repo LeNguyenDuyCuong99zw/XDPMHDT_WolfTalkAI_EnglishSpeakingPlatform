@@ -5,11 +5,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.wolftalk.backend"})
+@ComponentScan(basePackages = { "com.wolftalk.backend" })
 public class BackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BackendApplication.class, args);
+		System.out.println(">>> STARTING APPLICATION <<<");
+		try {
+			SpringApplication app = new SpringApplication(BackendApplication.class);
+			app.setWebApplicationType(org.springframework.boot.WebApplicationType.SERVLET);
+			app.run(args);
+			System.out.println(">>> SPRING RUN COMPLETED <<<");
+			// Keep alive if for some reason Tomcat isn't
+			Thread.currentThread().join();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

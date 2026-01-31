@@ -24,7 +24,7 @@ public class UserController {
             return ResponseEntity.status(401).body(Map.of("error", "Unauthenticated"));
         }
         String email = principal.getName();
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailIgnoreCase(email)
                 .map(u -> ResponseEntity.ok(Map.of("email", u.getEmail(), "firstName", u.getFirstName(), "lastName", u.getLastName())))
                 .orElseGet(() -> ResponseEntity.status(404).body(Map.of("error", "User not found")));
     }

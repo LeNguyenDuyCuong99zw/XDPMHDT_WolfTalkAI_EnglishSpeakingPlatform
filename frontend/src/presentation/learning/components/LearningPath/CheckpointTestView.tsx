@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { CheckpointTest, CheckpointResult } from '../../../../domain/learning/entities/CheckpointTest';
-import { checkpointService } from '../../../../application/learning/services/MockCheckpointService';
+import { checkpointService } from '../../../../application/learning/services/CheckpointService';
 import '../../styles/LearningPath.css'; // Reusing some styles
 
 interface CheckpointTestViewProps {
@@ -46,7 +46,13 @@ export const CheckpointTestView: React.FC<CheckpointTestViewProps> = ({ levelId,
     const submitTest = async () => {
         if (!test) return;
         setIsSubmitting(true);
-        const res = await checkpointService.submitTest(test.id, answers);
+        // Map answers to required format { questionId, selectedOption }
+        const formattedAnswers = answers.map((ans, idx) => ({
+            questionId: test.questions[idx].id,
+            selectedOption: ans
+        })).filter(a => a.selectedOption !== undefined);
+
+        const res = await checkpointService.submitTest(test.id, formattedAnswers);
         setResult(res);
         setIsSubmitting(false);
     };

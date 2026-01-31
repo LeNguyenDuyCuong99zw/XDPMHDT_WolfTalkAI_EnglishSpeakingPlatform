@@ -1,0 +1,332 @@
+/* src/presentation/pages/mentor/PronunciationAnalysisPage/components/ComparisonTool.css */
+
+.comparison-tool {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Header */
+.comparison-tool__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.comparison-tool__header-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #0369a1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.comparison-tool__title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.comparison-tool__subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Word display */
+.comparison-tool__word-display {
+  text-align: center;
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(219, 234, 254, 0.4), rgba(191, 219, 254, 0.3));
+  border: 2px solid rgba(14, 165, 233, 0.2);
+}
+
+.comparison-tool__word {
+  margin: 0 0 8px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.comparison-tool__phonetic {
+  font-family: 'Lucida Sans Unicode', 'Segoe UI Symbol', monospace;
+  font-size: 20px;
+  color: #0369a1;
+  font-weight: 500;
+}
+
+/* Players */
+.comparison-tool__players {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.comparison-tool__player {
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid;
+}
+
+.comparison-tool__player--learner {
+  background: rgba(254, 226, 226, 0.3);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.comparison-tool__player--native {
+  background: rgba(220, 252, 231, 0.3);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.comparison-tool__player-header {
+  margin-bottom: 14px;
+}
+
+.comparison-tool__player-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.comparison-tool__player-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.comparison-tool__player-avatar--learner {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.comparison-tool__player-avatar--native {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.comparison-tool__player-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-height: 100px;
+  justify-content: center;
+}
+
+.comparison-tool__play-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.15s ease;
+  color: #ffffff;
+}
+
+.comparison-tool__play-btn--learner {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.comparison-tool__play-btn--native {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.comparison-tool__play-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.comparison-tool__player-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.comparison-tool__spectrum {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 40px;
+  width: 100%;
+}
+
+.comparison-tool__spectrum-bar {
+  flex: 1;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  border-radius: 2px;
+  min-height: 6px;
+  opacity: 0.7;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Controls */
+.comparison-tool__controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.comparison-tool__control-btn {
+  flex: 1;
+  min-width: 140px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(248, 250, 252, 0.8);
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.comparison-tool__control-btn:hover:not(:disabled) {
+  background: rgba(14, 165, 233, 0.1);
+  border-color: rgba(14, 165, 233, 0.3);
+  color: #0369a1;
+  transform: translateY(-1px);
+}
+
+.comparison-tool__control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.comparison-tool__control-btn--primary {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.comparison-tool__control-btn--primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
+}
+
+/* Speed control */
+.comparison-tool__speed {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.comparison-tool__speed-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.comparison-tool__speed-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.comparison-tool__speed-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  color: #4b5563;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.comparison-tool__speed-btn:hover {
+  background: rgba(14, 165, 233, 0.1);
+  border-color: rgba(14, 165, 233, 0.3);
+  color: #0369a1;
+}
+
+.comparison-tool__speed-btn--active {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #ffffff;
+  border: none;
+}
+
+/* Tips */
+.comparison-tool__tips {
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.4), rgba(253, 230, 138, 0.3));
+  border: 2px solid rgba(245, 158, 11, 0.3);
+}
+
+.comparison-tool__tips-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.comparison-tool__tips-list {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.comparison-tool__tips-list li {
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .comparison-tool__players {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-tool__controls {
+    flex-direction: column;
+  }
+
+  .comparison-tool__control-btn {
+    width: 100%;
+  }
+
+  .comparison-tool__speed {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

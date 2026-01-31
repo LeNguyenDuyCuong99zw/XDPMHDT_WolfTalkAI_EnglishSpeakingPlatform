@@ -15,7 +15,6 @@ interface SessionSummaryProps {
 export const SessionSummary: React.FC<SessionSummaryProps> = ({
     scenarioName,
     vocabCount,
-    grammarCount,
     score = 0,
     maxScore = 100,
     onHome,
@@ -46,15 +45,15 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
             <div className="summary-stats-grid">
                 <div className="summary-card xp">
                     <span className="summary-value">+{Math.floor(score / 2)}</span>
-                    <span className="summary-label">XP Earned</span>
+                    <span className="summary-label">KN đạt được</span>
                 </div>
-                <div className="summary-card streak">
+                <div className="summary-card words">
                     <span className="summary-value">{vocabCount}</span>
-                    <span className="summary-label">Từ vựng</span>
+                    <span className="summary-label">Từ đã học</span>
                 </div>
                 <div className="summary-card accuracy">
-                    <span className="summary-value">{grammarCount}</span>
-                    <span className="summary-label">Ngữ pháp</span>
+                    <span className="summary-value">{percentage}%</span>
+                    <span className="summary-label">Chính xác</span>
                 </div>
             </div>
 

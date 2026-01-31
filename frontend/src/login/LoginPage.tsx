@@ -99,9 +99,19 @@ const LoginPage: React.FC<LoginPageProps> = ({
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     apiClient
-      .post<{ token: string }>("/auth/login", { email, password })
+      .post<{ token: string; isFirstLogin?: boolean }>("/auth/login", {
+        email,
+        password,
+      })
       .then((res) => {
         localStorage.setItem("accessToken", res.token);
+        // Set first login flag if it's the user's first login
+        if (res.isFirstLogin === true) {
+          sessionStorage.setItem("isFirstLogin", "true");
+        } else {
+          // Every subsequent login is a "welcome back"
+          sessionStorage.setItem("isWelcomeBack", "true");
+        }
         onLoginSuccess();
       })
       .catch((err) => {
@@ -111,11 +121,11 @@ const LoginPage: React.FC<LoginPageProps> = ({
   };
 
   const handleGoogleLogin = () => {
-    console.log("Google login clicked");
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
 
   const handleFacebookLogin = () => {
-    console.log("Facebook login clicked");
+    window.location.href = "http://localhost:8080/oauth2/authorization/facebook";
   };
 
   return (

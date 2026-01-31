@@ -1,10 +1,10 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
-  requiredRole?: 'Admin' | 'Mentor';
+  requiredRole?: "ADMIN" | "MENTOR";
 }
 
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({
@@ -15,12 +15,14 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
 
   if (isLoading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         Loading...
       </div>
     );
@@ -30,7 +32,7 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRole && user?.role !== requiredRole) {
+  if (requiredRole && user?.role?.toUpperCase() !== requiredRole) {
     return <Navigate to="/unauthorized" replace />;
   }
 

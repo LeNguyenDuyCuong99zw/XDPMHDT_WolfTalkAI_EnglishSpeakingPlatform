@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ProfilePage.css";
 import { apiClient } from "../services/api";
+import { friendshipAPI } from "../services/friendshipAPI";
+import type { UserFriendDTO, FriendshipDTO } from "../services/friendshipAPI";
+import FindFriendsModal from "./components/FindFriendsModal";
+import FriendsTab from "./components/FriendsTab";
+import FriendRequestsTab from "./components/FriendRequestsTab";
 
 interface UserProfile {
   id?: number;
@@ -20,9 +25,14 @@ const ProfilePage: React.FC = () => {
     lastName: "",
   });
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"following" | "followers">(
-    "following",
-  );
+  const [activeTab, setActiveTab] = useState<"friends" | "requests">("friends");
+  const [isFriendsModalOpen, setIsFriendsModalOpen] = useState(false);
+
+  // Friends and requests states
+  const [friends, setFriends] = useState<UserFriendDTO[]>([]);
+  const [pendingRequests, setPendingRequests] = useState<FriendshipDTO[]>([]);
+  const [sentRequests, setSentRequests] = useState<FriendshipDTO[]>([]);
+  const [isLoadingFriends, setIsLoadingFriends] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -45,11 +55,29 @@ const ProfilePage: React.FC = () => {
     fetchProfile();
   }, []);
 
-  const getInitials = () => {
-    const first = user.firstName?.[0] || "";
-    const last = user.lastName?.[0] || "";
-    return (first + last).toUpperCase() || "U";
-  };
+  // Load friends and requests
+  const loadFriendsAndRequests = useCallback(async () => {
+    setIsLoadingFriends(true);
+    try {
+      const [friendsList, pending, sent] = await Promise.all([
+        friendshipAPI.getFriendsList(),
+        friendshipAPI.getPendingFriendRequests(),
+        friendshipAPI.getSentFriendRequests(),
+      ]);
+      setFriends(friendsList);
+      setPendingRequests(pending);
+      setSentRequests(sent);
+    } catch (error) {
+      console.error("Error loading friends data:", error);
+    } finally {
+      setIsLoadingFriends(false);
+    }
+  }, []);
+
+  // Load friends on component mount
+  useEffect(() => {
+    loadFriendsAndRequests();
+  }, [loadFriendsAndRequests]);
 
   const getUsername = () => {
     return user.email?.split("@")[0] || "user";
@@ -120,12 +148,12 @@ const ProfilePage: React.FC = () => {
 
             <div className="profile-follow-stats">
               <button className="follow-stat-btn">
-                <span className="follow-link">Đang theo dõi</span>{" "}
-                <strong>0</strong>
+                <span className="follow-link">Bạn bè</span>{" "}
+                <strong>{friends.length}</strong>
               </button>
               <button className="follow-stat-btn">
-                <strong>0</strong>{" "}
-                <span className="follow-link">Người theo dõi</span>
+                <strong>{pendingRequests.length}</strong>{" "}
+                <span className="follow-link">Lời mời kết bạn</span>
               </button>
             </div>
 
@@ -230,38 +258,47 @@ const ProfilePage: React.FC = () => {
         <div className="profile-tabs-sidebar">
           <button
             className={`profile-tab-sidebar ${
-              activeTab === "following" ? "active" : ""
+              activeTab === "friends" ? "active" : ""
             }`}
-            onClick={() => setActiveTab("following")}
+            onClick={() => setActiveTab("friends")}
           >
-            ĐANG THEO DÕI
+            BẠN BÈ
           </button>
           <button
             className={`profile-tab-sidebar ${
-              activeTab === "followers" ? "active" : ""
+              activeTab === "requests" ? "active" : ""
             }`}
-            onClick={() => setActiveTab("followers")}
+            onClick={() => setActiveTab("requests")}
           >
-            NGƯỜI THEO DÕI
+            LỜI MỜI
           </button>
         </div>
 
         {/* Tab Content */}
         <div className="profile-tab-content-sidebar">
-          <div className="empty-follow-state">
-            <img
-              src="https://d35aaqx5ub95lt.cloudfront.net/images/profile/4338922b73f6dc43e5f0f34e3cb904dd.svg"
-              alt="Empty"
-              className="empty-illustration"
+          {activeTab === "friends" ? (
+            <FriendsTab
+              friends={friends}
+              isLoading={isLoadingFriends}
+              onRefresh={loadFriendsAndRequests}
             />
-            <p>Kết nối bạn bè giúp học vui và hiệu quả hơn.</p>
-          </div>
+          ) : (
+            <FriendRequestsTab
+              pendingRequests={pendingRequests}
+              sentRequests={sentRequests}
+              isLoading={isLoadingFriends}
+              onRefresh={loadFriendsAndRequests}
+            />
+          )}
         </div>
 
         {/* Add Friends Card */}
         <div className="side-card">
           <h3>Thêm bạn bè</h3>
-          <div className="friend-option">
+          <div
+            className="friend-option"
+            onClick={() => setIsFriendsModalOpen(true)}
+          >
             <div className="friend-icon search">🔍</div>
             <div className="friend-info">
               <div className="friend-title">Tìm bạn bè</div>
@@ -276,6 +313,12 @@ const ProfilePage: React.FC = () => {
             <button className="friend-action-btn">›</button>
           </div>
         </div>
+
+        {/* Find Friends Modal */}
+        <FindFriendsModal
+          isOpen={isFriendsModalOpen}
+          onClose={() => setIsFriendsModalOpen(false)}
+        />
 
         {/* Footer Links */}
         <div className="footer-links">

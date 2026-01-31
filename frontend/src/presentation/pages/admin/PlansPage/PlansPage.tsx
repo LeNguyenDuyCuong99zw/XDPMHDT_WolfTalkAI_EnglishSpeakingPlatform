@@ -20,8 +20,6 @@ import { Button } from "../../../components/atoms/Button/Button";
 import { Modal } from "../../../components/organisms/Modal/Modal";
 import { Input } from "../../../components/atoms/Input/Input";
 import { usePlans } from "../../../hooks/usePlans";
-import { PlanDTO, CreatePlanDTO } from "../../../../application/dto/PlanDTO";
-import { formatCurrency } from "../../../../shared/utils/formatters";
 import "./PlansPage.css";
 
 interface PlanFeature {

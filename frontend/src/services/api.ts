@@ -1,6 +1,25 @@
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8080/api";
 
+/**
+ * Giải mã JWT token để lấy email (subject)
+ */
+export function getEmailFromToken(): string | null {
+  const token = localStorage.getItem("accessToken");
+  if (!token) return null;
+
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+
+    const decoded = JSON.parse(atob(parts[1]));
+    return decoded.sub || null; // 'sub' chứa email
+  } catch (error) {
+    console.error("Error decoding JWT:", error);
+    return null;
+  }
+}
+
 export const apiClient = {
   async get<T>(endpoint: string): Promise<T> {
     const token = localStorage.getItem("accessToken");

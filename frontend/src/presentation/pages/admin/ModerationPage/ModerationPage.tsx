@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Shield,
   CheckCircle,
@@ -9,47 +9,47 @@ import {
   Flag,
   Eye,
   Clock,
-  TrendingUp
-} from 'lucide-react';
-import './ModerationPage.css';
+  TrendingUp,
+} from "lucide-react";
+import "./ModerationPage.css";
 
 export const ModerationPage: React.FC = () => {
   const features = [
     {
       icon: <MessageSquare size={24} strokeWidth={2} />,
-      title: 'Review Comments',
-      description: 'Moderate user comments and feedback',
-      color: '#0056D2',
+      title: "Review Comments",
+      description: "Moderate user comments and feedback",
+      color: "#0056D2",
     },
     {
       icon: <Star size={24} strokeWidth={2} />,
-      title: 'Rating Reviews',
-      description: 'Approve or reject user ratings',
-      color: '#f59e0b',
+      title: "Rating Reviews",
+      description: "Approve or reject user ratings",
+      color: "#f59e0b",
     },
     {
       icon: <Flag size={24} strokeWidth={2} />,
-      title: 'Flagged Content',
-      description: 'Handle reported inappropriate content',
-      color: '#ef4444',
+      title: "Flagged Content",
+      description: "Handle reported inappropriate content",
+      color: "#ef4444",
     },
     {
       icon: <Eye size={24} strokeWidth={2} />,
-      title: 'Content Preview',
-      description: 'Preview before publishing',
-      color: '#8b5cf6',
+      title: "Content Preview",
+      description: "Preview before publishing",
+      color: "#8b5cf6",
     },
     {
       icon: <CheckCircle size={24} strokeWidth={2} />,
-      title: 'Auto-Approval',
-      description: 'Set rules for automatic approval',
-      color: '#22c55e',
+      title: "Auto-Approval",
+      description: "Set rules for automatic approval",
+      color: "#22c55e",
     },
     {
       icon: <TrendingUp size={24} strokeWidth={2} />,
-      title: 'Analytics',
-      description: 'Track moderation metrics',
-      color: '#06b6d4',
+      title: "Analytics",
+      description: "Track moderation metrics",
+      color: "#06b6d4",
     },
   ];
 
@@ -87,9 +87,10 @@ export const ModerationPage: React.FC = () => {
           </div>
           <h2 className="moderation-card__title">Content Moderation System</h2>
           <p className="moderation-card__description">
-            This powerful feature is currently under development. Soon you'll be able to
-            review, approve, or reject user-generated content, manage reviews, handle
-            flagged content, and maintain a safe community environment.
+            This powerful feature is currently under development. Soon you'll be
+            able to review, approve, or reject user-generated content, manage
+            reviews, handle flagged content, and maintain a safe community
+            environment.
           </p>
 
           <div className="moderation-card__actions">
@@ -117,7 +118,10 @@ export const ModerationPage: React.FC = () => {
             >
               <div
                 className="feature-card__icon"
-                style={{ backgroundColor: `${feature.color}15`, color: feature.color }}
+                style={{
+                  backgroundColor: `${feature.color}15`,
+                  color: feature.color,
+                }}
               >
                 {feature.icon}
               </div>

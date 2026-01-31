@@ -1,0 +1,217 @@
+/* src/presentation/pages/mentor/ProgressTrackingPage/components/LearningPath.css */
+
+.learning-path {
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.learning-path__header {
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(226, 232, 240, 0.8);
+}
+
+.learning-path__title {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.learning-path__subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.learning-path__timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.learning-path__milestone {
+  position: relative;
+  display: flex;
+  gap: 20px;
+}
+
+.learning-path__connector {
+  position: absolute;
+  left: 23px;
+  top: 48px;
+  width: 2px;
+  height: calc(100% + 24px);
+  background: rgba(226, 232, 240, 0.8);
+}
+
+.learning-path__milestone--completed .learning-path__connector {
+  background: linear-gradient(180deg, #10b981, rgba(16, 185, 129, 0.3));
+}
+
+.learning-path__milestone--current .learning-path__connector {
+  background: linear-gradient(
+    180deg,
+    #0ea5e9,
+    rgba(14, 165, 233, 0.3)
+  );
+}
+
+.learning-path__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.learning-path__milestone--completed .learning-path__icon {
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  color: #047857;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.learning-path__milestone--current .learning-path__icon {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #0369a1;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  animation: pulse-current 2s ease-in-out infinite;
+}
+
+.learning-path__milestone--locked .learning-path__icon {
+  background: rgba(226, 232, 240, 0.5);
+  color: #94a3b8;
+}
+
+@keyframes pulse-current {
+  0%,
+  100% {
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(14, 165, 233, 0.5);
+  }
+}
+
+.learning-path__content {
+  flex: 1;
+  padding: 8px 0;
+}
+
+.learning-path__content-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.learning-path__milestone-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.learning-path__milestone--locked .learning-path__milestone-title {
+  color: #94a3b8;
+}
+
+.learning-path__completed-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #047857;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.learning-path__milestone-desc {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.learning-path__milestone--locked .learning-path__milestone-desc {
+  color: #94a3b8;
+}
+
+.learning-path__progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.learning-path__progress-bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(226, 232, 240, 0.8);
+  overflow: hidden;
+}
+
+.learning-path__progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.learning-path__milestone--completed .learning-path__progress-fill {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.learning-path__milestone--current .learning-path__progress-fill {
+  background: linear-gradient(90deg, #0ea5e9, #0284c7);
+}
+
+.learning-path__progress-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  min-width: 40px;
+}
+
+.learning-path__completed-date {
+  display: block;
+  font-size: 12px;
+  color: #10b981;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .learning-path {
+    padding: 16px;
+  }
+
+  .learning-path__milestone {
+    gap: 14px;
+  }
+
+  .learning-path__connector {
+    left: 19px;
+  }
+
+  .learning-path__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .learning-path__icon svg {
+    width: 20px;
+    height: 20px;
+  }
+}

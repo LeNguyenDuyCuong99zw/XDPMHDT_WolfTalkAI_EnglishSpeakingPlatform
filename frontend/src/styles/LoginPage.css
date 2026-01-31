@@ -247,10 +247,37 @@
 }
 
 .social-btn:hover {
-  background: #1e1e2e;
-  border-color: #475569;
-  color: #e2e8f0;
-  transform: translateY(-1px);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+}
+
+.google-btn {
+  background: #fff;
+  color: #333;
+  border-color: #fff;
+}
+
+.google-btn:hover {
+  background: #f2f2f2;
+  border-color: #f2f2f2;
+  color: #000;
+}
+
+.facebook-btn {
+  background: #1877f2;
+  color: #fff;
+  border-color: #1877f2;
+}
+
+.facebook-btn:hover {
+  background: #166fe5;
+  border-color: #166fe5;
+  color: #fff;
+}
+
+.google-icon {
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .google-icon,

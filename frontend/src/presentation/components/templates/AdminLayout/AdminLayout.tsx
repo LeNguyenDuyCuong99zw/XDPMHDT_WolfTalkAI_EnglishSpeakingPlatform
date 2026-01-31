@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Sidebar } from '../../organisms/Sidebar/Sidebar';
-import { Header } from '../../organisms/Header/Header';
-import { useAuth } from '../../../contexts/AuthContext';
-import './AdminLayout.css';
+import React, { useState } from "react";
+import { Sidebar } from "../../organisms/Sidebar/Sidebar";
+import { Header } from "../../organisms/Header/Header";
+import { useAuth } from "../../../contexts/AuthContext";
+import "./AdminLayout.css";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
-        role={user?.role as 'Admin' | 'Mentor'}
+        role={(user?.role?.toUpperCase() as "ADMIN" | "MENTOR") || "ADMIN"}
       />
 
       <div className="admin-layout__content">

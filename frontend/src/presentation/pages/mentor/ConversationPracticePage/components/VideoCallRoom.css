@@ -1,0 +1,487 @@
+/* src/presentation/pages/mentor/ConversationPracticePage/components/VideoCallRoom.css */
+
+.video-call-room {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+  background: #0f172a;
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.video-call-room__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+
+.video-call-room__header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.video-call-room__session-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+}
+
+.video-call-room__learner-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.video-call-room__status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.video-call-room__status--connecting {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+}
+
+.video-call-room__status--connected {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.video-call-room__status--disconnected {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.video-call-room__status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.video-call-room__status-text {
+  line-height: 1;
+}
+
+.video-call-room__header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.video-call-room__duration {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.video-call-room__recording-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.video-call-room__recording-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #ef4444;
+  animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Videos */
+.video-call-room__videos {
+  position: relative;
+  flex: 1;
+  background: #1e293b;
+}
+
+.video-call-room__remote-video {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #1e293b;
+}
+
+.video-call-room__local-video {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 240px;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0f172a;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.video-call-room__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-call-room__video-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+}
+
+.video-call-room__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.video-call-room__placeholder-text {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.video-call-room__video-off {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.9);
+  color: #94a3b8;
+}
+
+.video-call-room__video-label {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Controls */
+.video-call-room__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-call-room__controls-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.video-call-room__control-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.video-call-room__control-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.video-call-room__control-btn--off {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.video-call-room__control-btn--off:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+.video-call-room__control-btn--active {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.video-call-room__control-btn--recording {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.video-call-room__record-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #ef4444;
+}
+
+.video-call-room__end-call-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+  transition: all 0.15s ease;
+}
+
+.video-call-room__end-call-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px rgba(239, 68, 68, 0.5);
+}
+
+/* Chat panel */
+.video-call-room__chat {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  width: 320px;
+  height: calc(100% - 180px);
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+}
+
+.video-call-room__chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-call-room__chat-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.video-call-room__chat-close {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.video-call-room__chat-close:hover {
+  color: #ffffff;
+}
+
+.video-call-room__chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.video-call-room__chat-empty {
+  margin: 0;
+  text-align: center;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.video-call-room__chat-input {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-call-room__chat-field {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  font-size: 13px;
+  outline: none;
+}
+
+.video-call-room__chat-field::placeholder {
+  color: #64748b;
+}
+
+.video-call-room__chat-send {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.video-call-room__chat-send:hover {
+  transform: translateY(-1px);
+}
+
+/* Settings panel */
+.video-call-room__settings {
+  position: absolute;
+  bottom: 100px;
+  right: 20px;
+  width: 300px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 20;
+}
+
+.video-call-room__settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-call-room__settings-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.video-call-room__settings-close {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.video-call-room__settings-close:hover {
+  color: #ffffff;
+}
+
+.video-call-room__settings-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.video-call-room__setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.video-call-room__setting-item label {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.video-call-room__setting-select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .video-call-room__local-video {
+    width: 120px;
+    height: 90px;
+    bottom: 90px;
+    right: 10px;
+  }
+
+  .video-call-room__chat,
+  .video-call-room__settings {
+    width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+  }
+}

@@ -46,7 +46,7 @@ public class AlphabetQuestionService {
     
     @Transactional
     public Map<String, Object> saveProgress(String email, AlphabetProgressRequest request) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
         AlphabetQuestion question = alphabetQuestionRepository.findById(request.getQuestionId())
@@ -71,7 +71,7 @@ public class AlphabetQuestionService {
     }
     
     public Map<String, Object> getUserProgress(String email) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
         Long correctAnswers = progressRepository.countCorrectAnswersByUser(user);

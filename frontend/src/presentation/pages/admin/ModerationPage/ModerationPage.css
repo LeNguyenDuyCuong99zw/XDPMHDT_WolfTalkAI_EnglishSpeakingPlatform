@@ -8,6 +8,8 @@
   max-width: 1400px;
   margin: 0 auto;
   animation: pageSlideUp 0.5s ease-out;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafb 100%);
+  min-height: 100vh;
 }
 
 @keyframes pageSlideUp {
@@ -50,18 +52,23 @@
 .moderation-page__icon-wrapper {
   width: 72px;
   height: 72px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.15));
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 86, 210, 0.14),
+    rgba(0, 102, 255, 0.2)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8b5cf6;
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+  color: #0056d2;
+  box-shadow: 0 8px 24px rgba(0, 86, 210, 0.12);
   animation: iconFloat 3s ease-in-out infinite;
 }
 
 @keyframes iconFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -71,17 +78,14 @@
 
 .moderation-page__title {
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 800;
   margin: 0 0 var(--space-1) 0;
-  background: linear-gradient(135deg, #1f1f1f 0%, #8b5cf6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #0f172a;
 }
 
 .moderation-page__subtitle {
   font-size: var(--font-size-md);
-  color: var(--color-text-muted);
+  color: #647191;
   margin: 0;
 }
 
@@ -100,7 +104,8 @@
 }
 
 @keyframes statusPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
   }
   50% {
@@ -110,16 +115,13 @@
 
 /* Main Card - Glassmorphism */
 .moderation-card {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
   padding: var(--space-8);
-  box-shadow: 
-    0 8px 32px rgba(31, 38, 135, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
   margin-bottom: var(--space-6);
   position: relative;
   animation: cardSlideUp 0.6s ease-out 0.3s both;
@@ -145,8 +147,8 @@
   gap: 8px;
   padding: 8px 16px;
   border-radius: 999px;
-  background: rgba(139, 92, 246, 0.1);
-  color: #8b5cf6;
+  background: rgba(0, 86, 210, 0.1);
+  color: #0056d2;
   font-size: var(--font-size-xs);
   font-weight: 600;
   border: 1px solid rgba(139, 92, 246, 0.2);
@@ -166,41 +168,42 @@
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 86, 210, 0.14),
+    rgba(0, 102, 255, 0.2)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8b5cf6;
+  color: #0056d2;
   margin-bottom: var(--space-5);
-  box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 86, 210, 0.12);
   animation: iconPulse 3s ease-in-out infinite;
 }
 
 @keyframes iconPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
-    box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 86, 210, 0.12);
   }
   50% {
     transform: scale(1.05);
-    box-shadow: 0 16px 60px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 16px 60px rgba(0, 86, 210, 0.18);
   }
 }
 
 .moderation-card__title {
   font-size: 28px;
-  font-weight: 700;
-  color: var(--color-text-main);
+  font-weight: 800;
+  color: #0f172a;
   margin: 0 0 var(--space-3) 0;
-  background: linear-gradient(135deg, #1f1f1f 0%, #8b5cf6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .moderation-card__description {
   font-size: var(--font-size-md);
-  color: var(--color-text-muted);
+  color: #647191;
   line-height: 1.7;
   max-width: 600px;
   margin: 0 0 var(--space-6) 0;
@@ -276,7 +279,7 @@
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   border-radius: 16px;
   padding: var(--space-5);
-  box-shadow: 
+  box-shadow:
     0 4px 16px rgba(31, 38, 135, 0.08),
     0 2px 8px rgba(0, 0, 0, 0.04),
     inset 0 0 0 1px rgba(255, 255, 255, 0.6);
@@ -298,7 +301,7 @@
 
 .feature-card:hover {
   transform: translateY(-6px);
-  box-shadow: 
+  box-shadow:
     0 12px 32px rgba(31, 38, 135, 0.15),
     0 4px 16px rgba(0, 0, 0, 0.06);
   background: rgba(255, 255, 255, 0.9);

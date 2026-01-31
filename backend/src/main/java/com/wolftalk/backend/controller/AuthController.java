@@ -13,9 +13,11 @@ import com.wolftalk.backend.auth.dto.RegisterRequest;
 import com.wolftalk.backend.service.AuthService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
 
     @Autowired

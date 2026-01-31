@@ -122,26 +122,41 @@
 
 /* Path Content */
 .path-content-area {
-    padding: 50px 2rem 2rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    box-sizing: border-box;
-    background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
-    /* Brighter gradient bg */
-    overflow: hidden;
-    /* Prevent body scroll if we want horizontal mainly */
+    .path-content-area {
+        padding: 50px 2rem 2rem 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        box-sizing: border-box;
+        background: radial-gradient(circle at 20% 20%,
+                rgba(255, 255, 255, 0.05) 0%,
+                transparent 50%);
+        /* Brighter gradient bg */
+        overflow: hidden;
+        /* Prevent body scroll if we want horizontal mainly */
+    }
+
+    .path-header {
+        text-align: left;
+        position: relative;
+        z-index: 1;
+        border: 2px solid transparent;
+        margin-bottom: 2rem;
+    }
+
+    .path-header h3 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(to right, #fff, #a0aec0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 }
 
-.path-header {
-    text-align: left;
-    position: relative;
-    z-index: 1;
-    border: 2px solid transparent;
-    margin-bottom: 2rem;
-}
-
+/* Horizontal List Container */
 /* Horizontal List Container */
 .units-path-list {
     display: flex;
@@ -160,11 +175,25 @@
     /* Mặc định là grab */
 }
 
+.units-path-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+.units-path-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.units-path-list::-webkit-scrollbar-thumb {
+    background: rgba(88, 204, 2, 0.3);
+    border-radius: 4px;
+}
+
 .units-path-list:active {
     cursor: grabbing;
     /* Khi nhấn chuột là grabbing */
     scroll-behavior: auto;
     /* Tắt smooth scroll khi kéo để mượt hơn */
+}
 }
 
 /* Each step contains Unit + Connector */
@@ -310,7 +339,6 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
-
 
 .start-btn {
     margin-top: 1.2rem;

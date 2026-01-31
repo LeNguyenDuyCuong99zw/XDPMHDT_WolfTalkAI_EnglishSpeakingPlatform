@@ -1,0 +1,33 @@
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #fff;
+}
+
+.load-more-button-container {
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+}
+
+.load-more-button {
+  padding: 8px 16px;
+  background-color: #f0f2f5;
+  border: none;
+  border-radius: 20px;
+  color: #0084ff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.load-more-button:hover:not(:disabled) {
+  background-color: #e4e6eb;
+}
+
+.load-more-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

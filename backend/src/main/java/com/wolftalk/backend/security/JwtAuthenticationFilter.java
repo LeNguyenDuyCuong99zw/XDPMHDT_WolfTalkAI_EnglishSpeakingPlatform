@@ -1,9 +1,9 @@
 package com.wolftalk.backend.security;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,8 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.List;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -31,8 +33,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 var claims = jwtUtil.parseClaims(token);
                 String subject = claims.getSubject();
                 if (subject != null) {
-                    // In this simple implementation we grant ROLE_USER by default
-                    Authentication auth = new UsernamePasswordAuthenticationToken(subject, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                    // Extract roles from token claims if available, default to ROLE_USER
+                    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                    Object rolesObj = claims.get("roles");
+                    if (rolesObj != null) {
+                        String roles = rolesObj.toString();
+                        if (roles != null && !roles.isEmpty()) {
+                            for (String role : roles.split(",")) {
+                                authorities.add(new SimpleGrantedAuthority(role.trim()));
+                            }
+                        } else {
+                            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+                        }
+                    } else {
+                        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+                    }
+                    Authentication auth = new UsernamePasswordAuthenticationToken(subject, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             } catch (Exception ex) {

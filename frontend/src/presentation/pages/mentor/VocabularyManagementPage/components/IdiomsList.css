@@ -1,0 +1,409 @@
+/* src/presentation/pages/mentor/VocabularyManagementPage/components/IdiomsList.css */
+
+.idioms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Header */
+.idioms-list__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.idioms-list__header-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+  color: #be123c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.idioms-list__title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.idioms-list__subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Stats */
+.idioms-list__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.idioms-list__stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.idioms-list__stat strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+/* Controls */
+.idioms-list__controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.idioms-list__search {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.idioms-list__search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.idioms-list__search-input {
+  width: 100%;
+  padding: 9px 12px 9px 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(156, 163, 175, 0.45);
+  font-size: 13px;
+  background: rgba(248, 250, 252, 0.95);
+  color: #0f172a;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.idioms-list__search-input:focus {
+  border-color: #ec4899;
+  box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.15);
+  background: #ffffff;
+}
+
+.idioms-list__filters {
+  display: flex;
+  gap: 8px;
+}
+
+.idioms-list__select {
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(156, 163, 175, 0.45);
+  font-size: 13px;
+  background: rgba(248, 250, 252, 0.95);
+  color: #0f172a;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.idioms-list__select:focus {
+  border-color: #ec4899;
+  box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.15);
+}
+
+.idioms-list__favorite-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(156, 163, 175, 0.45);
+  background: rgba(248, 250, 252, 0.95);
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.idioms-list__favorite-toggle:hover {
+  background: rgba(252, 231, 243, 0.3);
+  border-color: rgba(236, 72, 153, 0.3);
+  color: #ec4899;
+}
+
+.idioms-list__favorite-toggle--active {
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+/* Items */
+.idioms-list__items {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.idioms-list__items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.idioms-list__items::-webkit-scrollbar-track {
+  background: rgba(248, 250, 252, 0.8);
+  border-radius: 10px;
+}
+
+.idioms-list__items::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 10px;
+}
+
+/* Item */
+.idioms-list__item {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 2px solid rgba(226, 232, 240, 0.8);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.idioms-list__item:hover {
+  background: rgba(252, 231, 243, 0.3);
+  border-color: rgba(236, 72, 153, 0.3);
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.15);
+}
+
+.idioms-list__item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.idioms-list__item-title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.idioms-list__idiom {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.idioms-list__audio-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(236, 72, 153, 0.12);
+  color: #be123c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.idioms-list__audio-btn:hover {
+  background: rgba(236, 72, 153, 0.2);
+  transform: scale(1.1);
+}
+
+.idioms-list__favorite-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(148, 163, 184, 0.1);
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.idioms-list__favorite-btn:hover {
+  background: rgba(251, 191, 36, 0.15);
+  color: #f59e0b;
+  transform: scale(1.1);
+}
+
+.idioms-list__favorite-btn--active {
+  background: rgba(251, 191, 36, 0.15);
+  color: #f59e0b;
+}
+
+/* Badges */
+.idioms-list__badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.idioms-list__difficulty {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.idioms-list__difficulty--easy {
+  background: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+}
+
+.idioms-list__difficulty--medium {
+  background: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+}
+
+.idioms-list__difficulty--hard {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+}
+
+.idioms-list__category {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(236, 72, 153, 0.12);
+  color: #be123c;
+}
+
+.idioms-list__usage {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(59, 130, 246, 0.12);
+  color: #1e40af;
+}
+
+/* Meanings */
+.idioms-list__meanings {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.idioms-list__meaning {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.idioms-list__vietnamese-meaning {
+  margin: 0;
+  font-size: 14px;
+  color: #ec4899;
+  font-weight: 600;
+}
+
+/* Origin */
+.idioms-list__origin {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(219, 234, 254, 0.5);
+  border-left: 3px solid #0ea5e9;
+  margin-bottom: 10px;
+}
+
+.idioms-list__origin-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #0369a1;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.idioms-list__origin-text {
+  font-size: 12px;
+  color: #1e293b;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Example */
+.idioms-list__example {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.idioms-list__example-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.idioms-list__example-text {
+  font-size: 13px;
+  color: #0f172a;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Empty */
+.idioms-list__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 20px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .idioms-list__controls {
+    flex-direction: column;
+  }
+
+  .idioms-list__search,
+  .idioms-list__filters {
+    width: 100%;
+  }
+
+  .idioms-list__stats {
+    grid-template-columns: 1fr;
+  }
+}

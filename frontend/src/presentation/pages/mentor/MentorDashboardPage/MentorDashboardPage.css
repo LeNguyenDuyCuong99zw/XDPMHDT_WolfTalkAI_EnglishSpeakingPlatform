@@ -282,24 +282,20 @@
 }
 
 .mentor-dashboard__chart-placeholder--line::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 18px 16px 22px;
   border-radius: 10px;
-  background-image: linear-gradient(
-      rgba(148, 163, 184, 0.28) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(148, 163, 184, 0.22) 1px,
-      transparent 1px
-    );
-  background-size: 100% 26px, 42px 100%;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.22) 1px, transparent 1px);
+  background-size:
+    100% 26px,
+    42px 100%;
 }
 
 .mentor-dashboard__chart-placeholder--line::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 24px 18px 40px;
   border-radius: 999px;
@@ -315,7 +311,7 @@
 }
 
 .mentor-dashboard__chart-placeholder--bar::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 22px 18px 24px;
   display: grid;
@@ -324,17 +320,21 @@
 }
 
 .mentor-dashboard__chart-placeholder--bar::after {
-  content: '';
+  content: "";
   display: none;
 }
 
 .mentor-dashboard__chart-placeholder--bar::before {
   background:
     linear-gradient(to top, #4f46e5 0 45%, transparent 45%),
-    linear-gradient(to top, #6366f1 0 70%, transparent 70%) 24% 0 / 16% 100% no-repeat,
-    linear-gradient(to top, #818cf8 0 55%, transparent 55%) 48% 0 / 16% 100% no-repeat,
-    linear-gradient(to top, #4f46e5 0 80%, transparent 80%) 72% 0 / 16% 100% no-repeat,
-    linear-gradient(to top, #a5b4fc 0 35%, transparent 35%) 96% 0 / 16% 100% no-repeat;
+    linear-gradient(to top, #6366f1 0 70%, transparent 70%) 24% 0 / 16% 100%
+      no-repeat,
+    linear-gradient(to top, #818cf8 0 55%, transparent 55%) 48% 0 / 16% 100%
+      no-repeat,
+    linear-gradient(to top, #4f46e5 0 80%, transparent 80%) 72% 0 / 16% 100%
+      no-repeat,
+    linear-gradient(to top, #a5b4fc 0 35%, transparent 35%) 96% 0 / 16% 100%
+      no-repeat;
 }
 
 /* Bottom panel */

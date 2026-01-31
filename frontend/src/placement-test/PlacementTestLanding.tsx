@@ -1,15 +1,39 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { placementTestService } from "./api";
 import "./PlacementTest.css";
 
+
 const PlacementTestLanding: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = React.useState(false);
   const [isChecking, setIsChecking] = React.useState(true);
+  const [isGoogleProcessing, setIsGoogleProcessing] = React.useState(false);
 
-  // Check if user has already completed the test
+  // Xử lý Google OAuth code nếu có trên URL
   React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const code = params.get("code");
+    if (code) {
+      setIsGoogleProcessing(true);
+      // Gọi backend để xác thực Google signup
+      fetch(`http://localhost:8080/signup-google?code=${code}`)
+        .then(async (res) => {
+          if (!res.ok) throw new Error(await res.text());
+          // Xác thực thành công, xóa code khỏi URL
+          window.history.replaceState({}, document.title, "/placement-test");
+        })
+        .catch((err) => {
+          alert("Đăng ký Google thất bại: " + err.message);
+        })
+        .finally(() => {
+          setIsGoogleProcessing(false);
+          setIsChecking(false);
+        });
+      return;
+    }
+    // Check if user has already completed the test
     const checkTestCompletion = async () => {
       try {
         const hasCompleted = await placementTestService.hasCompletedTest();
@@ -23,9 +47,8 @@ const PlacementTestLanding: React.FC = () => {
         setIsChecking(false);
       }
     };
-
     checkTestCompletion();
-  }, [navigate]);
+  }, [navigate, location.search]);
 
   const handleStart = async () => {
     setIsLoading(true);
@@ -41,8 +64,8 @@ const PlacementTestLanding: React.FC = () => {
     }
   };
 
-  // Show loading while checking if test is completed
-  if (isChecking) {
+  // Show loading while checking if test is completed or processing Google signup
+  if (isChecking || isGoogleProcessing) {
     return (
       <div className="placement-test-container-dark">
         <div className="placement-test-card placement-test-landing">
@@ -51,7 +74,9 @@ const PlacementTestLanding: React.FC = () => {
               <span className="wolf-emoji">🐺</span>
             </div>
           </div>
-          <p className="landing-subtitle">Đang kiểm tra...</p>
+          <p className="landing-subtitle">
+            {isGoogleProcessing ? "Đang xác thực Google..." : "Đang kiểm tra..."}
+          </p>
         </div>
       </div>
     );

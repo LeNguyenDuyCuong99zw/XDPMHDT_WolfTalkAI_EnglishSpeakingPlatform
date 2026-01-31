@@ -33,11 +33,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(java.util.Arrays.asList(
-            "http://localhost:5173",
-            "http://localhost:3000",
-            "http://127.0.0.1:5173",
-            "http://127.0.0.1:3000"
-        ));
+                "http://localhost:5173",
+                "http://localhost:3000",
+                "http://localhost:3001",
+                "http://127.0.0.1:5173",
+                "http://127.0.0.1:3000",
+                "http://127.0.0.1:3001"));
         configuration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(java.util.Arrays.asList("*"));
         configuration.setExposedHeaders(java.util.Arrays.asList("Authorization", "Content-Type"));
@@ -50,19 +51,25 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, com.wolftalk.backend.security.JwtUtil jwtUtil) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, com.wolftalk.backend.security.JwtUtil jwtUtil,
+            com.wolftalk.backend.security.OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler)
+            throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/api/audio/**").permitAll() // Allow audio generation for learning
-                    // Allow public access to package listings (GET)
-                    .requestMatchers(HttpMethod.GET, "/api/packages/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-                    .anyRequest().authenticated()
-                );
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/audio/**").permitAll() // Allow audio generation for learning
+                        .requestMatchers("/oauth2/**").permitAll()
+                        .requestMatchers("/login/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/packages/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                        // Admin endpoints - require ROLE_ADMIN
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2LoginSuccessHandler));
         // Add JWT filter to validate tokens and set SecurityContext
         http.addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 

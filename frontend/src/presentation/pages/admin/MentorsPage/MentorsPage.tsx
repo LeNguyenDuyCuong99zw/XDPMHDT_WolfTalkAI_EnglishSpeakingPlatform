@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Search,
   Star,
@@ -11,14 +11,13 @@ import {
   Trash2,
   Mail,
   User,
-  Users
-} from 'lucide-react';
-import { Button } from '../../../components/atoms/Button/Button';
-import { Modal } from '../../../components/organisms/Modal/Modal';
-import { Input } from '../../../components/atoms/Input/Input';
-import { useMentors } from '../../../hooks/useMentors';
-import { MentorDTO } from '../../../../application/dto/MentorDTO';
-import './MentorsPage.css';
+  Users,
+} from "lucide-react";
+import { Button } from "../../../components/atoms/Button/Button";
+import { Modal } from "../../../components/organisms/Modal/Modal";
+import { Input } from "../../../components/atoms/Input/Input";
+import { useMentors } from "../../../hooks/useMentors";
+import "./MentorsPage.css";
 
 export const MentorsPage: React.FC = () => {
   const {
@@ -50,7 +49,7 @@ export const MentorsPage: React.FC = () => {
   };
 
   const handleAddSkill = () => {
-    setSkills([...skills, { name: '', level: 'Beginner' }]);
+    setSkills([...skills, { name: "", level: "Beginner" }]);
   };
 
   const handleRemoveSkill = (index: number) => {
@@ -59,8 +58,8 @@ export const MentorsPage: React.FC = () => {
 
   const handleSkillChange = (
     index: number,
-    field: 'name' | 'level',
-    value: string
+    field: "name" | "level",
+    value: string,
   ) => {
     const updated = [...skills];
     updated[index][field] = value;
@@ -125,7 +124,11 @@ export const MentorsPage: React.FC = () => {
       {/* Search Bar - FIXED */}
       <div className="mentors-page__controls">
         <div className="mentors-page__search">
-          <Search className="mentors-page__search-icon" size={20} strokeWidth={2} />
+          <Search
+            className="mentors-page__search-icon"
+            size={20}
+            strokeWidth={2}
+          />
           <input
             type="text"
             className="mentors-page__search-input"
@@ -159,9 +162,15 @@ export const MentorsPage: React.FC = () => {
 
       {mentors.length === 0 && !loading && (
         <div className="mentors-page__empty">
-          <User className="mentors-page__empty-icon" size={64} strokeWidth={1.5} />
+          <User
+            className="mentors-page__empty-icon"
+            size={64}
+            strokeWidth={1.5}
+          />
           <h3 className="mentors-page__empty-title">No mentors found</h3>
-          <p className="mentors-page__empty-text">Try adjusting your search criteria</p>
+          <p className="mentors-page__empty-text">
+            Try adjusting your search criteria
+          </p>
         </div>
       )}
 
@@ -169,21 +178,33 @@ export const MentorsPage: React.FC = () => {
       <Modal
         isOpen={isSkillsModalOpen}
         onClose={closeSkillsModal}
-        title={`Manage Skills - ${selectedMentor?.user.fullName || ''}`}
+        title={`Manage Skills - ${selectedMentor?.user.fullName || ""}`}
         size="medium"
         footer={
           <>
-            <Button variant="secondary" onClick={closeSkillsModal} disabled={actionLoading}>
+            <Button
+              variant="secondary"
+              onClick={closeSkillsModal}
+              disabled={actionLoading}
+            >
               Cancel
             </Button>
-            <Button variant="primary" onClick={handleSaveSkills} loading={actionLoading}>
+            <Button
+              variant="primary"
+              onClick={handleSaveSkills}
+              loading={actionLoading}
+            >
               Save Skills
             </Button>
           </>
         }
       >
         <div className="mentors-page__skills-editor-header">
-          <Award className="mentors-page__skills-editor-icon" size={24} strokeWidth={2} />
+          <Award
+            className="mentors-page__skills-editor-icon"
+            size={24}
+            strokeWidth={2}
+          />
           <span className="mentors-page__skills-editor-title">
             Edit mentor skills and expertise levels
           </span>
@@ -195,14 +216,18 @@ export const MentorsPage: React.FC = () => {
               <Input
                 type="text"
                 value={skill.name}
-                onChange={(e) => handleSkillChange(index, 'name', e.target.value)}
+                onChange={(e) =>
+                  handleSkillChange(index, "name", e.target.value)
+                }
                 placeholder="Skill name (e.g., IELTS Speaking)"
                 fullWidth
               />
               <select
                 className="mentors-page__skill-level-select"
                 value={skill.level}
-                onChange={(e) => handleSkillChange(index, 'level', e.target.value)}
+                onChange={(e) =>
+                  handleSkillChange(index, "level", e.target.value)
+                }
               >
                 <option value="Beginner">Beginner</option>
                 <option value="Intermediate">Intermediate</option>
@@ -218,7 +243,10 @@ export const MentorsPage: React.FC = () => {
               </button>
             </div>
           ))}
-          <button className="mentors-page__skill-add-btn" onClick={handleAddSkill}>
+          <button
+            className="mentors-page__skill-add-btn"
+            onClick={handleAddSkill}
+          >
             <Plus size={20} strokeWidth={2} />
             <span>Add Skill</span>
           </button>
@@ -249,26 +277,33 @@ const MentorCard: React.FC<MentorCardProps> = ({
 }) => {
   const getStatusClass = (status: string) => {
     switch (status) {
-      case 'approved':
-        return 'approved';
-      case 'pending':
-        return 'pending';
-      case 'rejected':
-        return 'rejected';
+      case "approved":
+        return "approved";
+      case "pending":
+        return "pending";
+      case "rejected":
+        return "rejected";
       default:
-        return 'pending';
+        return "pending";
     }
   };
 
   const statusClass = getStatusClass(mentor.status);
 
   return (
-    <div className="mentors-page__card" style={{ animationDelay: `${index * 0.1}s` }}>
+    <div
+      className="mentors-page__card"
+      style={{ animationDelay: `${index * 0.1}s` }}
+    >
       {/* Status Badge - FIXED */}
-      <div className={`mentors-page__status-badge mentors-page__status-badge--${statusClass}`}>
-        {mentor.status === 'approved' && <CheckCircle size={14} strokeWidth={2} />}
-        {mentor.status === 'pending' && <Calendar size={14} strokeWidth={2} />}
-        {mentor.status === 'rejected' && <XCircle size={14} strokeWidth={2} />}
+      <div
+        className={`mentors-page__status-badge mentors-page__status-badge--${statusClass}`}
+      >
+        {mentor.status === "approved" && (
+          <CheckCircle size={14} strokeWidth={2} />
+        )}
+        {mentor.status === "pending" && <Calendar size={14} strokeWidth={2} />}
+        {mentor.status === "rejected" && <XCircle size={14} strokeWidth={2} />}
         <span>{mentor.status}</span>
       </div>
 
@@ -296,19 +331,33 @@ const MentorCard: React.FC<MentorCardProps> = ({
       {/* Stats - FIXED */}
       <div className="mentors-page__stats">
         <div className="mentors-page__stat">
-          <Award className="mentors-page__stat-icon" size={18} strokeWidth={2} />
+          <Award
+            className="mentors-page__stat-icon"
+            size={18}
+            strokeWidth={2}
+          />
           <span className="mentors-page__stat-label">Experience</span>
-          <span className="mentors-page__stat-value">{mentor.experience} years</span>
+          <span className="mentors-page__stat-value">
+            {mentor.experience} years
+          </span>
         </div>
         <div className="mentors-page__stat">
           <Star className="mentors-page__stat-icon" size={18} strokeWidth={2} />
           <span className="mentors-page__stat-label">Rating</span>
-          <span className="mentors-page__stat-value">{mentor.rating.toFixed(1)}</span>
+          <span className="mentors-page__stat-value">
+            {mentor.rating.toFixed(1)}
+          </span>
         </div>
         <div className="mentors-page__stat">
-          <Calendar className="mentors-page__stat-icon" size={18} strokeWidth={2} />
+          <Calendar
+            className="mentors-page__stat-icon"
+            size={18}
+            strokeWidth={2}
+          />
           <span className="mentors-page__stat-label">Sessions</span>
-          <span className="mentors-page__stat-value">{mentor.totalSessions}</span>
+          <span className="mentors-page__stat-value">
+            {mentor.totalSessions}
+          </span>
         </div>
       </div>
 
@@ -328,17 +377,26 @@ const MentorCard: React.FC<MentorCardProps> = ({
 
       {/* Actions - FIXED */}
       <div className="mentors-page__actions">
-        <button className="mentors-page__action-btn mentors-page__action-btn--primary" onClick={onEditSkills}>
+        <button
+          className="mentors-page__action-btn mentors-page__action-btn--primary"
+          onClick={onEditSkills}
+        >
           <Edit3 size={16} strokeWidth={2} />
           <span>Edit Skills</span>
         </button>
-        {mentor.status === 'pending' && (
+        {mentor.status === "pending" && (
           <>
-            <button className="mentors-page__action-btn mentors-page__action-btn--success" onClick={onApprove}>
+            <button
+              className="mentors-page__action-btn mentors-page__action-btn--success"
+              onClick={onApprove}
+            >
               <CheckCircle size={16} strokeWidth={2} />
               <span>Approve</span>
             </button>
-            <button className="mentors-page__action-btn mentors-page__action-btn--danger" onClick={onReject}>
+            <button
+              className="mentors-page__action-btn mentors-page__action-btn--danger"
+              onClick={onReject}
+            >
               <XCircle size={16} strokeWidth={2} />
               <span>Reject</span>
             </button>

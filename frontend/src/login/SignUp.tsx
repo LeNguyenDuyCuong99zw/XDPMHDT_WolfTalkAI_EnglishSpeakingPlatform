@@ -159,11 +159,11 @@ const SignUp: React.FC<SignUpProps> = ({
   };
 
   const handleGoogleSignUp = () => {
-    console.log("Google sign up clicked");
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
 
   const handleFacebookSignUp = () => {
-    console.log("Facebook sign up clicked");
+    window.location.href = "http://localhost:8080/oauth2/authorization/facebook";
   };
 
   return (

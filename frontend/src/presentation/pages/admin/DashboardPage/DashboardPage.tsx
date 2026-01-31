@@ -1,5 +1,5 @@
 // src/presentation/pages/admin/DashboardPage/DashboardPage.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Users,
   GraduationCap,
@@ -17,7 +17,7 @@ import {
   Target,
   BarChart3,
   Mic,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   AreaChart,
   Area,
@@ -31,16 +31,17 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend
-} from 'recharts';
-import './DashboardPage.css';
+  Legend,
+} from "recharts";
+import { userAdminAPI } from "../../../../services/admin/userAdminAPI";
+import "./DashboardPage.css";
 
 interface StatData {
   label: string;
   value: number;
   icon: React.ReactNode;
   trend: number;
-  color: 'blue' | 'purple' | 'green' | 'orange';
+  color: "blue" | "purple" | "green" | "orange";
   prefix?: string;
 }
 
@@ -50,7 +51,7 @@ interface ActivityData {
   description: string;
   time: string;
   icon: React.ReactNode;
-  color: 'blue' | 'purple' | 'orange' | 'green' | 'yellow';
+  color: "blue" | "purple" | "orange" | "green" | "yellow";
 }
 
 interface MentorData {
@@ -63,139 +64,176 @@ interface MentorData {
 
 const statsData: StatData[] = [
   {
-    label: 'Total Learners',
-    value: 3247,
+    label: "Total Learners",
+    value: 0, // Will be updated from API
     icon: <Users size={24} />,
     trend: 18.2,
-    color: 'blue'
+    color: "blue",
   },
   {
-    label: 'Active Mentors',
+    label: "Active Mentors",
     value: 89,
     icon: <GraduationCap size={24} />,
     trend: 12.5,
-    color: 'purple'
+    color: "purple",
   },
   {
-    label: 'Total Revenue',
+    label: "Total Revenue",
     value: 125400,
-    prefix: '₫',
+    prefix: "₫",
     icon: <DollarSign size={24} />,
     trend: 24.8,
-    color: 'green'
+    color: "green",
   },
   {
-    label: 'Speaking Sessions',
+    label: "Speaking Sessions",
     value: 8945,
     icon: <MessageCircle size={24} />,
     trend: 31.2,
-    color: 'orange'
-  }
+    color: "orange",
+  },
 ];
 
 const revenueData = [
-  { month: 'Jan', revenue: 85000, sessions: 1200 },
-  { month: 'Feb', revenue: 92000, sessions: 1450 },
-  { month: 'Mar', revenue: 98000, sessions: 1580 },
-  { month: 'Apr', revenue: 110000, sessions: 1820 },
-  { month: 'May', revenue: 118000, sessions: 1950 },
-  { month: 'Jun', revenue: 125400, sessions: 2100 }
+  { month: "Jan", revenue: 85000, sessions: 1200 },
+  { month: "Feb", revenue: 92000, sessions: 1450 },
+  { month: "Mar", revenue: 98000, sessions: 1580 },
+  { month: "Apr", revenue: 110000, sessions: 1820 },
+  { month: "May", revenue: 118000, sessions: 1950 },
+  { month: "Jun", revenue: 125400, sessions: 2100 },
 ];
 
 const enrollmentData = [
-  { name: 'IELTS Speaking', value: 2845 },
-  { name: 'Business English', value: 1920 },
-  { name: 'Daily Conversation', value: 2680 },
-  { name: 'TOEFL Speaking', value: 1500 }
+  { name: "IELTS Speaking", value: 2845 },
+  { name: "Business English", value: 1920 },
+  { name: "Daily Conversation", value: 2680 },
+  { name: "TOEFL Speaking", value: 1500 },
 ];
 
-const COLORS = ['#3b82f6', '#8b5cf6', '#f59e0b', '#22c55e'];
+const COLORS = ["#3b82f6", "#8b5cf6", "#f59e0b", "#22c55e"];
 
 const performanceData = [
-  { category: 'Fluency', current: 88, previous: 78 },
-  { category: 'Pronunciation', current: 85, previous: 75 },
-  { category: 'Vocabulary', current: 90, previous: 82 },
-  { category: 'Grammar', current: 82, previous: 74 },
-  { category: 'Confidence', current: 92, previous: 85 }
+  { category: "Fluency", current: 88, previous: 78 },
+  { category: "Pronunciation", current: 85, previous: 75 },
+  { category: "Vocabulary", current: 90, previous: 82 },
+  { category: "Grammar", current: 82, previous: 74 },
+  { category: "Confidence", current: 92, previous: 85 },
 ];
 
 const activitiesData: ActivityData[] = [
   {
-    id: '1',
-    title: 'New Session Completed',
-    description: 'Nguyễn Văn An completed IELTS Speaking Part 2 with mentor Sarah',
-    time: '15 minutes ago',
+    id: "1",
+    title: "New Session Completed",
+    description:
+      "Nguyễn Văn An completed IELTS Speaking Part 2 with mentor Sarah",
+    time: "15 minutes ago",
     icon: <CheckCircle size={18} />,
-    color: 'green'
+    color: "green",
   },
   {
-    id: '2',
-    title: 'New Learner Registered',
-    description: 'Trần Thị Bình joined the platform - Daily Conversation track',
-    time: '1 hour ago',
+    id: "2",
+    title: "New Learner Registered",
+    description: "Trần Thị Bình joined the platform - Daily Conversation track",
+    time: "1 hour ago",
     icon: <UserPlus size={18} />,
-    color: 'blue'
+    color: "blue",
   },
   {
-    id: '3',
-    title: 'Payment Received',
-    description: 'Premium plan purchased by Lê Minh Cường - ₫299,000',
-    time: '2 hours ago',
+    id: "3",
+    title: "Payment Received",
+    description: "Premium plan purchased by Lê Minh Cường - ₫299,000",
+    time: "2 hours ago",
     icon: <ShoppingCart size={18} />,
-    color: 'orange'
+    color: "orange",
   },
   {
-    id: '4',
-    title: 'Milestone Achieved',
-    description: 'Phạm Thu Hằng completed 50 speaking sessions',
-    time: '4 hours ago',
+    id: "4",
+    title: "Milestone Achieved",
+    description: "Phạm Thu Hằng completed 50 speaking sessions",
+    time: "4 hours ago",
     icon: <Award size={18} />,
-    color: 'purple'
+    color: "purple",
   },
   {
-    id: '5',
-    title: 'New Review',
-    description: 'Hoàng Đức Thịnh rated mentor John 5 stars',
-    time: '6 hours ago',
+    id: "5",
+    title: "New Review",
+    description: "Hoàng Đức Thịnh rated mentor John 5 stars",
+    time: "6 hours ago",
     icon: <Sparkles size={18} />,
-    color: 'yellow'
-  }
+    color: "yellow",
+  },
 ];
 
 const topMentorsData: MentorData[] = [
-  { 
-    name: 'Sarah Williams', 
-    sessions: 324, 
-    rating: 4.9, 
-    revenue: '₫18,500,000',
-    specialty: 'IELTS Speaking'
+  {
+    name: "Sarah Williams",
+    sessions: 324,
+    rating: 4.9,
+    revenue: "₫18,500,000",
+    specialty: "IELTS Speaking",
   },
-  { 
-    name: 'John Anderson', 
-    sessions: 298, 
-    rating: 4.8, 
-    revenue: '₫16,200,000',
-    specialty: 'Business English'
+  {
+    name: "John Anderson",
+    sessions: 298,
+    rating: 4.8,
+    revenue: "₫16,200,000",
+    specialty: "Business English",
   },
-  { 
-    name: 'Emily Chen', 
-    sessions: 276, 
-    rating: 4.9, 
-    revenue: '₫15,800,000',
-    specialty: 'Daily Conversation'
+  {
+    name: "Emily Chen",
+    sessions: 276,
+    rating: 4.9,
+    revenue: "₫15,800,000",
+    specialty: "Daily Conversation",
   },
-  { 
-    name: 'Michael Brown', 
-    sessions: 245, 
-    rating: 4.7, 
-    revenue: '₫13,900,000',
-    specialty: 'TOEFL Speaking'
-  }
+  {
+    name: "Michael Brown",
+    sessions: 245,
+    rating: 4.7,
+    revenue: "₫13,900,000",
+    specialty: "TOEFL Speaking",
+  },
 ];
 
 export const DashboardPage: React.FC = () => {
   const [animatedStats, setAnimatedStats] = useState<number[]>([0, 0, 0, 0]);
+  const [stats, setStats] = useState<StatData[]>(statsData);
+  const [loading, setLoading] = useState(true);
 
+  // Fetch total learners from API
+  useEffect(() => {
+    const fetchUserCount = async () => {
+      try {
+        // Fetch all users to count only Learners
+        const result = await userAdminAPI.getAllUsers();
+
+        // Filter only Learner users (not ADMIN or MENTOR)
+        const learnerUsers = result.filter((user: any) => {
+          const roles = user.roles || "";
+          return !roles.includes("ADMIN") && !roles.includes("MENTOR");
+        });
+
+        const totalLearners = learnerUsers.length;
+
+        // Update statsData with real learner count
+        const updatedStats = [...statsData];
+        updatedStats[0].value = totalLearners;
+        setStats(updatedStats);
+
+        // Reset animation with new data
+        setAnimatedStats([0, 0, 0, 0]);
+      } catch (error) {
+        console.error("Error fetching user count:", error);
+        setStats(statsData);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserCount();
+  }, []);
+
+  // Animation effect
   useEffect(() => {
     const duration = 1600;
     const steps = 50;
@@ -205,18 +243,18 @@ export const DashboardPage: React.FC = () => {
     const timer = setInterval(() => {
       currentStep++;
       const progress = currentStep / steps;
-      setAnimatedStats(statsData.map((stat) => Math.round(stat.value * progress)));
+      setAnimatedStats(stats.map((stat) => Math.round(stat.value * progress)));
 
       if (currentStep >= steps) {
         clearInterval(timer);
-        setAnimatedStats(statsData.map((stat) => stat.value));
+        setAnimatedStats(stats.map((stat) => stat.value));
       }
     }, interval);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [stats]);
 
-  const formatNumber = (num: number): string => num.toLocaleString('vi-VN');
+  const formatNumber = (num: number): string => num.toLocaleString("vi-VN");
 
   return (
     <div className="dashboard">
@@ -227,9 +265,7 @@ export const DashboardPage: React.FC = () => {
             <Activity size={28} />
           </div>
           <div>
-            <h1 className="dashboard__title">
-              Welcome back, Admin! 👋
-            </h1>
+            <h1 className="dashboard__title">Welcome back, Admin! 👋</h1>
             <p className="dashboard__subtitle">
               Monitor your speaking practice platform's performance
             </p>
@@ -243,7 +279,7 @@ export const DashboardPage: React.FC = () => {
 
       {/* Stats Grid */}
       <div className="dashboard__stats">
-        {statsData.map((stat, index) => (
+        {stats.map((stat, index) => (
           <article
             key={stat.label}
             className={`dashboard__stat-card dashboard__stat-card--${stat.color} glass-card`}
@@ -263,8 +299,12 @@ export const DashboardPage: React.FC = () => {
               </p>
               <div className="dashboard__stat-trend dashboard__stat-trend--positive">
                 <ArrowUpRight size={14} />
-                <span className="dashboard__stat-trend-value">{stat.trend}%</span>
-                <span className="dashboard__stat-trend-label">vs last month</span>
+                <span className="dashboard__stat-trend-value">
+                  {stat.trend}%
+                </span>
+                <span className="dashboard__stat-trend-label">
+                  vs last month
+                </span>
               </div>
             </div>
 
@@ -276,38 +316,60 @@ export const DashboardPage: React.FC = () => {
       {/* Charts Grid */}
       <section className="dashboard__charts">
         {/* Revenue & Sessions Trend */}
-        <div className="dashboard__chart-card dashboard__chart-card--large glass-card" style={{ animationDelay: '0.4s' }}>
+        <div
+          className="dashboard__chart-card dashboard__chart-card--large glass-card"
+          style={{ animationDelay: "0.4s" }}
+        >
           <div className="dashboard__chart-header">
             <div>
               <h3 className="dashboard__chart-title">
                 <TrendingUp size={20} />
                 Revenue &amp; Sessions Trend
               </h3>
-              <p className="dashboard__chart-subtitle">Last 6 months performance</p>
+              <p className="dashboard__chart-subtitle">
+                Last 6 months performance
+              </p>
             </div>
           </div>
           <div className="dashboard__chart-body">
             <ResponsiveContainer width="100%" height={280}>
-              <AreaChart data={revenueData} margin={{ top: 10, right: 16, left: -10, bottom: 0 }}>
+              <AreaChart
+                data={revenueData}
+                margin={{ top: 10, right: 16, left: -10, bottom: 0 }}
+              >
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.28} />
                     <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.02} />
                   </linearGradient>
-                  <linearGradient id="colorSessions" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="colorSessions"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="5%" stopColor="#22c55e" stopOpacity={0.26} />
                     <stop offset="95%" stopColor="#22c55e" stopOpacity={0.02} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" vertical={false} />
-                <XAxis dataKey="month" stroke="#94a3b8" style={{ fontSize: '12px' }} />
-                <YAxis stroke="#94a3b8" style={{ fontSize: '12px' }} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(148,163,184,0.2)"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="month"
+                  stroke="#94a3b8"
+                  style={{ fontSize: "12px" }}
+                />
+                <YAxis stroke="#94a3b8" style={{ fontSize: "12px" }} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(255,255,255,0.98)',
-                    border: '1px solid rgba(148,163,184,0.25)',
+                    backgroundColor: "rgba(255,255,255,0.98)",
+                    border: "1px solid rgba(148,163,184,0.25)",
                     borderRadius: 12,
-                    boxShadow: '0 8px 24px rgba(15,23,42,0.15)'
+                    boxShadow: "0 8px 24px rgba(15,23,42,0.15)",
                   }}
                 />
                 <Legend />
@@ -333,14 +395,19 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Sessions by Category */}
-        <div className="dashboard__chart-card glass-card" style={{ animationDelay: '0.5s' }}>
+        <div
+          className="dashboard__chart-card glass-card"
+          style={{ animationDelay: "0.5s" }}
+        >
           <div className="dashboard__chart-header">
             <div>
               <h3 className="dashboard__chart-title">
                 <Target size={20} />
                 Sessions by Category
               </h3>
-              <p className="dashboard__chart-subtitle">Total: {formatNumber(8945)} sessions</p>
+              <p className="dashboard__chart-subtitle">
+                Total: {formatNumber(8945)} sessions
+              </p>
             </div>
           </div>
           <div className="dashboard__chart-body">
@@ -363,10 +430,10 @@ export const DashboardPage: React.FC = () => {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(255,255,255,0.98)',
-                    border: '1px solid rgba(148,163,184,0.25)',
+                    backgroundColor: "rgba(255,255,255,0.98)",
+                    border: "1px solid rgba(148,163,184,0.25)",
                     borderRadius: 12,
-                    boxShadow: '0 8px 24px rgba(15,23,42,0.15)'
+                    boxShadow: "0 8px 24px rgba(15,23,42,0.15)",
                   }}
                 />
               </PieChart>
@@ -375,33 +442,59 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Learning Performance */}
-        <div className="dashboard__chart-card glass-card" style={{ animationDelay: '0.6s' }}>
+        <div
+          className="dashboard__chart-card glass-card"
+          style={{ animationDelay: "0.6s" }}
+        >
           <div className="dashboard__chart-header">
             <div>
               <h3 className="dashboard__chart-title">
                 <BarChart3 size={20} />
                 Learning Performance
               </h3>
-              <p className="dashboard__chart-subtitle">Average scores - Current vs Previous</p>
+              <p className="dashboard__chart-subtitle">
+                Average scores - Current vs Previous
+              </p>
             </div>
           </div>
           <div className="dashboard__chart-body">
             <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={performanceData} margin={{ top: 10, right: 16, left: -10, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" vertical={false} />
-                <XAxis dataKey="category" stroke="#94a3b8" style={{ fontSize: '12px' }} />
-                <YAxis stroke="#94a3b8" style={{ fontSize: '12px' }} />
+              <BarChart
+                data={performanceData}
+                margin={{ top: 10, right: 16, left: -10, bottom: 0 }}
+              >
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(148,163,184,0.2)"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="category"
+                  stroke="#94a3b8"
+                  style={{ fontSize: "12px" }}
+                />
+                <YAxis stroke="#94a3b8" style={{ fontSize: "12px" }} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(255,255,255,0.98)',
-                    border: '1px solid rgba(148,163,184,0.25)',
+                    backgroundColor: "rgba(255,255,255,0.98)",
+                    border: "1px solid rgba(148,163,184,0.25)",
                     borderRadius: 12,
-                    boxShadow: '0 8px 24px rgba(15,23,42,0.15)'
+                    boxShadow: "0 8px 24px rgba(15,23,42,0.15)",
                   }}
                 />
                 <Legend />
-                <Bar dataKey="current" fill="#3b82f6" name="Current Quarter" radius={[6, 6, 0, 0]} />
-                <Bar dataKey="previous" fill="#8b5cf6" name="Previous Quarter" radius={[6, 6, 0, 0]} />
+                <Bar
+                  dataKey="current"
+                  fill="#3b82f6"
+                  name="Current Quarter"
+                  radius={[6, 6, 0, 0]}
+                />
+                <Bar
+                  dataKey="previous"
+                  fill="#8b5cf6"
+                  name="Previous Quarter"
+                  radius={[6, 6, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -411,7 +504,10 @@ export const DashboardPage: React.FC = () => {
       {/* Bottom Grid */}
       <section className="dashboard__bottom-grid">
         {/* Recent Activity */}
-        <div className="dashboard__activity glass-card" style={{ animationDelay: '0.7s' }}>
+        <div
+          className="dashboard__activity glass-card"
+          style={{ animationDelay: "0.7s" }}
+        >
           <div className="dashboard__activity-header">
             <h3 className="dashboard__activity-title">
               <Activity size={20} />
@@ -430,12 +526,18 @@ export const DashboardPage: React.FC = () => {
                 className="dashboard__activity-item"
                 style={{ animationDelay: `${0.8 + index * 0.05}s` }}
               >
-                <div className={`dashboard__activity-icon dashboard__activity-icon--${activity.color}`}>
+                <div
+                  className={`dashboard__activity-icon dashboard__activity-icon--${activity.color}`}
+                >
                   {activity.icon}
                 </div>
                 <div className="dashboard__activity-content">
-                  <div className="dashboard__activity-title-text">{activity.title}</div>
-                  <div className="dashboard__activity-description">{activity.description}</div>
+                  <div className="dashboard__activity-title-text">
+                    {activity.title}
+                  </div>
+                  <div className="dashboard__activity-description">
+                    {activity.description}
+                  </div>
                 </div>
                 <div className="dashboard__activity-time">{activity.time}</div>
               </div>
@@ -444,7 +546,10 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Top Mentors */}
-        <div className="dashboard__mentors glass-card" style={{ animationDelay: '0.8s' }}>
+        <div
+          className="dashboard__mentors glass-card"
+          style={{ animationDelay: "0.8s" }}
+        >
           <div className="dashboard__mentors-header">
             <h3 className="dashboard__mentors-title">
               <Star size={20} />
@@ -477,7 +582,9 @@ export const DashboardPage: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                <div className="dashboard__mentor-revenue">{mentor.revenue}</div>
+                <div className="dashboard__mentor-revenue">
+                  {mentor.revenue}
+                </div>
               </div>
             ))}
           </div>

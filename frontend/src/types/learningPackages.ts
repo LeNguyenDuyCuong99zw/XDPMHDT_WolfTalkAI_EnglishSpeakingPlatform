@@ -1,17 +1,8 @@
 // Type definitions for Learning Packages System
 
-export enum SubscriptionStatus {
-  ACTIVE = "ACTIVE",
-  EXPIRED = "EXPIRED",
-  CANCELLED = "CANCELLED",
-  PENDING = "PENDING",
-}
+export type SubscriptionStatus = "ACTIVE" | "EXPIRED" | "CANCELLED" | "PENDING";
 
-export enum BillingCycle {
-  MONTHLY = "MONTHLY",
-  ANNUAL = "ANNUAL",
-  ONE_TIME = "ONE_TIME",
-}
+export type BillingCycle = "MONTHLY" | "ANNUAL" | "ONE_TIME";
 
 // Learning Package Types
 export interface LearningPackage {
