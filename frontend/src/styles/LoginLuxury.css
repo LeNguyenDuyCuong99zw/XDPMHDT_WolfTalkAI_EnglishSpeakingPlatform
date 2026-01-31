@@ -1,0 +1,139 @@
+/* Background */
+.luxury-login-page {
+  min-height: 100vh;
+  background: #0d0d0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", system-ui, sans-serif;
+  color: #e2e8f0;
+}
+
+/* Card */
+.login-card {
+  width: 440px;
+  max-width: 92%;
+  padding: 52px 44px;
+  border-radius: 24px;
+  background: rgba(17, 17, 23, 0.94);
+  border: 1px solid #1e1e2e;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+/* Logo */
+.login-logo {
+  width: 72px;
+  margin-bottom: 24px;
+}
+
+/* Title & Subtitle */
+.login-card h1 {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #f1f5f9;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #94a3b8;
+  margin-bottom: 40px;
+}
+
+/* Inputs */
+.login-card input {
+  width: 100%;
+  padding: 15px 16px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  border: 1px solid #2d3748;
+  background: #111118;
+  color: #e2e8f0;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.login-card input:focus {
+  outline: none;
+  border-color: #9ffb0d;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+  background: #17171f;
+}
+
+/* Primary button */
+.primary-btn {
+  width: 100%;
+  padding: 15px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #30e977, #a9f1b9);
+  border: none;
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: all 0.28s ease;
+  box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(124, 58, 237, 0.4);
+  background: linear-gradient(135deg, #8b5cf6, #c084fc);
+}
+
+/* Divider */
+.divider {
+  margin: 32px 0;
+  font-size: 13px;
+  color: #64748b;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 42%;
+  height: 1px;
+  background: #1e293b;
+}
+
+.divider::before {
+  left: 0;
+}
+.divider::after {
+  right: 0;
+}
+
+/* Social buttons */
+.social {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  background: #111118;
+  border: 1px solid #2d3748;
+  color: #cbd5e1;
+  font-weight: 600;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.22s;
+}
+
+.social:hover {
+  background: #1e1e2e;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+/* Terms */
+.terms {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 28px;
+  line-height: 1.5;
+}
