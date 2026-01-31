@@ -58,12 +58,87 @@ public class User {
     // Gamification
     private Integer streak = 0;
 
+    private Integer longestStreak = 0; // Streak dài nhất từng đạt được
+
     private Instant lastActiveDate;
 
     private Integer points = 0;
 
+    private Integer totalXp = 0; // Tổng XP kiếm được
+
+    private Integer todayXp = 0; // XP hôm nay
+
+    private Integer gems = 0; // Gems/đá quý (currency phụ)
+
+    private Integer hearts = 5; // Hearts/mạng (Duolingo style)
+
     private Integer todayLearningMinutes = 0;
 
     private LocalDate lastLearningDate;
+
+    @Column(name = "current_league")
+    private String currentLeague = "BRONZE"; // BRONZE, SILVER, GOLD, SAPPHIRE, RUBY, EMERALD, AMETHYST, PEARL, OBSIDIAN, DIAMOND
+
+    private Integer leagueRank = 0; // Rank trong league hiện tại
+
+    /**
+     * Cập nhật streak khi user học
+     */
+    public void updateStreak() {
+        LocalDate today = LocalDate.now();
+        if (lastLearningDate == null) {
+            streak = 1;
+        } else if (lastLearningDate.equals(today.minusDays(1))) {
+            streak++;
+        } else if (!lastLearningDate.equals(today)) {
+            streak = 1; // Reset streak if not consecutive
+        }
+        
+        lastLearningDate = today;
+        lastActiveDate = Instant.now();
+        
+        // Update longest streak
+        if (streak > longestStreak) {
+            longestStreak = streak;
+        }
+    }
+
+    /**
+     * Reset daily XP (gọi lúc 0:00)
+     */
+    public void resetDailyStats() {
+        todayXp = 0;
+        todayLearningMinutes = 0;
+    }
+
+    /**
+     * Thêm XP
+     */
+    public void addXp(int amount) {
+        if (amount > 0) {
+            totalXp = (totalXp != null ? totalXp : 0) + amount;
+            todayXp = (todayXp != null ? todayXp : 0) + amount;
+            points = (points != null ? points : 0) + amount;
+        }
+    }
+
+    /**
+     * Lấy league emoji
+     */
+    public String getLeagueEmoji() {
+        if (currentLeague == null) return "🥉";
+        return switch (currentLeague) {
+            case "DIAMOND" -> "💎";
+            case "OBSIDIAN" -> "⬛";
+            case "PEARL" -> "⚪";
+            case "AMETHYST" -> "💜";
+            case "EMERALD" -> "💚";
+            case "RUBY" -> "❤️";
+            case "SAPPHIRE" -> "💙";
+            case "GOLD" -> "🥇";
+            case "SILVER" -> "🥈";
+            default -> "🥉"; // BRONZE
+        };
+    }
 
 }
