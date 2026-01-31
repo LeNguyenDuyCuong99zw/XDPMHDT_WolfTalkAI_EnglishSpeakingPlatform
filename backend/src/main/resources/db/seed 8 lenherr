@@ -1,0 +1,1 @@
+$env:PGPASSWORD="wolftalk9999"; $env:PGCLIENTENCODING="UTF8"; & "C:\Program Files\PostgreSQL\18\bin\psql.exe" -h 127.0.0.1 -p 5433 -U wolftalk -d wolftalk_db -f "c:\xdpm\XDPMHDT_WolfTalkAI_EnglishSpeakingPlatform\backend\src\main\resources\db\migration\V008__vocabulary_learning_system.sql"
