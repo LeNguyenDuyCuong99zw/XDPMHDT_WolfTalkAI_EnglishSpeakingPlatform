@@ -1,0 +1,257 @@
+.leaderboard-panel {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.leaderboard-panel.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.leaderboard-panel.loading .spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.leaderboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.leaderboard-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.8em;
+}
+
+.sort-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.sort-btn {
+  padding: 8px 16px;
+  background: #f0f0f0;
+  color: #333;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.sort-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.sort-btn.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.leaderboard-table {
+  overflow-x: auto;
+}
+
+.leaderboard-table-header {
+  display: grid;
+  grid-template-columns: 80px 1fr 100px 80px 120px;
+  gap: 15px;
+  padding: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.leaderboard-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 100px 80px 120px;
+  gap: 15px;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.leaderboard-row:hover {
+  background: #f8f9ff;
+}
+
+.leaderboard-row.top-1,
+.leaderboard-row.top-2,
+.leaderboard-row.top-3 {
+  background: #f8f9ff;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.leaderboard-row.top-1 {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  font-weight: 600;
+}
+
+.leaderboard-row.top-2 {
+  background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+  font-weight: 600;
+}
+
+.leaderboard-row.top-3 {
+  background: linear-gradient(135deg, #cd7f32 0%, #e8a76a 100%);
+  font-weight: 600;
+  color: white;
+}
+
+.col-rank {
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.col-rank .rank-number {
+  font-weight: 600;
+  color: #667eea;
+}
+
+.col-name {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar,
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: white;
+  background: #667eea;
+  flex-shrink: 0;
+}
+
+.avatar {
+  object-fit: cover;
+  border: 2px solid white;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.col-points,
+.col-streak,
+.col-completed {
+  text-align: center;
+}
+
+.points-badge,
+.streak-badge,
+.completed-badge {
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+.points-badge {
+  background: #fff3e0;
+  color: #ff6f00;
+}
+
+.streak-badge {
+  color: #d32f2f;
+}
+
+.completed-badge {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.empty-leaderboard {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1024px) {
+  .leaderboard-table-header,
+  .leaderboard-row {
+    grid-template-columns: 60px 1fr 80px 60px 80px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .leaderboard-table-header,
+  .leaderboard-row {
+    grid-template-columns: 50px 1fr 70px 50px 60px;
+    gap: 8px;
+    padding: 10px;
+    font-size: 0.9em;
+  }
+
+  .avatar,
+  .avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8em;
+  }
+
+  .user-name {
+    font-size: 0.9em;
+  }
+
+  .leaderboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .leaderboard-header h2 {
+    font-size: 1.5em;
+  }
+}

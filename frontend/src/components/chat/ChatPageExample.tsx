@@ -1,7 +1,47 @@
 // Ví dụ cách sử dụng ChatService mới với WebSocket
+// NOTE: This is an example file, uncomment import below when chatService is implemented
 
 import { useEffect, useState, useRef } from "react";
-import chatService, { Message, Conversation } from "../services/chatService";
+// import chatService, { Message, Conversation } from "../services/chatService";
+
+// Temporary mock interfaces for compilation (remove when real chatService is ready)
+interface Message {
+  id: number;
+  content: string;
+  senderId: number;
+  isDeleted?: boolean;
+  createdAt: string;
+}
+
+interface Conversation {
+  id: number;
+  participants: number[];
+}
+
+// Temporary mock chatService for compilation
+const chatService = {
+  connectWebSocket: async () => {},
+  disconnectWebSocket: () => {},
+  startConversation: async (userId: number): Promise<Conversation> => ({
+    id: 1,
+    participants: [userId],
+  }),
+  getMessages: async (convId: number, page: number): Promise<Message[]> => [],
+  subscribeToConversation:
+    (convId: number, callback: (msg: Message) => void) => () => {},
+  sendMessage: async (
+    convId: number,
+    receiverId: number,
+    content: string,
+  ): Promise<Message> => ({
+    id: 1,
+    content,
+    senderId: 0,
+    createdAt: new Date().toISOString(),
+  }),
+  deleteMessage: async (msgId: number) => {},
+  isWebSocketConnected: () => false,
+};
 
 interface ChatPageProps {
   userId: number;
