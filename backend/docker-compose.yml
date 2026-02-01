@@ -1,6 +1,29 @@
 version: "3.8"
 
 services:
+  # Legacy Backend Spring Boot
+  legacy-backend:
+    build: .
+    container_name: wolftalk-legacy-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/wolftalk_db
+      - SPRING_DATASOURCE_USERNAME=wolftalk
+      - SPRING_DATASOURCE_PASSWORD=wolftalk9999
+      - JWT_SECRET=your-super-secret-jwt-key-replace-in-production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - wolftalk-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
   postgres:
     image: postgres:16-alpine
     container_name: wolftalk-postgres

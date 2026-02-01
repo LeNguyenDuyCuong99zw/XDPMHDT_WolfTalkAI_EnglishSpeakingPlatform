@@ -1,0 +1,106 @@
+services:
+  # Service Discovery
+  eureka-server:
+    build: ./eureka-server
+    container_name: wolftalk-eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - wolftalk-microservices
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    container_name: wolftalk-api-gateway
+    ports:
+      - "9000:9000"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATA_REDIS_HOST=redis
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - eureka-server
+      - redis
+    networks:
+      - wolftalk-microservices
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # AI Learning Service
+  ai-learning-service:
+    build: ./ai-learning-service
+    container_name: wolftalk-ai-learning-service
+    ports:
+      - "8083:8083"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5433/wolftalk_db
+      - SPRING_DATASOURCE_USERNAME=wolftalk
+      - SPRING_DATASOURCE_PASSWORD=wolftalk9999
+      - SPRING_DATA_REDIS_HOST=redis
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GOOGLE_CLOUD_PROJECT_ID=${GOOGLE_CLOUD_PROJECT_ID}
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/google-credentials.json
+    volumes:
+      - ./credentials:/app/credentials
+    depends_on:
+      - eureka-server
+      - redis
+    networks:
+      - wolftalk-microservices
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # Redis for caching and rate limiting
+  redis:
+    image: redis:7.2-alpine
+    container_name: wolftalk-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - wolftalk-microservices
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MongoDB for conversations
+  mongodb:
+    image: mongo:7.0
+    container_name: wolftalk-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: wolftalk
+      MONGO_INITDB_ROOT_PASSWORD: wolftalk9999
+      MONGO_INITDB_DATABASE: wolftalk_conversations
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - wolftalk-microservices
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  wolftalk-microservices:
+    driver: bridge
