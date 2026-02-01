@@ -1,9 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "../services/api";
+import { vocabularyAPI } from "../services/vocabularyAPI";
 import WeeklyLeaderboardWidget from "../components/listening/WeeklyLeaderboardWidget";
 import "./DashboardPage.css";
 import "./Notification.css";
+
+// Declare dotlottie-wc for TypeScript
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'dotlottie-wc': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        src?: string;
+        speed?: string;
+        mode?: string;
+        loop?: boolean;
+        autoplay?: boolean;
+      };
+    }
+  }
+}
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -11,15 +27,59 @@ const DashboardPage: React.FC = () => {
   const [wordsLearned, setWordsLearned] = useState(0);
   const [unitsCompleted, setUnitsCompleted] = useState(0);
   const [points, setPoints] = useState(0);
+  const [vocabularyLevel, setVocabularyLevel] = useState(0);
+  const [vocabularyLevelName, setVocabularyLevelName] = useState("");
 
   const [todayGoal] = useState(20);
   const [todayProgress, setTodayProgress] = useState(0);
   const [showNotification, setShowNotification] = useState(false);
   const userName = localStorage.getItem("userName") || "Học viên";
 
+  const getLevelName = (level: number): string => {
+    switch (level) {
+      case 1:
+        return "Cơ bản";
+      case 2:
+        return "Sơ cấp";
+      case 3:
+        return "Trung cấp";
+      case 4:
+        return "Nâng cao";
+      case 5:
+        return "Chuyên gia";
+      default:
+        return "Mới bắt đầu";
+    }
+  };
+
+  const getLevelColor = (level: number): string => {
+    switch (level) {
+      case 1:
+        return "#4CAF50";
+      case 2:
+        return "#2196F3";
+      case 3:
+        return "#FF9800";
+      case 4:
+        return "#9C27B0";
+      case 5:
+        return "#F44336";
+      default:
+        return "#757575";
+    }
+  };
+
   useEffect(() => {
     // Initial load
     loadUserStats();
+    loadVocabularyLevel();
+
+    // Load Lottie player script
+    const script = document.createElement("script");
+    script.src =
+      "https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js";
+    script.type = "module";
+    document.head.appendChild(script);
 
     // Stats polling (less frequent)
     const statsInterval = setInterval(loadUserStats, 10000);
@@ -38,6 +98,10 @@ const DashboardPage: React.FC = () => {
     return () => {
       clearInterval(statsInterval);
       clearInterval(heartbeatInterval);
+      // Cleanup script on unmount
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
     };
   }, []);
 
@@ -64,6 +128,19 @@ const DashboardPage: React.FC = () => {
       });
     } catch (error) {
       console.error("Failed to load stats", error);
+    }
+  };
+
+  const loadVocabularyLevel = async () => {
+    try {
+      const stats = await vocabularyAPI.getUserStats();
+      setVocabularyLevel(stats.currentLevel);
+      setVocabularyLevelName(getLevelName(stats.currentLevel));
+    } catch (error) {
+      console.error("Failed to load vocabulary level", error);
+      // Set default values if API fails
+      setVocabularyLevel(0);
+      setVocabularyLevelName("Mới bắt đầu");
     }
   };
 
@@ -119,7 +196,14 @@ const DashboardPage: React.FC = () => {
         {/* Quick Actions */}
         <div className="quick-actions">
           <div className="action-card" onClick={() => navigate("/learning")}>
-            <div className="action-icon">📚</div>
+            <div className="action-icon">
+              <dotlottie-wc
+                src="https://lottie.host/f7148130-a270-43ed-ae99-041cf82730bc/Iz59IuWloq.lottie"
+                style={{ width: "80px", height: "80px" }}
+                autoplay
+                loop
+              />
+            </div>
             <h3>Bài học mới</h3>
             <p>Học từ vựng và ngữ pháp</p>
             <button className="action-btn">BẮT ĐẦU</button>
@@ -129,7 +213,14 @@ const DashboardPage: React.FC = () => {
             className="action-card highlight"
             onClick={() => navigate("/practice")}
           >
-            <div className="action-icon">✏️</div>
+            <div className="action-icon">
+              <dotlottie-wc
+                src="https://lottie.host/ab14b692-30a0-457c-b509-6c2eea8aaa38/JBNJls2O9D.lottie"
+                style={{ width: "80px", height: "80px" }}
+                autoplay
+                loop
+              />
+            </div>
             <h3>Luyện tập</h3>
             <p>Trắc nghiệm, điền từ để kiếm XP</p>
             <button className="action-btn">LUYỆN TẬP</button>
@@ -142,28 +233,61 @@ const DashboardPage: React.FC = () => {
             <button className="action-btn">BẮT ĐẦU</button>
           </div>
 
-          <div className="action-card" onClick={() => navigate("/listening")}>
-            <div className="action-icon">🎧</div>
-            <h3>Thử thách nghe</h3>
-            <p>Nâng cao kỹ năng nghe</p>
-            <button className="action-btn">NGHE NGAY</button>
+          <div className="action-card" onClick={() => navigate("/vocabulary")}>
+            <div className="action-icon">
+              <dotlottie-wc
+                src="https://lottie.host/9008776f-52d8-46fa-a1d9-1565d93150fa/qeUV43Rush.lottie"
+                style={{ width: "80px", height: "80px" }}
+                autoplay
+                loop
+              />
+            </div>
+            {vocabularyLevel > 0 && (
+              <div 
+                className="vocab-level-badge" 
+                style={{ backgroundColor: getLevelColor(vocabularyLevel) }}
+              >
+                Level {vocabularyLevel}
+              </div>
+            )}
+            <h3>Học Từ vựng</h3>
+            <p>
+              {vocabularyLevel > 0 
+                ? `${vocabularyLevelName} - Mở rộng vốn từ vựng` 
+                : "Mở rộng vốn từ vựng"}
+            </p>
+            <button className="action-btn vocab-btn">HỌC NGAY</button>
           </div>
 
           <div
             className="action-card"
             onClick={() => navigate("/diagnostic-test")}
           >
-            <div className="action-icon">✅</div>
+            <div className="action-icon">
+              <dotlottie-wc
+                src="https://lottie.host/bd8b62ec-f449-4b99-94f8-b2efe6ac16e2/Blo6fty7Nl.lottie"
+                style={{ width: "80px", height: "80px" }}
+                autoplay
+                loop
+              />
+            </div>
             <h3>Kiểm tra trình độ</h3>
             <p>Đánh giá trình độ của bạn</p>
             <button className="action-btn">LÀM TEST</button>
           </div>
 
-          <div className="action-card" onClick={() => navigate("/progress")}>
-            <div className="action-icon">📊</div>
-            <h3>Tiến độ</h3>
-            <p>Xem thống kê của bạn</p>
-            <button className="action-btn secondary">XEM</button>
+          <div className="action-card" onClick={() => navigate("/ai")}>
+            <div className="action-icon">
+              <dotlottie-wc
+                src="https://lottie.host/ddf861c6-c66b-4fa7-b4cc-681149778616/QR8b05cF2Z.lottie"
+                style={{ width: "80px", height: "80px" }}
+                autoplay
+                loop
+              />
+            </div>
+            <h3>Học với AI</h3>
+            <p>Luyện tập với trí tuệ nhân tạo</p>
+            <button className="action-btn secondary">HỌC NGAY</button>
           </div>
         </div>
 

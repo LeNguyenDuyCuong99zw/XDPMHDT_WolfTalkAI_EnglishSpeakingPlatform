@@ -110,7 +110,7 @@ const PlacementTestSteps: React.FC = () => {
   const toggleMultiSelect = (
     value: string,
     list: string[],
-    setList: (list: string[]) => void
+    setList: (list: string[]) => void,
   ) => {
     if (list.includes(value)) {
       setList(list.filter((item) => item !== value));
@@ -354,7 +354,7 @@ const PlacementTestSteps: React.FC = () => {
                   toggleMultiSelect(
                     reason.value,
                     learningReasons,
-                    setLearningReasons
+                    setLearningReasons,
                   )
                 }
               >

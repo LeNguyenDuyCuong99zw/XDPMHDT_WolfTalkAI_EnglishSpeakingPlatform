@@ -37,11 +37,6 @@ const defaultItems: MenuItem[] = [
     icon: "あ",
   },
   {
-    id: "vocabulary",
-    label: "TỪ VỰNG",
-    icon: "📚",
-  },
-  {
     id: "plans",
     label: "CÁC KHÓA HỌC",
     icon: "courses-icon",

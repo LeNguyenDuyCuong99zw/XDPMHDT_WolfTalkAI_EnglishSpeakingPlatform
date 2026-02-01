@@ -48,7 +48,7 @@ const PlacementTestQuestions: React.FC = () => {
         `http://localhost:8080/api/placement-test/${testId}/questions`,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       let loadedQuestions = questionsResponse.data;
@@ -58,7 +58,7 @@ const PlacementTestQuestions: React.FC = () => {
         `http://localhost:8080/api/placement-test/${testId}/progress`,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       const currentIndex = progressResponse.data.currentQuestionIndex || 0;
@@ -68,12 +68,12 @@ const PlacementTestQuestions: React.FC = () => {
         (q: PlacementQuestion, index: number) => {
           if (index > 6) {
             const shuffledOptions = [...q.options].sort(
-              () => Math.random() - 0.5
+              () => Math.random() - 0.5,
             );
             return { ...q, options: shuffledOptions };
           }
           return q;
-        }
+        },
       );
 
       setQuestions(loadedQuestions);
@@ -114,7 +114,7 @@ const PlacementTestQuestions: React.FC = () => {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       const correct = response.data.isCorrect;
@@ -126,7 +126,7 @@ const PlacementTestQuestions: React.FC = () => {
         setHearts(hearts - 1);
         // Set correct answer for display (from backend or current question)
         setCorrectAnswer(
-          response.data.correctAnswer || currentQuestion.questionText
+          response.data.correctAnswer || currentQuestion.questionText,
         );
       }
 
@@ -140,7 +140,7 @@ const PlacementTestQuestions: React.FC = () => {
       alert(
         `Lỗi khi gửi câu trả lời: ${
           error.response?.data?.error || error.message
-        }`
+        }`,
       );
       setIsChecking(false);
     }

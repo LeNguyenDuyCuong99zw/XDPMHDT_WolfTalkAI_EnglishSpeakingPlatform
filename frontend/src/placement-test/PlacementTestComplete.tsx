@@ -20,7 +20,7 @@ const PlacementTestComplete: React.FC = () => {
         `http://localhost:8080/api/placement-test/${testId}/final-level`,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
       setFinalLevel(response.data.finalLevel);
       setIsLoading(false);

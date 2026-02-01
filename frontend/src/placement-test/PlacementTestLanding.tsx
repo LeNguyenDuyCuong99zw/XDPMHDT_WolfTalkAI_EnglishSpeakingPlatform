@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { placementTestService } from "./api";
 import "./PlacementTest.css";
 
-
 const PlacementTestLanding: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -75,7 +74,9 @@ const PlacementTestLanding: React.FC = () => {
             </div>
           </div>
           <p className="landing-subtitle">
-            {isGoogleProcessing ? "Đang xác thực Google..." : "Đang kiểm tra..."}
+            {isGoogleProcessing
+              ? "Đang xác thực Google..."
+              : "Đang kiểm tra..."}
           </p>
         </div>
       </div>

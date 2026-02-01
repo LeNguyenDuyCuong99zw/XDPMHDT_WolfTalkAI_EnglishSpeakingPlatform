@@ -33,7 +33,14 @@ import SubscriptionPage from "./pages/SubscriptionPage";
 import ChatPage from "./pages/ChatPage";
 import { OAuthCallback } from "./presentation/pages/auth/OAuthCallback";
 import { LoginPage } from "./presentation/pages/auth/LoginPage/LoginPage";
-import { VocabularyLearning } from "./vocabulary";
+import VocabularyLearningPage from "./presentation/vocabulary/pages/VocabularyLearningPage";
+import GrammarCheckerPage from "./pages/GrammarCheckerPage";
+import AIConversationPage from "./pages/AIConversationPage";
+import VocabularyPage from "./pages/VocabularyLearningPage";
+import WritingPracticePage from "./pages/WritingPracticePage";
+import ReadingComprehensionPage from "./pages/ReadingComprehensionPage";
+import GrammarExercisesPage from "./pages/GrammarExercisesPage";
+import AILearningIndexPage from "./pages/AILearningIndexPage";
 
 function App() {
   const token =
@@ -182,6 +189,85 @@ function App() {
                 </RequirePlacementTest>
               }
             />
+
+            {/* AI Learning Routes */}
+            <Route
+              path="/ai"
+              element={
+                <div className="app-layout">
+                  <Sidebar />
+                  <main className="main-content">
+                    <AILearningIndexPage />
+                  </main>
+                </div>
+              }
+            />
+            <Route
+              path="/ai/grammar"
+              element={
+                <div className="app-layout">
+                  <Sidebar />
+                  <main className="main-content">
+                    <GrammarCheckerPage />
+                  </main>
+                </div>
+              }
+            />
+            <Route
+              path="/ai/conversation"
+              element={
+                <div className="app-layout">
+                  <Sidebar />
+                  <main className="main-content">
+                    <AIConversationPage />
+                  </main>
+                </div>
+              }
+            />
+            <Route
+              path="/ai/vocabulary"
+              element={
+                <div className="app-layout">
+                  <Sidebar />
+                  <main className="main-content">
+                    <VocabularyPage />
+                  </main>
+                </div>
+              }
+            />
+            <Route
+              path="/ai/writing"
+              element={
+                <div className="app-layout">
+                  <Sidebar />
+                  <main className="main-content">
+                    <WritingPracticePage />
+                  </main>
+                </div>
+              }
+            />
+            <Route
+              path="/ai/reading"
+              element={
+                <div className="app-layout">
+                  <Sidebar />
+                  <main className="main-content">
+                    <ReadingComprehensionPage />
+                  </main>
+                </div>
+              }
+            />
+            <Route
+              path="/ai/exercises"
+              element={
+                <div className="app-layout">
+                  <Sidebar />
+                  <main className="main-content">
+                    <GrammarExercisesPage />
+                  </main>
+                </div>
+              }
+            />
             <Route
               path="/chat"
               element={
@@ -238,10 +324,44 @@ function App() {
               path="/vocabulary"
               element={
                 <RequirePlacementTest>
+                  <VocabularyLearningPage />
+                </RequirePlacementTest>
+              }
+            />
+            <Route
+              path="/ai/grammar"
+              element={
+                <RequirePlacementTest>
                   <div className="app-layout">
                     <Sidebar />
                     <main className="main-content">
-                      <VocabularyLearning />
+                      <GrammarCheckerPage />
+                    </main>
+                  </div>
+                </RequirePlacementTest>
+              }
+            />
+            <Route
+              path="/ai/conversation"
+              element={
+                <RequirePlacementTest>
+                  <div className="app-layout">
+                    <Sidebar />
+                    <main className="main-content">
+                      <AIConversationPage />
+                    </main>
+                  </div>
+                </RequirePlacementTest>
+              }
+            />
+            <Route
+              path="/ai/vocabulary"
+              element={
+                <RequirePlacementTest>
+                  <div className="app-layout">
+                    <Sidebar />
+                    <main className="main-content">
+                      <VocabularyPage />
                     </main>
                   </div>
                 </RequirePlacementTest>
