@@ -1,18 +1,26 @@
 package com.wolftalk.backend.controller;
 
-import com.wolftalk.backend.dto.VocabularyLearningDTO;
-import com.wolftalk.backend.repository.UserRepository;
-import com.wolftalk.backend.service.VocabularyLearningService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.wolftalk.backend.dto.VocabularyLearningDTO;
+import com.wolftalk.backend.repository.UserRepository;
+import com.wolftalk.backend.service.VocabularyLearningService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/vocabulary")
@@ -187,6 +195,10 @@ public class VocabularyLearningController {
         Object principal = auth.getPrincipal();
         if (principal instanceof Jwt jwt) {
             return jwt.getClaimAsString("email");
+        }
+        // Handle case where principal is a String (email directly from JwtAuthenticationFilter)
+        if (principal instanceof String) {
+            return (String) principal;
         }
         return null;
     }

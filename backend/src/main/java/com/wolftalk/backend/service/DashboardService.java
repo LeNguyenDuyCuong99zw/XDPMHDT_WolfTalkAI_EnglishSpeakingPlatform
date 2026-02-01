@@ -5,6 +5,7 @@ import com.wolftalk.backend.entity.User;
 import com.wolftalk.backend.repository.LessonVocabularyRepository;
 import com.wolftalk.backend.repository.UserUnitProgressRepository;
 import com.wolftalk.backend.repository.UserRepository;
+import com.wolftalk.backend.repository.UserVocabularyProgressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ public class DashboardService {
     private final UserRepository userRepository;
     private final LessonVocabularyRepository vocabRepository;
     private final UserUnitProgressRepository unitProgressRepository;
+    private final UserVocabularyProgressRepository progressRepository;
 
     private static final ZoneOffset VIETNAM_ZONE = ZoneOffset.ofHours(7);
 
@@ -45,12 +47,18 @@ public class DashboardService {
         long units = unitProgressRepository.countByUserIdAndStatus(user.getId(), "completed");
         stats.setUnitsCompleted(units);
 
-        // --- Words Learned ---
-        long words = vocabRepository.countLearnedWordsByUserId(user.getId());
-        stats.setWordsLearned(words);
+        // --- Words Learned (Combined from both sources) ---
+        // 1. Words from completed lessons
+        long lessonWords = vocabRepository.countLearnedWordsByUserId(user.getId());
+        // 2. Words mastered from vocabulary learning system
+        long masteredWords = progressRepository.countMasteredByUserId(user.getId());
+        // 3. Total words = lesson words + mastered vocabulary words
+        long totalWords = lessonWords + masteredWords;
+        stats.setWordsLearned(totalWords);
 
         System.out.println("DEBUG Dashboard: Stats for " + email + ": Units=" + units + ", Minutes="
-                + stats.getTodayLearningMinutes() + ", Words=" + words);
+                + stats.getTodayLearningMinutes() + ", LessonWords=" + lessonWords 
+                + ", MasteredWords=" + masteredWords + ", TotalWords=" + totalWords);
 
         return stats;
     }

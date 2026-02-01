@@ -1,15 +1,26 @@
 package com.wolftalk.backend.service;
 
-import com.wolftalk.backend.dto.VocabularyLearningDTO;
-import com.wolftalk.backend.entity.*;
-import com.wolftalk.backend.entity.VocabularyWord.VocabularyTopic;
-import com.wolftalk.backend.repository.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import com.wolftalk.backend.dto.VocabularyLearningDTO;
+import com.wolftalk.backend.entity.User;
+import com.wolftalk.backend.entity.UserVocabularyLevel;
+import com.wolftalk.backend.entity.UserVocabularyProgress;
+import com.wolftalk.backend.entity.VocabularyWord;
+import com.wolftalk.backend.entity.VocabularyWord.VocabularyTopic;
+import com.wolftalk.backend.repository.UserRepository;
+import com.wolftalk.backend.repository.UserVocabularyLevelRepository;
+import com.wolftalk.backend.repository.UserVocabularyProgressRepository;
+import com.wolftalk.backend.repository.VocabularyWordRepository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor

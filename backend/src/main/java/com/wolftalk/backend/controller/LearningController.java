@@ -1,21 +1,28 @@
 package com.wolftalk.backend.controller;
 
-import com.wolftalk.backend.dto.learning.LevelDTO;
-import com.wolftalk.backend.dto.learning.UnitDTO;
-import com.wolftalk.backend.dto.learning.TopicDTO;
-import com.wolftalk.backend.dto.learning.ScenarioDetailDTO;
-import com.wolftalk.backend.dto.learning.content.ConversationDTO;
-import com.wolftalk.backend.dto.learning.content.GrammarDTO;
-import com.wolftalk.backend.dto.learning.content.VocabularyDTO;
-import com.wolftalk.backend.service.SyllabusService;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.wolftalk.backend.dto.learning.LevelDTO;
+import com.wolftalk.backend.dto.learning.ScenarioDetailDTO;
+import com.wolftalk.backend.dto.learning.TopicDTO;
+import com.wolftalk.backend.dto.learning.UnitDTO;
+import com.wolftalk.backend.dto.learning.content.ConversationDTO;
+import com.wolftalk.backend.dto.learning.content.GrammarDTO;
+import com.wolftalk.backend.dto.learning.content.VocabularyDTO;
+import com.wolftalk.backend.service.SyllabusService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/learning")
