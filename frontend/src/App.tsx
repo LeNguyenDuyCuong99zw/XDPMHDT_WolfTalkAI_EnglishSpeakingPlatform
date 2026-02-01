@@ -33,7 +33,7 @@ import SubscriptionPage from "./pages/SubscriptionPage";
 import ChatPage from "./pages/ChatPage";
 import { OAuthCallback } from "./presentation/pages/auth/OAuthCallback";
 import { LoginPage } from "./presentation/pages/auth/LoginPage/LoginPage";
-import { VocabularyLearning } from "./vocabulary";
+
 
 function App() {
   const token =
@@ -234,19 +234,7 @@ function App() {
                 </RequirePlacementTest>
               }
             />
-            <Route
-              path="/vocabulary"
-              element={
-                <RequirePlacementTest>
-                  <div className="app-layout">
-                    <Sidebar />
-                    <main className="main-content">
-                      <VocabularyLearning />
-                    </main>
-                  </div>
-                </RequirePlacementTest>
-              }
-            />
+
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </>
         ) : (

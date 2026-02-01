@@ -7,7 +7,22 @@ import path from "path";
 // https://vite.dev/config/
 // Admin app configuration - runs on admin.localhost:3001
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: "admin-spa-fallback",
+      apply: "serve" as const,
+      configResolved(config) {
+        // After server setup
+      },
+      transformIndexHtml: {
+        order: "pre",
+        handler() {
+          return fs.readFileSync(path.join(__dirname, "admin.html"), "utf-8");
+        },
+      },
+    },
+  ],
   define: {
     global: "window",
   },
@@ -35,21 +50,4 @@ export default defineConfig({
       "@": resolve(__dirname, "./src"),
     },
   },
-  // Custom plugin to handle SPA routing
-  plugins: [
-    react(),
-    {
-      name: "admin-spa-fallback",
-      apply: "serve" as const,
-      configResolved(config) {
-        // After server setup
-      },
-      transformIndexHtml: {
-        order: "pre",
-        handler() {
-          return fs.readFileSync(path.join(__dirname, "admin.html"), "utf-8");
-        },
-      },
-    },
-  ],
 });
