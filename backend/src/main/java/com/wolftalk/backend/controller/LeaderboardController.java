@@ -80,6 +80,24 @@ public class LeaderboardController {
         return ResponseEntity.ok(history);
     }
 
+    /**
+     * Award XP to a user (called by external services like pronunciation-checking)
+     * 
+     * @param email User email
+     * @param xp XP amount to award
+     * @return Updated leaderboard stats
+     */
+    @org.springframework.web.bind.annotation.PostMapping("/award-xp")
+    public ResponseEntity<UserLeaderboardStatsDTO> awardXP(
+            @org.springframework.web.bind.annotation.RequestParam String email,
+            @org.springframework.web.bind.annotation.RequestParam int xp) {
+        
+        log.info("Awarding {} XP to user: {}", xp, email);
+        leaderboardService.updateWeeklyXPByEmail(email, xp);
+        UserLeaderboardStatsDTO stats = leaderboardService.getMyWeeklyStatsByEmail(email);
+        return ResponseEntity.ok(stats);
+    }
+
     // Extract email from authentication
     private String extractEmail(Authentication auth) {
         if (auth == null || !auth.isAuthenticated()) {

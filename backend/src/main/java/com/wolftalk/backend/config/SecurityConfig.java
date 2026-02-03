@@ -67,8 +67,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                         // Quest endpoints - allow authenticated users
                         .requestMatchers("/api/quests/**").authenticated()
-                        // Leaderboard endpoints - allow public access for viewing
-                        .requestMatchers(HttpMethod.GET, "/api/leaderboard/**").permitAll()
+                        // Leaderboard endpoints
+                        .requestMatchers(HttpMethod.GET, "/api/leaderboard/**").permitAll() // Allow public access for viewing
+                        .requestMatchers(HttpMethod.POST, "/api/leaderboard/award-xp").permitAll() // Allow internal service call
                         // Admin endpoints - require ROLE_ADMIN
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
