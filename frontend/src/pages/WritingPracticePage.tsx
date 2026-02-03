@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import aiLearningService from '../services/aiLearningService';
-import AIProviderSelector from '../components/AIProviderSelector';
-import { AIProvider } from '../types/aiLearning';
+import React, { useState } from "react";
+import aiLearningService from "../services/aiLearningService";
+import AIProviderSelector from "../components/AIProviderSelector";
+import Sidebar from "../components/Sidebar";
+import { AIProvider } from "../types/aiLearning";
 
 interface WritingAnalysisResponse {
   originalText: string;
@@ -18,14 +19,14 @@ interface WritingAnalysisResponse {
 }
 
 const WritingPracticePage: React.FC = () => {
-  const [text, setText] = useState('');
-  const [provider, setProvider] = useState<AIProvider>('auto');
-  const [type, setType] = useState<'essay' | 'email' | 'article'>('essay');
-  const [topic, setTopic] = useState('');
+  const [text, setText] = useState("");
+  const [provider, setProvider] = useState<AIProvider>("auto");
+  const [type, setType] = useState<"essay" | "email" | "article">("essay");
+  const [topic, setTopic] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<WritingAnalysisResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState("");
   const [generatingPrompt, setGeneratingPrompt] = useState(false);
 
   const handleGeneratePrompt = async () => {
@@ -33,10 +34,24 @@ const WritingPracticePage: React.FC = () => {
     setError(null);
 
     try {
-      const generated = await aiLearningService.generateWritingPrompt(type, topic || undefined, 'intermediate', provider);
+      const generated = await aiLearningService.generateWritingPrompt(
+        type,
+        topic || undefined,
+        "intermediate",
+        provider,
+      );
+
+      if (!generated || generated.trim() === "") {
+        throw new Error("AI returned empty prompt");
+      }
+
       setPrompt(generated);
     } catch (err: any) {
-      setError('Failed to generate prompt');
+      const errorMsg =
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to generate prompt";
+      setError(errorMsg);
     } finally {
       setGeneratingPrompt(false);
     }
@@ -44,150 +59,199 @@ const WritingPracticePage: React.FC = () => {
 
   const handleAnalyze = async () => {
     if (!text.trim()) {
-      setError('Please enter some text to analyze');
+      setError("Please enter some text to analyze");
       return;
     }
 
     setLoading(true);
     setError(null);
+    setResult(null);
 
     try {
-      const response = await aiLearningService.analyzeWriting(text, type, topic, provider);
+      const response = await aiLearningService.analyzeWriting(
+        text,
+        type,
+        topic,
+        provider,
+      );
+
+      if (!response || !response.overallFeedback) {
+        throw new Error("AI returned invalid analysis");
+      }
+
       setResult(response);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to analyze writing');
+      const errorMsg =
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to analyze writing";
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return '#10b981';
-    if (score >= 75) return '#3b82f6';
-    if (score >= 60) return '#f59e0b';
-    return '#ef4444';
+    if (score >= 90) return "#10b981";
+    if (score >= 75) return "#3b82f6";
+    if (score >= 60) return "#f59e0b";
+    return "#ef4444";
   };
 
   return (
-    <div className="writing-practice-page">
-      <div className="page-header">
-        <h1>📝 Writing Practice</h1>
-        <p>Improve your writing skills with AI-powered feedback</p>
-      </div>
-
-      <AIProviderSelector value={provider} onChange={setProvider} />
-
-      <div className="settings-bar">
-        <div className="setting-group">
-          <label>Writing Type:</label>
-          <select value={type} onChange={(e) => setType(e.target.value as any)} className="setting-select">
-            <option value="essay">Essay</option>
-            <option value="email">Email</option>
-            <option value="article">Article</option>
-          </select>
+    <div className="duolingo-dashboard">
+      <Sidebar />
+      <div className="writing-practice-page">
+        <div className="page-header">
+          <h1>📝 Writing Practice</h1>
+          <p>Improve your writing skills with AI-powered feedback</p>
         </div>
 
-        <div className="setting-group">
-          <label>Topic (optional):</label>
-          <input
-            type="text"
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            placeholder="e.g., climate change"
-            className="setting-input"
-          />
-        </div>
+        <AIProviderSelector value={provider} onChange={setProvider} />
 
-        <button onClick={handleGeneratePrompt} disabled={generatingPrompt} className="generate-btn">
-          {generatingPrompt ? '⏳ Generating...' : '✨ Generate Prompt'}
-        </button>
-      </div>
+        <div className="settings-bar">
+          <div className="setting-group">
+            <label>Writing Type:</label>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value as any)}
+              className="setting-select"
+            >
+              <option value="essay">Essay</option>
+              <option value="email">Email</option>
+              <option value="article">Article</option>
+            </select>
+          </div>
 
-      {prompt && (
-        <div className="prompt-card">
-          <h3>📋 Writing Prompt:</h3>
-          <p>{prompt}</p>
-        </div>
-      )}
+          <div className="setting-group">
+            <label>Topic (optional):</label>
+            <input
+              type="text"
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              placeholder="e.g., climate change"
+              className="setting-input"
+            />
+          </div>
 
-      <div className="content-grid">
-        <div className="editor-section">
-          <h2>Your Writing</h2>
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Start writing here..."
-            className="writing-editor"
-            rows={15}
-          />
-          <button onClick={handleAnalyze} disabled={loading || !text.trim()} className="analyze-btn">
-            {loading ? '🔄 Analyzing...' : '🎯 Analyze Writing'}
+          <button
+            onClick={handleGeneratePrompt}
+            disabled={generatingPrompt}
+            className="generate-btn"
+          >
+            {generatingPrompt ? "⏳ Generating..." : "✨ Generate Prompt"}
           </button>
         </div>
 
-        {result && (
-          <div className="results-section">
-            <div className="score-card">
-              <h2>Overall Score</h2>
-              <div className="score-circle" style={{ borderColor: getScoreColor(result.score) }}>
-                <span className="score-value" style={{ color: getScoreColor(result.score) }}>
-                  {result.score}
-                </span>
-                <span className="score-label">/100</span>
+        {prompt && (
+          <div className="prompt-card">
+            <h3>📋 Writing Prompt:</h3>
+            <p>{prompt}</p>
+          </div>
+        )}
+
+        <div className="content-grid">
+          <div className="editor-section">
+            <h2>Your Writing</h2>
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Start writing here..."
+              className="writing-editor"
+              rows={15}
+            />
+            <button
+              onClick={handleAnalyze}
+              disabled={loading || !text.trim()}
+              className="analyze-btn"
+            >
+              {loading ? "🔄 Analyzing..." : "🎯 Analyze Writing"}
+            </button>
+          </div>
+
+          {result && (
+            <div className="results-section">
+              <div className="score-card">
+                <h2>Overall Score</h2>
+                <div
+                  className="score-circle"
+                  style={{ borderColor: getScoreColor(result.score) }}
+                >
+                  <span
+                    className="score-value"
+                    style={{ color: getScoreColor(result.score) }}
+                  >
+                    {result.score}
+                  </span>
+                  <span className="score-label">/100</span>
+                </div>
+              </div>
+
+              <div className="feedback-card">
+                <h3>💪 Strengths</h3>
+                <ul>
+                  {result.strengths.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="feedback-card">
+                <h3>📈 Areas to Improve</h3>
+                <ul>
+                  {result.improvements.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="suggestions-card">
+                <h3>💡 Suggestions</h3>
+                {Object.entries(result.suggestions).map(([category, items]) => (
+                  <div key={category} className="suggestion-category">
+                    <h4>
+                      {category.charAt(0).toUpperCase() + category.slice(1)}:
+                    </h4>
+                    <ul>
+                      {items.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+
+              <div className="feedback-card">
+                <h3>📝 Overall Feedback</h3>
+                <p>
+                  {result.overallFeedback.split("\n").map((line, i) => (
+                    <React.Fragment key={i}>
+                      {line}
+                      {i < result.overallFeedback.split("\n").length - 1 && (
+                        <br />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </p>
               </div>
             </div>
+          )}
 
-            <div className="feedback-card">
-              <h3>💪 Strengths</h3>
-              <ul>
-                {result.strengths.map((item, i) => (
-                  <li key={i}>{item}</li>
-                ))}
-              </ul>
+          {error && (
+            <div className="error-message">
+              <span>⚠️</span> {error}
             </div>
+          )}
+        </div>
 
-            <div className="feedback-card">
-              <h3>📈 Areas to Improve</h3>
-              <ul>
-                {result.improvements.map((item, i) => (
-                  <li key={i}>{item}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="suggestions-card">
-              <h3>💡 Suggestions</h3>
-              {Object.entries(result.suggestions).map(([category, items]) => (
-                <div key={category} className="suggestion-category">
-                  <h4>{category.charAt(0).toUpperCase() + category.slice(1)}:</h4>
-                  <ul>
-                    {items.map((item, i) => (
-                      <li key={i}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-
-            <div className="feedback-card">
-              <h3>📝 Overall Feedback</h3>
-              <p>{result.overallFeedback}</p>
-            </div>
-          </div>
-        )}
-
-        {error && (
-          <div className="error-message">
-            <span>⚠️</span> {error}
-          </div>
-        )}
-      </div>
-
-      <style>{`
+        <style>{`
         .writing-practice-page {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 24px;
+          flex: 1;
+          padding: 24px 32px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          height: 100vh;
+          background: #f9fafb;
         }
 
         .page-header {
@@ -197,7 +261,7 @@ const WritingPracticePage: React.FC = () => {
         .page-header h1 {
           font-size: 32px;
           font-weight: 700;
-          color: #111827;
+          color: #1e293b;
           margin: 0 0 8px 0;
         }
 
@@ -275,8 +339,10 @@ const WritingPracticePage: React.FC = () => {
 
         .prompt-card p {
           margin: 0;
-          color: #374151;
-          line-height: 1.6;
+          color: #1e293b;
+          line-height: 1.8;
+          white-space: pre-wrap;
+          word-wrap: break-word;
         }
 
         .content-grid {
@@ -411,6 +477,7 @@ const WritingPracticePage: React.FC = () => {
           }
         }
       `}</style>
+      </div>
     </div>
   );
 };

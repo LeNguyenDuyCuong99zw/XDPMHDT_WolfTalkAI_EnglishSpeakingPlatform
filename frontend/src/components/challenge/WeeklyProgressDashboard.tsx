@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { apiClient } from "../../services/api";
 import "./WeeklyProgressDashboard.css";
 
 interface ProgressStat {
@@ -10,6 +10,12 @@ interface ProgressStat {
   totalTime: number;
   accuracyPercentage: number;
   averageXPPerAttempt: number;
+}
+
+interface WeeklyProgressResponse {
+  success: boolean;
+  progress: ProgressStat[];
+  count: number;
 }
 
 interface WeeklyProgressDashboardProps {
@@ -31,13 +37,15 @@ const WeeklyProgressDashboard: React.FC<WeeklyProgressDashboardProps> = ({
   const fetchWeeklyProgress = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/api/challenges/progress/weekly");
+      const response = await apiClient.get<WeeklyProgressResponse>(
+        "/challenges/progress/weekly",
+      );
 
-      if (response.data.success && Array.isArray(response.data.progress)) {
-        setWeeklyProgress(response.data.progress);
+      if (response.success && Array.isArray(response.progress)) {
+        setWeeklyProgress(response.progress);
 
         // Calculate total XP
-        const total = response.data.progress.reduce(
+        const total = response.progress.reduce(
           (sum: number, stat: ProgressStat) => sum + stat.totalXP,
           0,
         );
@@ -47,7 +55,7 @@ const WeeklyProgressDashboard: React.FC<WeeklyProgressDashboardProps> = ({
       setError(null);
     } catch (err) {
       console.error("Error fetching weekly progress:", err);
-      setError("Failed to load progress data");
+      setError("Không thể tải dữ liệu tiến trình");
     } finally {
       setLoading(false);
     }

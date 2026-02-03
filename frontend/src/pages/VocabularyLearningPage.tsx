@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import aiLearningService from '../services/aiLearningService';
-import AIProviderSelector from '../components/AIProviderSelector';
-import { AIProvider } from '../types/aiLearning';
+import React, { useState } from "react";
+import aiLearningService from "../services/aiLearningService";
+import AIProviderSelector from "../components/AIProviderSelector";
+import Sidebar from "../components/Sidebar";
+import { AIProvider } from "../types/aiLearning";
 
 interface VocabularyCard {
   word: string;
@@ -11,16 +12,18 @@ interface VocabularyCard {
 }
 
 const VocabularyLearningPage: React.FC = () => {
-  const [context, setContext] = useState('');
-  const [level, setLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('intermediate');
-  const [provider, setProvider] = useState<AIProvider>('auto');
+  const [context, setContext] = useState("");
+  const [level, setLevel] = useState<"beginner" | "intermediate" | "advanced">(
+    "intermediate",
+  );
+  const [provider, setProvider] = useState<AIProvider>("auto");
   const [loading, setLoading] = useState(false);
   const [vocabulary, setVocabulary] = useState<VocabularyCard[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const handleGetSuggestions = async () => {
     if (!context.trim()) {
-      setError('Please enter a context');
+      setError("Please enter a context");
       return;
     }
 
@@ -30,25 +33,28 @@ const VocabularyLearningPage: React.FC = () => {
     try {
       const response = await aiLearningService.suggestVocabulary(
         { context, level },
-        provider
+        provider,
       );
 
       // Parse response into vocabulary cards
       const cards: VocabularyCard[] = response.map((item) => {
         // Expected format: "word | definition | example"
-        const parts = item.split('|').map((p) => p.trim());
+        const parts = item.split("|").map((p) => p.trim());
         return {
-          word: parts[0] || '',
-          definition: parts[1] || '',
-          example: parts[2] || '',
+          word: parts[0] || "",
+          definition: parts[1] || "",
+          example: parts[2] || "",
           isFlipped: false,
         };
       });
 
       setVocabulary(cards);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to get suggestions. Please try again.');
-      console.error('Vocabulary error:', err);
+      setError(
+        err.response?.data?.message ||
+          "Failed to get suggestions. Please try again.",
+      );
+      console.error("Vocabulary error:", err);
     } finally {
       setLoading(false);
     }
@@ -57,126 +63,131 @@ const VocabularyLearningPage: React.FC = () => {
   const toggleFlip = (index: number) => {
     setVocabulary((prev) =>
       prev.map((card, i) =>
-        i === index ? { ...card, isFlipped: !card.isFlipped } : card
-      )
+        i === index ? { ...card, isFlipped: !card.isFlipped } : card,
+      ),
     );
   };
 
   const speak = (text: string) => {
-    if ('speechSynthesis' in window) {
+    if ("speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
+      utterance.lang = "en-US";
       utterance.rate = 0.9;
       window.speechSynthesis.speak(utterance);
     }
   };
 
   return (
-    <div className="vocabulary-page">
-      <div className="page-header">
-        <h1>📚 Vocabulary Learning</h1>
-        <p>Learn new words based on context with AI assistance</p>
-      </div>
-
-      <div className="controls-section">
-        <div className="input-group">
-          <label>Context</label>
-          <input
-            type="text"
-            value={context}
-            onChange={(e) => setContext(e.target.value)}
-            placeholder="e.g., business meeting, travel, cooking..."
-            className="context-input"
-          />
+    <div className="duolingo-dashboard">
+      <Sidebar />
+      <div className="vocabulary-page">
+        <div className="page-header">
+          <h1>📚 Vocabulary Learning</h1>
+          <p>Learn new words based on context with AI assistance</p>
         </div>
 
-        <div className="input-group">
-          <label>Level</label>
-          <select
-            value={level}
-            onChange={(e) => setLevel(e.target.value as any)}
-            className="level-select"
-          >
-            <option value="beginner">🟢 Beginner</option>
-            <option value="intermediate">🟡 Intermediate</option>
-            <option value="advanced">🔴 Advanced</option>
-          </select>
-        </div>
+        <div className="controls-section">
+          <div className="input-group">
+            <label>Context</label>
+            <input
+              type="text"
+              value={context}
+              onChange={(e) => setContext(e.target.value)}
+              placeholder="e.g., business meeting, travel, cooking..."
+              className="context-input"
+            />
+          </div>
 
-        <AIProviderSelector value={provider} onChange={setProvider} />
-
-        <button
-          onClick={handleGetSuggestions}
-          disabled={loading || !context.trim()}
-          className="get-button"
-        >
-          {loading ? '🔄 Loading...' : '✨ Get Vocabulary'}
-        </button>
-      </div>
-
-      {error && (
-        <div className="error-message">
-          <span>⚠️</span> {error}
-        </div>
-      )}
-
-      {vocabulary.length > 0 && (
-        <div className="vocabulary-grid">
-          {vocabulary.map((card, index) => (
-            <div
-              key={index}
-              className={`vocab-card ${card.isFlipped ? 'flipped' : ''}`}
-              onClick={() => toggleFlip(index)}
+          <div className="input-group">
+            <label>Level</label>
+            <select
+              value={level}
+              onChange={(e) => setLevel(e.target.value as any)}
+              className="level-select"
             >
-              <div className="card-inner">
-                {/* Front */}
-                <div className="card-front">
-                  <div className="card-header">
-                    <h3 className="word">{card.word}</h3>
-                    <button
-                      className="speak-button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        speak(card.word);
-                      }}
-                    >
-                      🔊
-                    </button>
-                  </div>
-                  <p className="tap-hint">Tap to see definition</p>
-                </div>
+              <option value="beginner">🟢 Beginner</option>
+              <option value="intermediate">🟡 Intermediate</option>
+              <option value="advanced">🔴 Advanced</option>
+            </select>
+          </div>
 
-                {/* Back */}
-                <div className="card-back">
-                  <div className="definition-section">
-                    <strong>Definition:</strong>
-                    <p>{card.definition}</p>
+          <AIProviderSelector value={provider} onChange={setProvider} />
+
+          <button
+            onClick={handleGetSuggestions}
+            disabled={loading || !context.trim()}
+            className="get-button"
+          >
+            {loading ? "🔄 Loading..." : "✨ Get Vocabulary"}
+          </button>
+        </div>
+
+        {error && (
+          <div className="error-message">
+            <span>⚠️</span> {error}
+          </div>
+        )}
+
+        {vocabulary.length > 0 && (
+          <div className="vocabulary-grid">
+            {vocabulary.map((card, index) => (
+              <div
+                key={index}
+                className={`vocab-card ${card.isFlipped ? "flipped" : ""}`}
+                onClick={() => toggleFlip(index)}
+              >
+                <div className="card-inner">
+                  {/* Front */}
+                  <div className="card-front">
+                    <div className="card-header">
+                      <h3 className="word">{card.word}</h3>
+                      <button
+                        className="speak-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          speak(card.word);
+                        }}
+                      >
+                        🔊
+                      </button>
+                    </div>
+                    <p className="tap-hint">Tap to see definition</p>
                   </div>
-                  <div className="example-section">
-                    <strong>Example:</strong>
-                    <p className="example-text">{card.example}</p>
+
+                  {/* Back */}
+                  <div className="card-back">
+                    <div className="definition-section">
+                      <strong>Definition:</strong>
+                      <p>{card.definition}</p>
+                    </div>
+                    <div className="example-section">
+                      <strong>Example:</strong>
+                      <p className="example-text">{card.example}</p>
+                    </div>
+                    <p className="tap-hint">Tap to flip back</p>
                   </div>
-                  <p className="tap-hint">Tap to flip back</p>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
 
-      {vocabulary.length === 0 && !loading && !error && (
-        <div className="empty-state">
-          <div className="empty-icon">📖</div>
-          <h3>No vocabulary yet</h3>
-          <p>Enter a context and click "Get Vocabulary" to start learning!</p>
-        </div>
-      )}
+        {vocabulary.length === 0 && !loading && !error && (
+          <div className="empty-state">
+            <div className="empty-icon">📖</div>
+            <h3>No vocabulary yet</h3>
+            <p>Enter a context and click "Get Vocabulary" to start learning!</p>
+          </div>
+        )}
 
-      <style>{`
+        <style>{`
         .vocabulary-page {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 24px;
+          flex: 1;
+          padding: 24px 32px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          height: 100vh;
+          background: #f9fafb;
         }
 
         .page-header {
@@ -429,6 +440,7 @@ const VocabularyLearningPage: React.FC = () => {
           }
         }
       `}</style>
+      </div>
     </div>
   );
 };

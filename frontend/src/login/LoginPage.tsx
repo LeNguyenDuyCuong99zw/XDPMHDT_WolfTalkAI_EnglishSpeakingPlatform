@@ -125,7 +125,8 @@ const LoginPage: React.FC<LoginPageProps> = ({
   };
 
   const handleFacebookLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/facebook";
+    window.location.href =
+      "http://localhost:8080/oauth2/authorization/facebook";
   };
 
   return (

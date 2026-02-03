@@ -229,8 +229,21 @@ public class ChallengeController {
         }
 
         Object principal = auth.getPrincipal();
+        
+        // Handle JWT principal
         if (principal instanceof Jwt) {
-            return ((Jwt) principal).getClaimAsString("email");
+            // First try 'email' claim, then fallback to 'subject'
+            String email = ((Jwt) principal).getClaimAsString("email");
+            if (email != null) {
+                return email;
+            }
+            // Fallback to subject which contains email in our JWT
+            return ((Jwt) principal).getSubject();
+        }
+        
+        // Handle UsernamePasswordAuthenticationToken where principal is email string
+        if (principal instanceof String) {
+            return (String) principal;
         }
 
         return null;

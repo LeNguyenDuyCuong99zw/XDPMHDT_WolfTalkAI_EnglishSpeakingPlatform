@@ -51,10 +51,164 @@ const ListeningChallengeQuiz: React.FC<ListeningChallengeQuizProps> = ({
     };
   }, []);
 
-  const playAudio = () => {
-    if (audioRef.current) {
+  // Browser's built-in Text-to-Speech (Web Speech API fallback)
+  const playBrowserTTS = (text: string) => {
+    try {
+      if (!("speechSynthesis" in window)) {
+        console.error("Browser TTS not supported");
+        setIsPlayingAudio(false);
+        return;
+      }
+
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+
+      const speak = () => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        utterance.rate = 0.85; // Slightly slower for learning
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
+        // Try to find an English voice
+        const voices = window.speechSynthesis.getVoices();
+        const englishVoice = voices.find(
+          (voice) =>
+            voice.lang.startsWith("en-") ||
+            voice.lang === "en" ||
+            voice.name.includes("English"),
+        );
+
+        if (englishVoice) {
+          utterance.voice = englishVoice;
+          console.log("Using voice:", englishVoice.name);
+        }
+
+        utterance.onstart = () => {
+          console.log("Browser TTS started:", text);
+          setIsPlayingAudio(true);
+        };
+
+        utterance.onend = () => {
+          console.log("Browser TTS ended");
+          setIsPlayingAudio(false);
+        };
+
+        utterance.onerror = (event) => {
+          console.error("Browser TTS error:", event);
+          setIsPlayingAudio(false);
+        };
+
+        window.speechSynthesis.speak(utterance);
+      };
+
+      // Load voices if not already loaded
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length === 0) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          speak();
+        };
+      } else {
+        speak();
+      }
+    } catch (error) {
+      console.error("Browser TTS error:", error);
+      setIsPlayingAudio(false);
+    }
+  };
+
+  // Audio playback using Google Cloud TTS API
+  const playAudio = async () => {
+    try {
+      const text = challenge.englishText;
       setIsPlayingAudio(true);
-      audioRef.current.play();
+
+      // Stop any currently playing audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+
+      // Cancel any ongoing browser TTS
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      console.log("Generating audio for text:", text);
+      const token = localStorage.getItem("accessToken");
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+      };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      const response = await fetch(
+        `http://localhost:8080/api/audio/generate?text=${encodeURIComponent(
+          text,
+        )}&lang=en-US`,
+        {
+          method: "GET",
+          headers: headers,
+          credentials: "omit",
+        },
+      );
+
+      // If TTS service not configured (503), use browser fallback
+      if (response.status === 503) {
+        const errorData = await response.json();
+        if (errorData.useBrowserTTS) {
+          console.log("Backend TTS not available, using browser TTS");
+          playBrowserTTS(text);
+          return;
+        }
+      }
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => "Unknown error");
+        console.error("Audio generation failed:", response.status, errorText);
+        // Fallback to browser TTS on any error
+        console.log("Falling back to browser TTS");
+        playBrowserTTS(text);
+        return;
+      }
+
+      const audioBlob = await response.blob();
+      console.log("Audio blob received:", audioBlob.size, "bytes");
+
+      if (audioBlob.size === 0) {
+        console.log("Empty audio blob, using browser TTS");
+        playBrowserTTS(text);
+        return;
+      }
+
+      const audioObjectUrl = URL.createObjectURL(audioBlob);
+      audioRef.current = new Audio(audioObjectUrl);
+      audioRef.current.volume = 1.0;
+
+      audioRef.current.onended = () => {
+        setIsPlayingAudio(false);
+        URL.revokeObjectURL(audioObjectUrl);
+      };
+
+      audioRef.current.onerror = (e) => {
+        console.error("Audio playback error:", e);
+        setIsPlayingAudio(false);
+        URL.revokeObjectURL(audioObjectUrl);
+        // Fallback to browser TTS
+        playBrowserTTS(text);
+      };
+
+      await audioRef.current.play();
+      console.log("Audio playing successfully");
+    } catch (error: any) {
+      console.error("Error playing audio:", error);
+      setIsPlayingAudio(false);
+      // Fallback to browser TTS
+      if (challenge.englishText) {
+        console.log("Error occurred, falling back to browser TTS");
+        playBrowserTTS(challenge.englishText);
+      }
     }
   };
 
@@ -161,11 +315,6 @@ const ListeningChallengeQuiz: React.FC<ListeningChallengeQuizProps> = ({
           <h2>{challenge.title}</h2>
 
           <div className="audio-section">
-            <audio
-              ref={audioRef}
-              src={challenge.audioUrl}
-              onEnded={() => setIsPlayingAudio(false)}
-            />
             <button
               className="audio-btn"
               onClick={playAudio}
@@ -174,7 +323,7 @@ const ListeningChallengeQuiz: React.FC<ListeningChallengeQuizProps> = ({
               {isPlayingAudio ? "🔊 Đang phát..." : "🔊 Nghe"}
             </button>
             <span className="audio-hint">
-              Nhấp nút trên để nghe và dịch những gì bạn nghe
+              Nhấp nút trên để nghe và viết những gì bạn nghe
             </span>
           </div>
 

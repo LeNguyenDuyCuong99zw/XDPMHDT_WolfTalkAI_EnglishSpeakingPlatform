@@ -33,6 +33,15 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
   const [isActive, setIsActive] = useState(true);
   const [feedback, setFeedback] = useState<string>("");
 
+  // Reset state when challenge changes
+  useEffect(() => {
+    setUserAnswer("");
+    setSelectedOption(null);
+    setTimeSpent(0);
+    setIsActive(true);
+    setFeedback("");
+  }, [challenge.id]);
+
   // Timer for the challenge
   useEffect(() => {
     if (!isActive || !challenge) return;
@@ -51,24 +60,28 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
   }, [isActive, challenge]);
 
   const handleOptionSelect = (index: number) => {
+    if (!isActive || isLoading) return;
     setSelectedOption(index);
+    setFeedback("");
   };
 
   const handleTextChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setUserAnswer(e.target.value);
+    setFeedback("");
   };
 
   const handleSubmit = () => {
     const answer =
       selectedOption !== null ? selectedOption.toString() : userAnswer;
     if (!answer.trim()) {
-      setFeedback("Please provide an answer");
+      setFeedback("Vui lòng nhập câu trả lời");
       return;
     }
 
     setIsActive(false);
+    setFeedback("");
     onSubmit(answer, timeSpent);
   };
 
@@ -202,10 +215,10 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
             (selectedOption === null && !userAnswer.trim())
           }
         >
-          {isLoading ? "Submitting..." : "Submit Answer"}
+          {isLoading ? "Đang gửi..." : "Gửi câu trả lời"}
         </button>
         {!isActive && timeSpent >= challenge.timeLimit && (
-          <span className="time-expired">Time's up!</span>
+          <span className="time-expired">Hết giờ!</span>
         )}
       </div>
     </div>

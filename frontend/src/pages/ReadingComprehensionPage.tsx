@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import aiLearningService from '../services/aiLearningService';
-import AIProviderSelector from '../components/AIProviderSelector';
-import { AIProvider } from '../types/aiLearning';
+import React, { useState } from "react";
+import aiLearningService from "../services/aiLearningService";
+import AIProviderSelector from "../components/AIProviderSelector";
+import Sidebar from "../components/Sidebar";
+import { AIProvider } from "../types/aiLearning";
 
 interface Question {
   type: string;
@@ -26,10 +27,12 @@ interface ReadingPassage {
 }
 
 const ReadingComprehensionPage: React.FC = () => {
-  const [provider, setProvider] = useState<AIProvider>('auto');
-  const [topic, setTopic] = useState('');
-  const [level, setLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('intermediate');
-  const [length, setLength] = useState<'short' | 'medium' | 'long'>('medium');
+  const [provider, setProvider] = useState<AIProvider>("auto");
+  const [topic, setTopic] = useState("");
+  const [level, setLevel] = useState<"beginner" | "intermediate" | "advanced">(
+    "intermediate",
+  );
+  const [length, setLength] = useState<"short" | "medium" | "long">("medium");
   const [loading, setLoading] = useState(false);
   const [passage, setPassage] = useState<ReadingPassage | null>(null);
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -42,10 +45,24 @@ const ReadingComprehensionPage: React.FC = () => {
     setShowResults(false);
 
     try {
-      const data = await aiLearningService.generateReadingPassage(topic || undefined, level, length, provider);
+      const data = await aiLearningService.generateReadingPassage(
+        topic || undefined,
+        level,
+        length,
+        provider,
+      );
+
+      if (!data || !data.passage || !data.questions) {
+        throw new Error("AI returned invalid passage data");
+      }
+
       setPassage(data);
-    } catch (err) {
-      alert('Failed to generate passage');
+    } catch (err: any) {
+      const errorMsg =
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to generate passage";
+      alert(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -65,131 +82,161 @@ const ReadingComprehensionPage: React.FC = () => {
   };
 
   return (
-    <div className="reading-page">
-      <div className="page-header">
-        <h1>📰 Reading Comprehension</h1>
-        <p>Practice reading with AI-generated passages and questions</p>
-      </div>
-
-      <AIProviderSelector value={provider} onChange={setProvider} />
-
-      <div className="settings-bar">
-        <div className="setting-group">
-          <label>Topic (optional):</label>
-          <input
-            type="text"
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            placeholder="e.g., technology, environment"
-            className="setting-input"
-          />
+    <div className="duolingo-dashboard">
+      <Sidebar />
+      <div className="reading-page">
+        <div className="page-header">
+          <h1>📰 Reading Comprehension</h1>
+          <p>Practice reading with AI-generated passages and questions</p>
         </div>
 
-        <div className="setting-group">
-          <label>Level:</label>
-          <select value={level} onChange={(e) => setLevel(e.target.value as any)} className="setting-select">
-            <option value="beginner">🟢 Beginner</option>
-            <option value="intermediate">🟡 Intermediate</option>
-            <option value="advanced">🔴 Advanced</option>
-          </select>
+        <AIProviderSelector value={provider} onChange={setProvider} />
+
+        <div className="settings-bar">
+          <div className="setting-group">
+            <label>Topic (optional):</label>
+            <input
+              type="text"
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              placeholder="e.g., technology, environment"
+              className="setting-input"
+            />
+          </div>
+
+          <div className="setting-group">
+            <label>Level:</label>
+            <select
+              value={level}
+              onChange={(e) => setLevel(e.target.value as any)}
+              className="setting-select"
+            >
+              <option value="beginner">🟢 Beginner</option>
+              <option value="intermediate">🟡 Intermediate</option>
+              <option value="advanced">🔴 Advanced</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <label>Length:</label>
+            <select
+              value={length}
+              onChange={(e) => setLength(e.target.value as any)}
+              className="setting-select"
+            >
+              <option value="short">Short (~200 words)</option>
+              <option value="medium">Medium (~300 words)</option>
+              <option value="long">Long (~400 words)</option>
+            </select>
+          </div>
+
+          <button
+            onClick={handleGenerate}
+            disabled={loading}
+            className="generate-btn"
+          >
+            {loading ? "⏳ Generating..." : "✨ Generate Passage"}
+          </button>
         </div>
 
-        <div className="setting-group">
-          <label>Length:</label>
-          <select value={length} onChange={(e) => setLength(e.target.value as any)} className="setting-select">
-            <option value="short">Short (~200 words)</option>
-            <option value="medium">Medium (~300 words)</option>
-            <option value="long">Long (~400 words)</option>
-          </select>
-        </div>
+        {passage && (
+          <div className="content-grid">
+            <div className="passage-section">
+              <h2>📖 Reading Passage</h2>
+              <div className="passage-card">
+                <p>
+                  {passage.passage.split("\n").map((line, i) => (
+                    <React.Fragment key={i}>
+                      {line}
+                      {i < passage.passage.split("\n").length - 1 && <br />}
+                    </React.Fragment>
+                  ))}
+                </p>
+              </div>
 
-        <button onClick={handleGenerate} disabled={loading} className="generate-btn">
-          {loading ? '⏳ Generating...' : '✨ Generate Passage'}
-        </button>
-      </div>
-
-      {passage && (
-        <div className="content-grid">
-          <div className="passage-section">
-            <h2>📖 Reading Passage</h2>
-            <div className="passage-card">
-              <p>{passage.passage}</p>
+              {passage.vocabulary.length > 0 && (
+                <div className="vocab-card">
+                  <h3>📚 Key Vocabulary</h3>
+                  {passage.vocabulary.map((item, i) => (
+                    <div key={i} className="vocab-item">
+                      <strong>{item.word}:</strong> {item.definition}
+                      <div className="vocab-example">"{item.example}"</div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {passage.vocabulary.length > 0 && (
-              <div className="vocab-card">
-                <h3>📚 Key Vocabulary</h3>
-                {passage.vocabulary.map((item, i) => (
-                  <div key={i} className="vocab-item">
-                    <strong>{item.word}:</strong> {item.definition}
-                    <div className="vocab-example">"{item.example}"</div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+            <div className="questions-section">
+              <h2>❓ Questions</h2>
+              {passage.questions.map((q, i) => (
+                <div key={i} className="question-card">
+                  <h4>Question {i + 1}</h4>
+                  <p>{q.question}</p>
 
-          <div className="questions-section">
-            <h2>❓ Questions</h2>
-            {passage.questions.map((q, i) => (
-              <div key={i} className="question-card">
-                <h4>Question {i + 1}</h4>
-                <p>{q.question}</p>
+                  {q.type === "multiple_choice" && q.options && (
+                    <div className="options">
+                      {q.options.map((opt, j) => (
+                        <label key={j} className="option-label">
+                          <input
+                            type="radio"
+                            name={`q${i}`}
+                            value={opt}
+                            checked={answers[i] === opt}
+                            onChange={() =>
+                              setAnswers({ ...answers, [i]: opt })
+                            }
+                            disabled={showResults}
+                          />
+                          {opt}
+                        </label>
+                      ))}
+                    </div>
+                  )}
 
-                {q.type === 'multiple_choice' && q.options && (
-                  <div className="options">
-                    {q.options.map((opt, j) => (
-                      <label key={j} className="option-label">
-                        <input
-                          type="radio"
-                          name={`q${i}`}
-                          value={opt}
-                          checked={answers[i] === opt}
-                          onChange={() => setAnswers({ ...answers, [i]: opt })}
-                          disabled={showResults}
-                        />
-                        {opt}
-                      </label>
-                    ))}
-                  </div>
-                )}
+                  {showResults && (
+                    <div
+                      className={`result ${answers[i] === q.correctAnswer ? "correct" : "incorrect"}`}
+                    >
+                      {answers[i] === q.correctAnswer
+                        ? "✅ Correct!"
+                        : `❌ Incorrect. Answer: ${q.correctAnswer}`}
+                      <div className="explanation">{q.explanation}</div>
+                    </div>
+                  )}
+                </div>
+              ))}
 
-                {showResults && (
-                  <div className={`result ${answers[i] === q.correctAnswer ? 'correct' : 'incorrect'}`}>
-                    {answers[i] === q.correctAnswer ? '✅ Correct!' : `❌ Incorrect. Answer: ${q.correctAnswer}`}
-                    <div className="explanation">{q.explanation}</div>
-                  </div>
-                )}
-              </div>
-            ))}
-
-            {!showResults ? (
-              <button onClick={handleSubmit} className="submit-btn">
-                📝 Submit Answers
-              </button>
-            ) : (
-              <div className="score-banner">
-                <h3>Your Score: {calculateScore()}%</h3>
-                <button onClick={handleGenerate} className="retry-btn">
-                  🔄 Try Another Passage
+              {!showResults ? (
+                <button onClick={handleSubmit} className="submit-btn">
+                  📝 Submit Answers
                 </button>
-              </div>
-            )}
+              ) : (
+                <div className="score-banner">
+                  <h3>Your Score: {calculateScore()}%</h3>
+                  <button onClick={handleGenerate} className="retry-btn">
+                    🔄 Try Another Passage
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <style>{`
+        <style>{`
         .reading-page {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 24px;
+          flex: 1;
+          padding: 24px 32px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          height: 100vh;
+          background: #f9fafb;
         }
 
         .page-header h1 {
           font-size: 32px;
           font-weight: 700;
-          color: #111827;
+          color: #1e293b;
           margin: 0 0 8px 0;
         }
 
@@ -267,10 +314,16 @@ const ReadingComprehensionPage: React.FC = () => {
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .passage-card {
+          background: #f0f9ff;
+        }
+
         .passage-card p {
           line-height: 1.8;
-          color: #374151;
+          color: #1e293b;
           font-size: 16px;
+          white-space: pre-wrap;
+          word-wrap: break-word;
         }
 
         .vocab-card {
@@ -279,7 +332,7 @@ const ReadingComprehensionPage: React.FC = () => {
 
         .vocab-card h3 {
           margin: 0 0 16px 0;
-          color: #111827;
+          color: #1e293b;
         }
 
         .vocab-item {
@@ -392,6 +445,7 @@ const ReadingComprehensionPage: React.FC = () => {
           }
         }
       `}</style>
+      </div>
     </div>
   );
 };

@@ -215,7 +215,13 @@ public class QuestController {
 
         Object principal = auth.getPrincipal();
         if (principal instanceof Jwt) {
-            return ((Jwt) principal).getClaimAsString("email");
+            // First try 'email' claim, then fallback to 'subject'
+            String email = ((Jwt) principal).getClaimAsString("email");
+            if (email != null) {
+                return email;
+            }
+            // Fallback to subject which contains email in our JWT
+            return ((Jwt) principal).getSubject();
         }
         
         // Handle case where principal is a String (email directly from JwtAuthenticationFilter)

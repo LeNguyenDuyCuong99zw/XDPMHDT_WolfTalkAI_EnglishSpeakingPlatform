@@ -19,6 +19,7 @@ public class GrammarCheckResponse {
     private List<String> suggestions;
     private Integer errorCount;
     private String overallFeedback;
+    private Double similarityScore;
     
     @Data
     @Builder

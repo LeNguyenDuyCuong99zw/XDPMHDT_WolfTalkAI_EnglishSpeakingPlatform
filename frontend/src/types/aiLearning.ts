@@ -30,10 +30,10 @@ export interface PronunciationAssessmentResponse {
 
 export interface GrammarError {
   type: string;
+  message: string;
+  incorrectText: string;
+  correctText: string;
   position: number;
-  length: number;
-  original: string;
-  correction: string;
   explanation: string;
 }
 
@@ -43,20 +43,19 @@ export interface GrammarCheckRequest {
 }
 
 export interface GrammarCheckResponse {
-  id: number;
-  userId: number;
+  checkId?: number;
   originalText: string;
   correctedText: string;
   errors: GrammarError[];
   suggestions: string[];
+  errorCount: number;
   overallFeedback: string;
-  similarityScore: number;
-  checkDate: string;
+  similarityScore?: number;
 }
 
 export interface VocabularySuggestionRequest {
   context: string;
-  level: 'beginner' | 'intermediate' | 'advanced';
+  level: "beginner" | "intermediate" | "advanced";
 }
 
 export interface VocabularyItem {
@@ -68,7 +67,7 @@ export interface VocabularyItem {
 export interface ConversationRequest {
   message: string;
   context?: string;
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  difficulty?: "beginner" | "intermediate" | "advanced";
 }
 
 export interface ConversationResponse {
@@ -77,7 +76,7 @@ export interface ConversationResponse {
   provider: string;
 }
 
-export type AIProvider = 'gemini' | 'auto';
+export type AIProvider = "gemini" | "auto";
 
 export interface AIServiceConfig {
   provider?: AIProvider;

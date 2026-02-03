@@ -71,18 +71,20 @@ const ChallengePage: React.FC = () => {
       setCurrentChallengeIndex(0);
       setLastSubmission(null);
 
-      const response = await apiClient.get<any>(
-        `/api/challenges/random/${selectedType}?limit=5`,
-      );
+      const response = await apiClient.get<{
+        success: boolean;
+        challenges: Challenge[];
+        count: number;
+      }>(`/challenges/random/${selectedType}?limit=5`);
 
-      if (response.data.success && Array.isArray(response.data.challenges)) {
-        setChallenges(response.data.challenges);
+      if (response.success && Array.isArray(response.challenges)) {
+        setChallenges(response.challenges);
       } else {
-        setError("Failed to load challenges");
+        setError("Không thể tải challenges");
       }
     } catch (err) {
       console.error("Error loading challenges:", err);
-      setError("Failed to load challenges. Please try again.");
+      setError("Không thể tải challenges. Vui lòng thử lại.");
     } finally {
       setLoading(false);
     }
@@ -97,7 +99,7 @@ const ChallengePage: React.FC = () => {
       setSuccessMessage(null);
 
       const response = await apiClient.post<SubmissionResult>(
-        "/api/challenges/submit",
+        "/challenges/submit",
         {
           challengeId: challenges[currentChallengeIndex].id,
           userAnswer: answer,
@@ -116,14 +118,18 @@ const ChallengePage: React.FC = () => {
             setSuccessMessage(null);
           } else {
             setSuccessMessage(
-              "All challenges completed! 🎉 Load more to continue.",
+              "Hoàn thành tất cả challenges! 🎉 Tải thêm để tiếp tục.",
             );
           }
         }, 2000);
+      } else {
+        setError("Gửi câu trả lời thất bại");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error submitting challenge:", err);
-      setError("Failed to submit answer. Please try again.");
+      const errorMessage =
+        err?.response?.data?.message || err?.message || "Lỗi không xác định";
+      setError(`Không thể gửi câu trả lời: ${errorMessage}`);
     } finally {
       setSubmitting(false);
     }

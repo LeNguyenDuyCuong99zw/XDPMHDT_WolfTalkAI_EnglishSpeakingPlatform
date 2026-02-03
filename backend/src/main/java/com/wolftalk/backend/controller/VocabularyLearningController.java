@@ -194,7 +194,13 @@ public class VocabularyLearningController {
         if (auth == null) return null;
         Object principal = auth.getPrincipal();
         if (principal instanceof Jwt jwt) {
-            return jwt.getClaimAsString("email");
+            // First try 'email' claim, then fallback to 'subject'
+            String email = jwt.getClaimAsString("email");
+            if (email != null) {
+                return email;
+            }
+            // Fallback to subject which contains email in our JWT
+            return jwt.getSubject();
         }
         // Handle case where principal is a String (email directly from JwtAuthenticationFilter)
         if (principal instanceof String) {

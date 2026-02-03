@@ -1,18 +1,23 @@
 package com.wolftalk.microservices.ai.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import okhttp3.*;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 @Service
 @Slf4j
@@ -86,11 +91,17 @@ public class GeminiService {
     @Cacheable(value = "geminiGrammarExplanation", key = "#originalText + #correctedText")
     public List<String> explainGrammarErrors(String originalText, String correctedText) {
         String prompt = String.format(
-                "Explain the grammar errors in the original text compared to the corrected version. " +
-                "List each error with a brief explanation (one per line).\n\n" +
+                "Analyze the grammar errors between the original and corrected text. " +
+                "For each specific error, provide a JSON object with this exact format:\n" +
+                "{\"incorrectText\":\"the wrong word or phrase\",\"correctText\":\"the correct word or phrase\",\"explanation\":\"brief explanation\"}\n\n" +
+                "IMPORTANT:\n" +
+                "- Only include the specific WORD or SHORT PHRASE that is wrong (not the entire sentence)\n" +
+                "- Extract the exact incorrect portion and its correction\n" +
+                "- One JSON object per line\n" +
+                "- Do not include any other text, markdown, or formatting\n\n" +
                 "Original: %s\n" +
                 "Corrected: %s\n\n" +
-                "Errors:",
+                "Errors (one JSON per line):",
                 originalText, correctedText
         );
         

@@ -1,15 +1,17 @@
 package com.wolftalk.microservices.ai.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wolftalk.microservices.ai.dto.GrammarCheckResponse;
 import com.wolftalk.microservices.ai.entity.GrammarCheck;
 import com.wolftalk.microservices.ai.repository.GrammarCheckRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +58,10 @@ public class GrammarService {
             
             grammarCheck = grammarCheckRepository.save(grammarCheck);
             
+            // Calculate similarity score
+            double similarity = calculateSimilarity(text, correctedText);
+            double similarityScore = similarity * 100.0;
+            
             // Step 7: Build response
             return GrammarCheckResponse.builder()
                     .checkId(grammarCheck.getId())
@@ -65,10 +71,15 @@ public class GrammarService {
                     .suggestions(suggestions)
                     .errorCount(errors.size())
                     .overallFeedback(overallFeedback)
+                    .similarityScore(similarityScore)
                     .build();
                     
         } catch (Exception e) {
             log.error("Error saving grammar check: {}", e.getMessage(), e);
+            
+            // Calculate similarity score for error response too
+            double similarity = calculateSimilarity(text, correctedText);
+            double similarityScore = similarity * 100.0;
             
             return GrammarCheckResponse.builder()
                     .originalText(text)
@@ -77,6 +88,7 @@ public class GrammarService {
                     .suggestions(suggestions)
                     .errorCount(errors.size())
                     .overallFeedback(overallFeedback)
+                    .similarityScore(similarityScore)
                     .build();
         }
     }
@@ -89,17 +101,61 @@ public class GrammarService {
         for (String explanation : explanations) {
             if (explanation.trim().isEmpty()) continue;
             
-            // Simple parsing - in production, use more sophisticated NLP
-            GrammarCheckResponse.GrammarError error = GrammarCheckResponse.GrammarError.builder()
-                    .type("grammar")
-                    .message(explanation)
-                    .incorrectText(original)
-                    .correctText(corrected)
-                    .position(0)
-                    .explanation(explanation)
-                    .build();
-            
-            errors.add(error);
+            try {
+                // Try to parse JSON format from Gemini
+                if (explanation.trim().startsWith("{")) {
+                    var errorNode = objectMapper.readTree(explanation);
+                    
+                    String incorrectText = errorNode.has("incorrectText") 
+                            ? errorNode.get("incorrectText").asText() 
+                            : "";
+                    String correctText = errorNode.has("correctText") 
+                            ? errorNode.get("correctText").asText() 
+                            : "";
+                    String explanationText = errorNode.has("explanation") 
+                            ? errorNode.get("explanation").asText() 
+                            : explanation;
+                    
+                    // Find position of the error in original text
+                    int position = original.toLowerCase().indexOf(incorrectText.toLowerCase());
+                    
+                    GrammarCheckResponse.GrammarError error = GrammarCheckResponse.GrammarError.builder()
+                            .type("grammar")
+                            .message(explanationText)
+                            .incorrectText(incorrectText)
+                            .correctText(correctText)
+                            .position(position >= 0 ? position : 0)
+                            .explanation(explanationText)
+                            .build();
+                    
+                    errors.add(error);
+                } else {
+                    // Fallback for non-JSON format
+                    GrammarCheckResponse.GrammarError error = GrammarCheckResponse.GrammarError.builder()
+                            .type("grammar")
+                            .message(explanation)
+                            .incorrectText(original)
+                            .correctText(corrected)
+                            .position(0)
+                            .explanation(explanation)
+                            .build();
+                    
+                    errors.add(error);
+                }
+            } catch (Exception e) {
+                log.warn("Failed to parse error explanation: {}", explanation, e);
+                // Add as plain text error
+                GrammarCheckResponse.GrammarError error = GrammarCheckResponse.GrammarError.builder()
+                        .type("grammar")
+                        .message(explanation)
+                        .incorrectText(original)
+                        .correctText(corrected)
+                        .position(0)
+                        .explanation(explanation)
+                        .build();
+                
+                errors.add(error);
+            }
         }
         
         return errors;
