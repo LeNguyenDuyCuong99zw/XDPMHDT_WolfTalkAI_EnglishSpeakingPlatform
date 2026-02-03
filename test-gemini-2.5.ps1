@@ -1,8 +1,8 @@
 # Test Gemini 2.5 Flash (recommended stable model)
 Write-Host "=== Testing Gemini 2.5 Flash ===" -ForegroundColor Cyan
 
-$apiKey = "AIzaSyC53Otwcfc6RIv2wRz-NmOWikbXhNPM_LY"
-$model = "gemini-2.5-flash-lite"
+$apiKey = "AIzaSyCyG-Vgbl_N0AGH4o8YoNDtBYQsQcV59lg"
+$model = "gemini-2.5-flash"
 
 Write-Host "`n[Testing] $model..." -ForegroundColor Yellow
 

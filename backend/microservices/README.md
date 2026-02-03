@@ -9,6 +9,7 @@ Dự án này bao gồm các microservices sau:
 - **Eureka Server** (Port 8761) - Service Discovery
 - **API Gateway** (Port 9000) - Single entry point, routing, authentication
 - **AI Learning Service** (Port 8083) - Pronunciation assessment, grammar checking, AI conversation
+- **Pronunciation Checking Service** (Port 8086) - Vosk-based pronunciation checking (free, offline)
 - **Auth Service** (Port 8081) - Authentication & authorization
 - **User Service** (Port 8082) - User management
 - **Conversation Service** (Port 8084) - Real-time conversations

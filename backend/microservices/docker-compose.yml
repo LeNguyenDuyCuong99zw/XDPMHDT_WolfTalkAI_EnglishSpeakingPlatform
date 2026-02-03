@@ -95,6 +95,26 @@ services:
       timeout: 5s
       retries: 5
 
+  # Pronunciation Checking Service
+  pronunciation-checking-service:
+    build: ./pronunciation-checking-service
+    container_name: wolftalk-pronunciation-service
+    ports:
+      - "8086:8086"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5433/wolftalk_db
+      - SPRING_DATASOURCE_USERNAME=wolftalk
+      - SPRING_DATASOURCE_PASSWORD=wolftalk9999
+    volumes:
+      - ./models:/app/models
+    depends_on:
+      - eureka-server
+    networks:
+      - wolftalk-microservices
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
 
 
 volumes:

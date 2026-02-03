@@ -13,10 +13,10 @@
     </parent>
     
     <groupId>com.wolftalk.microservices</groupId>
-    <artifactId>ai-learning-service</artifactId>
+    <artifactId>pronunciation-checking-service</artifactId>
     <version>1.0.0</version>
-    <name>AI Learning Service</name>
-    <description>AI-powered learning service with Google Gemini AI</description>
+    <name>Pronunciation Checking Service</name>
+    <description>Pronunciation checking service with Vosk API</description>
     
     <properties>
         <java.version>21</java.version>
@@ -49,38 +49,11 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         
-        <!-- Redis for caching -->
+        <!-- Vosk API -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        
-        <!-- Google Cloud Speech-to-Text -->
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>google-cloud-speech</artifactId>
-            <version>4.25.0</version>
-        </dependency>
-        
-        <!-- Google Cloud Text-to-Speech -->
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>google-cloud-texttospeech</artifactId>
-            <version>2.39.0</version>
-        </dependency>
-        
-        <!-- Google Generative AI (Gemini) -->
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>google-cloud-aiplatform</artifactId>
-            <version>3.35.0</version>
-        </dependency>
-        
-        <!-- OkHttp for Gemini API calls -->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.12.0</version>
+            <groupId>com.alphacephei</groupId>
+            <artifactId>vosk</artifactId>
+            <version>0.3.45</version>
         </dependency>
         
         <!-- Lombok -->
@@ -152,10 +125,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <release>21</release>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>

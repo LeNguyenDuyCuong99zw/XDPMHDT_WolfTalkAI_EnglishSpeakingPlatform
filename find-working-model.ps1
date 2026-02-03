@@ -1,4 +1,4 @@
-$apiKey = "AIzaSyC53Otwcfc6RIv2wRz-NmOWikbXhNPM_LY"
+$apiKey = "AIzaSyCyG-Vgbl_N0AGH4o8YoNDtBYQsQcV59lg"
 $models = @(
     "gemini-2.5-flash",
     "gemini-2.5-pro",
@@ -12,7 +12,12 @@ $models = @(
     "gemini-pro-latest",
     "gemini-2.5-flash-lite",
     "gemini-2.5-flash-preview-09-2025",
-    "gemini-2.5-flash-lite-preview-09-2025"
+    "gemini-2.5-flash-lite-preview-09-2025",
+    "gemini-3-pro-preview",
+    "gemini-3-flash-preview",
+    "gemini-3-pro-image-preview",
+    "gemini-robotics-er-1.5-preview",
+    "gemini-2.5-computer-use-preview-10-2025"
 )
 
 Write-Host "=== Checking available Gemini Models for Quota ===" -ForegroundColor Cyan

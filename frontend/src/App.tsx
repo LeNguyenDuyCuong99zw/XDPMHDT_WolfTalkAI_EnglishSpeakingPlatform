@@ -41,6 +41,7 @@ import WritingPracticePage from "./pages/WritingPracticePage";
 import ReadingComprehensionPage from "./pages/ReadingComprehensionPage";
 import GrammarExercisesPage from "./pages/GrammarExercisesPage";
 import AILearningIndexPage from "./pages/AILearningIndexPage";
+import { PronunciationPractice } from "./pronunciation";
 
 function App() {
   const token =
@@ -73,6 +74,19 @@ function App() {
 
             {/* Alphabet Quiz - Full Screen without Sidebar */}
             <Route path="/alphabet/quiz" element={<AlphabetQuiz />} />
+
+            {/* Pronunciation Practice - With Sidebar */}
+            <Route 
+              path="/pronunciation-practice" 
+              element={
+                <div className="app-layout">
+                  <Sidebar />
+                  <main className="main-content">
+                    <PronunciationPractice />
+                  </main>
+                </div>
+              } 
+            />
 
             {/* DIRECT ACCESS TO LEARNING (Bypassing Placement Test for Testing) */}
             <Route
