@@ -13,9 +13,23 @@ import { PolicyPage } from "./presentation/pages/admin/PolicyPage/PolicyPage";
 import { AdminLayout } from "./presentation/components/templates/AdminLayout/AdminLayout";
 import { PrivateRoute } from "./presentation/routes/PrivateRoute";
 
+// Mentor imports
+import { MentorLayout } from "./presentation/components/templates/MentorLayout/MentorLayout";
+import { MentorDashboardPage } from "./presentation/pages/mentor/MentorDashboardPage/MentorDashboardPage";
+import { LearnersPage } from "./presentation/pages/mentor/LearnersPage/LearnersPage";
+import { AssessmentPage } from "./presentation/pages/mentor/AssessmentPage/AssessmentPage";
+import { FeedbackPage } from "./presentation/pages/mentor/FeedbackPage/FeedbackPage";
+import { MaterialsPage } from "./presentation/pages/mentor/MaterialsPage/MaterialsPage";
+import { SharedExperiencePage } from "./presentation/pages/mentor/SharedExperiencePage/SharedExperiencePage";
+import { ConversationPracticePage } from "./presentation/pages/mentor/ConversationPracticePage/ConversationPracticePage";
+import { LiveSessionPage } from "./presentation/pages/mentor/LiveSessionPage/LiveSessionPage";
+import { ProgressTrackingPage } from "./presentation/pages/mentor/ProgressTrackingPage/ProgressTrackingPage";
+import { PronunciationAnalysisPage } from "./presentation/pages/mentor/PronunciationAnalysisPage/PronunciationAnalysisPage";
+import { VocabularyManagementPage } from "./presentation/pages/mentor/VocabularyManagementPage/VocabularyManagementPage";
+
 /**
- * Admin-only routes for http://admin.localhost:5173
- * This app only shows admin interface
+ * Admin & Mentor routes for http://localhost:3001
+ * This app supports both admin and mentor interfaces
  */
 const AdminApp: React.FC = () => {
   const { user } = useAuth();
@@ -106,6 +120,119 @@ const AdminApp: React.FC = () => {
         }
       />
 
+      {/* Mentor Routes */}
+      <Route
+        path="/mentor/dashboard"
+        element={
+          <PrivateRoute requiredRole="MENTOR">
+            <MentorLayout>
+              <MentorDashboardPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/learners"
+        element={
+          <PrivateRoute requiredRole="MENTOR">
+            <MentorLayout>
+              <LearnersPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/assessment"
+        element={
+          <PrivateRoute requiredRole="MENTOR">
+            <MentorLayout>
+              <AssessmentPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/feedback"
+        element={
+          <PrivateRoute requiredRole="MENTOR">
+            <MentorLayout>
+              <FeedbackPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/materials"
+        element={
+          <PrivateRoute requiredRole="MENTOR">
+            <MentorLayout>
+              <MaterialsPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/sharedexperience"
+        element={
+          <PrivateRoute requiredRole="MENTOR">
+            <MentorLayout>
+              <SharedExperiencePage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/conversationpractice"
+        element={
+          <PrivateRoute requiredRole="MENTOR">
+            <MentorLayout>
+              <ConversationPracticePage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/livesession"
+        element={
+          <PrivateRoute requiredRole="MENTOR">
+            <MentorLayout>
+              <LiveSessionPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/progresstracking"
+        element={
+          <PrivateRoute requiredRole="MENTOR">
+            <MentorLayout>
+              <ProgressTrackingPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/pronunciationanalysis"
+        element={
+          <PrivateRoute requiredRole="MENTOR">
+            <MentorLayout>
+              <PronunciationAnalysisPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mentor/vocabularymanagement"
+        element={
+          <PrivateRoute requiredRole="MENTOR">
+            <MentorLayout>
+              <VocabularyManagementPage />
+            </MentorLayout>
+          </PrivateRoute>
+        }
+      />
+
+
       {/* Unauthorized page */}
       <Route
         path="/unauthorized"
@@ -148,12 +275,14 @@ const AdminApp: React.FC = () => {
         }
       />
 
-      {/* Default redirects - if admin is logged in and authorized, send to dashboard; otherwise send to login */}
+      {/* Default redirects - redirect based on user role */}
       <Route
         path="/"
         element={
           user && user.role === "ADMIN" ? (
             <Navigate to="/admin/dashboard" replace />
+          ) : user && user.role === "MENTOR" ? (
+            <Navigate to="/mentor/learners" replace />
           ) : (
             <Navigate to="/login" replace />
           )
@@ -164,6 +293,8 @@ const AdminApp: React.FC = () => {
         element={
           user && user.role === "ADMIN" ? (
             <Navigate to="/admin/dashboard" replace />
+          ) : user && user.role === "MENTOR" ? (
+            <Navigate to="/mentor/learners" replace />
           ) : (
             <Navigate to="/login" replace />
           )

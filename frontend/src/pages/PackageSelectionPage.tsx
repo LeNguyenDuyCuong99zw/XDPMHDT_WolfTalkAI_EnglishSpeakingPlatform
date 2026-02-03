@@ -118,28 +118,30 @@ const PackageSelectionPage: React.FC = () => {
       return;
     }
 
-    try {
-      setPurchasing(true);
-      await createSubscription(
-        Number(userId),
-        packageId,
-        billingCycle as "MONTHLY" | "ANNUAL" | "ONE_TIME",
-      );
-
-      // Cập nhật subscription hiện tại
-      setCurrentSubscription({ packageCode });
-
-      // Hiển thị thông báo thành công
-      alert(`Đã nâng cấp lên gói ${packageCode} thành công!`);
-
-      // Chuyển hướng đến trang dashboard
-      navigate("/dashboard");
-    } catch (err) {
-      alert("Lỗi khi mua gói. Vui lòng thử lại.");
-      console.error(err);
-    } finally {
-      setPurchasing(false);
+    // Find package details
+    const selectedPackage = packages.find(pkg => pkg.id === packageId);
+    if (!selectedPackage) {
+      alert("Không tìm thấy gói học");
+      return;
     }
+
+    // Calculate price based on billing cycle
+    const price = billingCycle === 'MONTHLY' 
+      ? selectedPackage.monthlyPrice 
+      : selectedPackage.annualPrice;
+
+    // Navigate to payment page with package info
+    navigate('/payment', {
+      state: {
+        id: packageId,
+        packageCode,
+        packageName: selectedPackage.packageName,
+        price,
+        billingCycle,
+        hasMentor: selectedPackage.hasMentor,
+        mentorHoursPerMonth: selectedPackage.mentorHoursPerMonth
+      }
+    });
   };
 
   const filteredPackages = packages.filter((pkg) => {

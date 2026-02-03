@@ -28,7 +28,9 @@ import {
 import PlacementTestQuestions from "./placement-test/PlacementTestQuestions";
 import LearningPage from "./presentation/learning/pages/LearningPage";
 import PackageSelectionPage from "./pages/PackageSelectionPage";
-
+import PaymentPage from "./payment/PaymentPage";
+import PaymentSuccessPage from "./payment/PaymentSuccessPage";
+import LearningLoginPage from "./payment/LearningLoginPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import ChatPage from "./pages/ChatPage";
 import { OAuthCallback } from "./presentation/pages/auth/OAuthCallback";
@@ -54,6 +56,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/auth/callback" element={<OAuthCallback />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/learning/login" element={<LearningLoginPage />} />
 
         {token ? (
           <>
@@ -87,6 +90,17 @@ function App() {
                 </div>
               } 
             />
+            <Route 
+              path="/pronunciation" 
+              element={
+                <div className="app-layout">
+                  <Sidebar />
+                  <main className="main-content">
+                    <PronunciationPractice />
+                  </main>
+                </div>
+              } 
+            />
 
             {/* DIRECT ACCESS TO LEARNING (Bypassing Placement Test for Testing) */}
             <Route
@@ -110,6 +124,10 @@ function App() {
               path="/subscriptions/:userId"
               element={<SubscriptionPage />}
             />
+
+            {/* Payment Routes - Full Screen */}
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/payment/success" element={<PaymentSuccessPage />} />
 
             {/* Dashboard Routes - With Sidebar - Protected by Placement Test */}
             <Route

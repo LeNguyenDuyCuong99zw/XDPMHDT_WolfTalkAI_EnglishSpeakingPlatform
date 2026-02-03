@@ -2,6 +2,21 @@ import React, { useState, useEffect } from "react";
 import { apiClient } from "../../services/api";
 import "./LeaderboardPanel.css";
 
+// Declare dotlottie-wc for TypeScript
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'dotlottie-wc': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        src?: string;
+        speed?: string;
+        mode?: string;
+        loop?: boolean;
+        autoplay?: boolean;
+      };
+    }
+  }
+}
+
 interface WeeklyLeaderboardEntry {
   rank: number;
   userId: number;
@@ -31,6 +46,19 @@ const LeaderboardPanel: React.FC = () => {
 
   useEffect(() => {
     loadLeaderboard();
+    
+    // Load Lottie player script
+    const script = document.createElement("script");
+    script.src = "https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js";
+    script.type = "module";
+    document.head.appendChild(script);
+
+    return () => {
+      // Cleanup script on unmount
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
   }, []);
 
   const loadLeaderboard = async () => {
@@ -45,7 +73,7 @@ const LeaderboardPanel: React.FC = () => {
       }
 
       const response = await apiClient.get<WeeklyLeaderboardEntry[]>(
-        "/api/leaderboard/weekly?limit=100",
+        "/leaderboard/weekly?limit=100",
       );
 
       setLeaderboard(response);
@@ -89,7 +117,15 @@ const LeaderboardPanel: React.FC = () => {
   return (
     <div className="leaderboard-panel">
       <div className="leaderboard-header">
-        <h2>🏆 Bảng Xếp Hạng</h2>
+        <h2>
+          <dotlottie-wc
+            src="https://lottie.host/3ef13e35-1a3b-4251-87a5-8f182d07accb/Vi0pXTFKQ5.lottie"
+            style={{ width: "50px", height: "50px", display: "inline-block", verticalAlign: "middle", marginRight: "10px" }}
+            autoplay
+            loop
+          />
+          Bảng Xếp Hạng
+        </h2>
         <div className="sort-buttons">
           <button
             className={`sort-btn ${sortBy === "xp" ? "active" : ""}`}

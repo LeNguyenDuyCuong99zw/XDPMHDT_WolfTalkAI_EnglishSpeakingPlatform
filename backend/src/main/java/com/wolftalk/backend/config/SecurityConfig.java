@@ -34,13 +34,15 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(java.util.Arrays.asList(
                 "http://localhost:5173",
+                "http://localhost:5174",
                 "http://localhost:3000",
                 "http://localhost:3001",
                 "http://127.0.0.1:5173",
+                "http://127.0.0.1:5174",
                 "http://127.0.0.1:3000",
                 "http://127.0.0.1:3001"));
         configuration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        configuration.setAllowedHeaders(java.util.Arrays.asList("*"));
+        configuration.setAllowedHeaders(java.util.Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept"));
         configuration.setExposedHeaders(java.util.Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
@@ -73,6 +75,8 @@ public class SecurityConfig {
                         // Admin endpoints - require ROLE_ADMIN
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
+                .exceptionHandling(eh -> eh
+                        .authenticationEntryPoint(new org.springframework.security.web.authentication.HttpStatusEntryPoint(org.springframework.http.HttpStatus.UNAUTHORIZED)))
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(oAuth2LoginSuccessHandler));
         // Add JWT filter to validate tokens and set SecurityContext
