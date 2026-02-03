@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/exercises")
+@RequestMapping("/api/v1/ai/exercises")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class GrammarExerciseController {
 
     private final GrammarExerciseService exerciseService;

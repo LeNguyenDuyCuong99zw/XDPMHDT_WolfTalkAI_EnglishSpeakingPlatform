@@ -1,5 +1,8 @@
 package com.wolftalk.microservices.ai.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wolftalk.microservices.ai.dto.GrammarExerciseResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -15,6 +20,7 @@ import java.util.List;
 public class GrammarExerciseService {
 
     private final AIProviderService aiProviderService;
+    private final ObjectMapper objectMapper;
 
     public GrammarExerciseResponse generateExercises(String topic, String level, Integer count, String provider) {
         log.info("Generating {} exercises on {} for {} level", count, topic, level);
@@ -31,9 +37,15 @@ public class GrammarExerciseService {
                 Target level: %s
                 
                 Create a mix of:
-                - Fill-in-the-blank questions
-                - Multiple choice questions
+                - Fill-in-the-blank questions (must have a clear context)
+                - Multiple choice questions (must have 4 distinct options)
                 - Sentence correction exercises
+                
+                IMPORTANT RULES:
+                1. Return ONLY valid JSON.
+                2. Do not using markdown code blocks (```json).
+                3. The "question" field MUST contain the full question text, never leave it empty.
+                4. Ensure explanations are helpful.
                 
                 Format as JSON:
                 {
@@ -62,8 +74,64 @@ public class GrammarExerciseService {
     }
 
     private GrammarExerciseResponse parseExerciseResponse(String aiResponse, String topic, String level, Integer count) {
-        // For MVP, return sample exercises
-        // TODO: Implement proper JSON parsing
+        try {
+            log.info("Parsing AI response for grammar exercises");
+            
+            // Extract JSON from response (handles markdown code blocks)
+            String jsonString = extractJsonFromResponse(aiResponse);
+            
+            // Parse JSON
+            JsonNode rootNode = objectMapper.readTree(jsonString);
+            JsonNode exercisesNode = rootNode.get("exercises");
+            
+            if (exercisesNode != null && exercisesNode.isArray()) {
+                List<GrammarExerciseResponse.Exercise> exercises = objectMapper.convertValue(
+                    exercisesNode,
+                    new TypeReference<List<GrammarExerciseResponse.Exercise>>() {}
+                );
+                
+                log.info("Successfully parsed {} exercises from AI response", exercises.size());
+                
+                return GrammarExerciseResponse.builder()
+                        .topic(topic)
+                        .level(level)
+                        .exercises(exercises)
+                        .build();
+            } else {
+                log.warn("No exercises array found in AI response, using fallback");
+                return createFallbackResponse(topic, level, count);
+            }
+            
+        } catch (Exception e) {
+            log.error("Failed to parse AI response for grammar exercises: {}", e.getMessage());
+            log.debug("AI Response snippet: {}", aiResponse.substring(0, Math.min(200, aiResponse.length())));
+            return createFallbackResponse(topic, level, count);
+        }
+    }
+    
+    private String extractJsonFromResponse(String response) {
+        // Try to extract JSON from markdown code blocks
+        Pattern pattern = Pattern.compile("```(?:json)?\\s*\\n?([\\s\\S]*?)```", Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(response);
+        
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+        
+        // Try to find JSON object boundaries
+        int startIndex = response.indexOf("{");
+        int endIndex = response.lastIndexOf("}");
+        
+        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+            return response.substring(startIndex, endIndex + 1).trim();
+        }
+        
+        // Return as-is if no patterns found
+        return response.trim();
+    }
+    
+    private GrammarExerciseResponse createFallbackResponse(String topic, String level, Integer count) {
+        log.warn("Using fallback mock data for grammar exercises");
         
         List<GrammarExerciseResponse.Exercise> exercises = new ArrayList<>();
         

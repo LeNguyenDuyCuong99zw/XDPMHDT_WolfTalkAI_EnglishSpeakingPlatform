@@ -1,14 +1,15 @@
 package com.wolftalk.microservices.ai.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wolftalk.microservices.ai.dto.WritingAnalysisResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -16,6 +17,7 @@ import java.util.Map;
 public class WritingService {
 
     private final AIProviderService aiProviderService;
+    private final ObjectMapper objectMapper;
 
     public WritingAnalysisResponse analyzeWriting(String text, String type, String topic, String provider) {
         log.info("Analyzing {} writing (provider: {})", type, provider);
@@ -38,6 +40,8 @@ public class WritingService {
                 Analyze this %s writing about "%s" and provide detailed feedback in JSON format:
                 
                 Text: %s
+                
+                IMPORTANT: Return ONLY valid JSON, no markdown formatting or explanations.
                 
                 Provide your analysis in this exact JSON structure:
                 {
@@ -76,93 +80,95 @@ public class WritingService {
 
     private WritingAnalysisResponse parseAnalysisResponse(String originalText, String aiResponse) {
         try {
-            // Try to extract JSON from AI response
-            String jsonPart = extractJson(aiResponse);
+            log.info("Parsing AI response for writing analysis");
             
-            // For MVP, return a simple parsed response
-            // TODO: Implement proper JSON parsing with ObjectMapper
+            // Extract JSON from response
+            String jsonString = extractJsonFromResponse(aiResponse);
+            
+            // Parse JSON
+            JsonNode rootNode = objectMapper.readTree(jsonString);
+            
+            Integer score = rootNode.has("score") ? rootNode.get("score").asInt() : 75;
+            List<String> strengths = parseStringList(rootNode.get("strengths"));
+            List<String> improvements = parseStringList(rootNode.get("improvements"));
+            Map<String, List<String>> suggestions = parseSuggestions(rootNode.get("suggestions"));
+            String overallFeedback = rootNode.has("overallFeedback") ? 
+                    rootNode.get("overallFeedback").asText() : 
+                    "Your writing shows good potential.";
+            String correctedText = rootNode.has("correctedText") ? 
+                    rootNode.get("correctedText").asText() : 
+                    originalText;
+            
+            log.info("Successfully parsed writing analysis with score: {}", score);
             
             return WritingAnalysisResponse.builder()
                     .originalText(originalText)
-                    .score(extractScore(aiResponse))
-                    .strengths(extractList(aiResponse, "strengths"))
-                    .improvements(extractList(aiResponse, "improvements"))
-                    .suggestions(extractSuggestions(aiResponse))
-                    .overallFeedback(extractOverallFeedback(aiResponse))
-                    .correctedText(extractCorrectedText(aiResponse, originalText))
+                    .score(score)
+                    .strengths(strengths)
+                    .improvements(improvements)
+                    .suggestions(suggestions)
+                    .overallFeedback(overallFeedback)
+                    .correctedText(correctedText)
                     .build();
                     
         } catch (Exception e) {
-            log.error("Error parsing analysis response", e);
+            log.error("Failed to parse AI response for writing analysis: {}", e.getMessage());
+            log.debug("AI Response snippet: {}", aiResponse.substring(0, Math.min(200, aiResponse.length())));
             return createFallbackResponse(originalText);
         }
     }
 
-    private String extractJson(String response) {
-        int start = response.indexOf('{');
-        int end = response.lastIndexOf('}');
-        return (start >= 0 && end > start) ? response.substring(start, end + 1) : response;
-    }
-
-    private Integer extractScore(String response) {
-        // Simple regex to find score: number between 0-100
-        try {
-            if (response.contains("\"score\"")) {
-                String[] parts = response.split("\"score\"\\s*:\\s*");
-                if (parts.length > 1) {
-                    String numStr = parts[1].split("[,\\}]")[0].trim();
-                    return Integer.parseInt(numStr);
-                }
-            }
-        } catch (Exception e) {
-            log.warn("Could not extract score", e);
+    private String extractJsonFromResponse(String response) {
+        // Try to extract JSON from markdown code blocks
+        Pattern pattern = Pattern.compile("```(?:json)?\\s*\\n?([\\s\\S]*?)```", Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(response);
+        
+        if (matcher.find()) {
+            return matcher.group(1).trim();
         }
-        return 75; // Default score
+        
+        // Try to find JSON object boundaries
+        int startIndex = response.indexOf("{");
+        int endIndex = response.lastIndexOf("}");
+        
+        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+            return response.substring(startIndex, endIndex + 1).trim();
+        }
+        
+        return response.trim();
     }
-
-    private List<String> extractList(String response, String key) {
-        // TODO: Implement proper parsing
-        return Arrays.asList(
-                "Good use of vocabulary",
-                "Clear structure",
-                "Engaging content"
-        );
+    
+    private List<String> parseStringList(JsonNode node) {
+        List<String> result = new ArrayList<>();
+        if (node != null && node.isArray()) {
+            for (JsonNode item : node) {
+                result.add(item.asText());
+            }
+        }
+        return result;
     }
-
-    private Map<String, List<String>> extractSuggestions(String response) {
+    
+    private Map<String, List<String>> parseSuggestions(JsonNode node) {
         Map<String, List<String>> suggestions = new HashMap<>();
-        suggestions.put("vocabulary", Arrays.asList("Consider using more advanced vocabulary"));
-        suggestions.put("grammar", Arrays.asList("Check subject-verb agreement"));
-        suggestions.put("structure", Arrays.asList("Add a stronger conclusion"));
+        
+        if (node != null && node.isObject()) {
+            if (node.has("vocabulary")) {
+                suggestions.put("vocabulary", parseStringList(node.get("vocabulary")));
+            }
+            if (node.has("grammar")) {
+                suggestions.put("grammar", parseStringList(node.get("grammar")));
+            }
+            if (node.has("structure")) {
+                suggestions.put("structure", parseStringList(node.get("structure")));
+            }
+        }
+        
         return suggestions;
     }
 
-    private String extractOverallFeedback(String response) {
-        // Try to find overall feedback in response
-        if (response.contains("overallFeedback")) {
-            int start = response.indexOf("\"overallFeedback\"");
-            int valueStart = response.indexOf("\"", start + 17);
-            int valueEnd = response.indexOf("\"", valueStart + 1);
-            if (valueStart > 0 && valueEnd > valueStart) {
-                return response.substring(valueStart + 1, valueEnd);
-            }
-        }
-        return "Your writing shows good potential. Focus on the suggested improvements to enhance your skills.";
-    }
-
-    private String extractCorrectedText(String response, String original) {
-        if (response.contains("correctedText")) {
-            int start = response.indexOf("\"correctedText\"");
-            int valueStart = response.indexOf("\"", start + 15);
-            int valueEnd = response.indexOf("\"", valueStart + 1);
-            if (valueStart > 0 && valueEnd > valueStart) {
-                return response.substring(valueStart + 1, valueEnd);
-            }
-        }
-        return original; // Return original if cannot extract
-    }
-
     private WritingAnalysisResponse createFallbackResponse(String originalText) {
+        log.warn("Using fallback mock data for writing analysis");
+        
         Map<String, List<String>> suggestions = new HashMap<>();
         suggestions.put("vocabulary", Arrays.asList("Try using more varied vocabulary"));
         suggestions.put("grammar", Arrays.asList("Review basic grammar rules"));

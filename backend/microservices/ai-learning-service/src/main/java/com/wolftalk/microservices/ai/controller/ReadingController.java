@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/reading")
+@RequestMapping("/api/v1/ai/reading")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class ReadingController {
 
     private final ReadingService readingService;

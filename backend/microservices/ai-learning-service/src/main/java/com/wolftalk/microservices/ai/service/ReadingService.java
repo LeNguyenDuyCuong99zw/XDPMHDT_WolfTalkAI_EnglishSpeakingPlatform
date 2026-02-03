@@ -1,12 +1,17 @@
 package com.wolftalk.microservices.ai.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wolftalk.microservices.ai.dto.ReadingPassageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -14,6 +19,7 @@ import java.util.List;
 public class ReadingService {
 
     private final AIProviderService aiProviderService;
+    private final ObjectMapper objectMapper;
 
     public ReadingPassageResponse generatePassage(String topic, String level, String length, String provider) {
         log.info("Generating reading passage: topic={}, level={}, length={}", topic, level, length);
@@ -43,6 +49,8 @@ public class ReadingService {
                 1. 4-5 comprehension questions (mix of multiple choice and open-ended)
                 2. List 5-7 important vocabulary words with definitions
                 
+                IMPORTANT: Return ONLY valid JSON, no markdown formatting or explanations.
+                
                 Format your response as JSON:
                 {
                   "passage": "the text passage",
@@ -69,15 +77,100 @@ public class ReadingService {
     }
 
     private ReadingPassageResponse parsePassageResponse(String aiResponse, String topic, String level) {
-        // For MVP, return sample data
-        // TODO: Implement proper JSON parsing
+        try {
+            log.info("Parsing AI response for reading passage");
+            
+            // Extract JSON from response
+            String jsonString = extractJsonFromResponse(aiResponse);
+            
+            // Parse JSON
+            JsonNode rootNode = objectMapper.readTree(jsonString);
+            
+            String passage = rootNode.has("passage") ? rootNode.get("passage").asText() : "";
+            
+            List<ReadingPassageResponse.Question> questions = new ArrayList<>();
+            if (rootNode.has("questions") && rootNode.get("questions").isArray()) {
+                for (JsonNode qNode : rootNode.get("questions")) {
+                    ReadingPassageResponse.Question question = ReadingPassageResponse.Question.builder()
+                            .type(qNode.has("type") ? qNode.get("type").asText() : "open_ended")
+                            .question(qNode.has("question") ? qNode.get("question").asText() : "")
+                            .options(parseStringList(qNode.get("options")))
+                            .correctAnswer(qNode.has("correctAnswer") ? qNode.get("correctAnswer").asText() : "")
+                            .explanation(qNode.has("explanation") ? qNode.get("explanation").asText() : "")
+                            .build();
+                    questions.add(question);
+                }
+            }
+            
+            List<ReadingPassageResponse.VocabularyItem> vocabulary = new ArrayList<>();
+            if (rootNode.has("vocabulary") && rootNode.get("vocabulary").isArray()) {
+                for (JsonNode vNode : rootNode.get("vocabulary")) {
+                    ReadingPassageResponse.VocabularyItem item = ReadingPassageResponse.VocabularyItem.builder()
+                            .word(vNode.has("word") ? vNode.get("word").asText() : "")
+                            .definition(vNode.has("definition") ? vNode.get("definition").asText() : "")
+                            .example(vNode.has("example") ? vNode.get("example").asText() : "")
+                            .build();
+                    vocabulary.add(item);
+                }
+            }
+            
+            log.info("Successfully parsed reading passage with {} questions and {} vocabulary items", 
+                    questions.size(), vocabulary.size());
+            
+            return ReadingPassageResponse.builder()
+                    .passage(passage)
+                    .questions(questions)
+                    .vocabulary(vocabulary)
+                    .topic(topic)
+                    .level(level)
+                    .build();
+                    
+        } catch (Exception e) {
+            log.error("Failed to parse AI response for reading passage: {}", e.getMessage());
+            log.debug("AI Response snippet: {}", aiResponse.substring(0, Math.min(200, aiResponse.length())));
+            return createFallbackResponse(topic, level);
+        }
+    }
+    
+    private String extractJsonFromResponse(String response) {
+        // Try to extract JSON from markdown code blocks
+        Pattern pattern = Pattern.compile("```(?:json)?\\s*\\n?([\\s\\S]*?)```", Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(response);
+        
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+        
+        // Try to find JSON object boundaries
+        int startIndex = response.indexOf("{");
+        int endIndex = response.lastIndexOf("}");
+        
+        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+            return response.substring(startIndex, endIndex + 1).trim();
+        }
+        
+        return response.trim();
+    }
+    
+    private List<String> parseStringList(JsonNode node) {
+        List<String> result = new ArrayList<>();
+        if (node != null && node.isArray()) {
+            for (JsonNode item : node) {
+                result.add(item.asText());
+            }
+        }
+        return result;
+    }
+    
+    private ReadingPassageResponse createFallbackResponse(String topic, String level) {
+        log.warn("Using fallback mock data for reading passage");
         
         List<ReadingPassageResponse.Question> questions = Arrays.asList(
                 ReadingPassageResponse.Question.builder()
                         .type("multiple_choice")
                         .question("What is the main idea of the passage?")
                         .options(Arrays.asList("Option A", "Option B", "Option C", "Option D"))
-                       .correctAnswer("Option A")
+                        .correctAnswer("Option A")
                         .explanation("The passage primarily discusses...")
                         .build()
         );
@@ -91,25 +184,11 @@ public class ReadingService {
         );
 
         return ReadingPassageResponse.builder()
-                .passage(extractPassage(aiResponse))
+                .passage("This is a sample reading passage. The AI response could not be parsed correctly.")
                 .questions(questions)
                 .vocabulary(vocabulary)
                 .topic(topic)
                 .level(level)
                 .build();
-    }
-
-    private String extractPassage(String response) {
-        // Try to extract passage from JSON or return trimmed response
-        if (response.contains("\"passage\"")) {
-            int start = response.indexOf("\"passage\"");
-            int valueStart = response.indexOf("\"", start + 10);
-            int valueEnd = response.indexOf("\"", valueStart + 1);
-            if (valueStart > 0 && valueEnd > valueStart) {
-                return response.substring(valueStart + 1, valueEnd);
-            }
-        }
-        // Fallback: return first 300 words or full response
-        return response.length() > 500 ? response.substring(0, 500) + "..." : response;
     }
 }
