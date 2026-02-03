@@ -130,7 +130,7 @@ const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
           <button className="back-button" onClick={onBack}>
             {content.backButton}
           </button>
-          <div className="logo">
+          <div className="landing-logo">
             <img src={logoWolf} alt="WolfTalk Logo" className="logo-wolf" />
             <span className="logo-text">WolfTalk</span>
           </div>

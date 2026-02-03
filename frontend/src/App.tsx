@@ -28,7 +28,11 @@ import {
 import PlacementTestQuestions from "./placement-test/PlacementTestQuestions";
 import LearningPage from "./presentation/learning/pages/LearningPage";
 import PackageSelectionPage from "./pages/PackageSelectionPage";
-
+import PaymentPage from "./payment/PaymentPage";
+import PaymentSuccessPage from "./payment/PaymentSuccessPage";
+import LearningLoginPage from "./payment/LearningLoginPage";
+import { LearnerLayout } from "./presentation/components/templates/LearnerLayout/LearnerLayout";
+import { LearnerDashboardPage } from "./presentation/pages/learner/LearnerDashboardPage/LearnerDashboardPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import ChatPage from "./pages/ChatPage";
 import { OAuthCallback } from "./presentation/pages/auth/OAuthCallback";
@@ -43,9 +47,24 @@ import GrammarExercisesPage from "./pages/GrammarExercisesPage";
 import AILearningIndexPage from "./pages/AILearningIndexPage";
 import { PronunciationPractice } from "./pronunciation";
 
+import { useState, useEffect } from "react";
+
 function App() {
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+  const [token, setToken] = useState<string | null>(
+    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null
+  );
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setToken(localStorage.getItem("accessToken"));
+    };
+
+    // Listen for storage events (including custom dispatched ones)
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   return (
     <Router>
@@ -54,6 +73,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/auth/callback" element={<OAuthCallback />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/learning/login" element={<LearningLoginPage />} />
 
         {token ? (
           <>
@@ -87,6 +107,17 @@ function App() {
                 </div>
               } 
             />
+            <Route 
+              path="/pronunciation" 
+              element={
+                <div className="app-layout">
+                  <Sidebar />
+                  <main className="main-content">
+                    <PronunciationPractice />
+                  </main>
+                </div>
+              } 
+            />
 
             {/* DIRECT ACCESS TO LEARNING (Bypassing Placement Test for Testing) */}
             <Route
@@ -111,6 +142,10 @@ function App() {
               element={<SubscriptionPage />}
             />
 
+            {/* Payment Routes - Full Screen */}
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/payment/success" element={<PaymentSuccessPage />} />
+
             {/* Dashboard Routes - With Sidebar - Protected by Placement Test */}
             <Route
               path="/profile"
@@ -123,6 +158,27 @@ function App() {
                     </main>
                   </div>
                 </RequirePlacementTest>
+              }
+            />
+
+            {/* NEW Learner Dashboard Routes */}
+            <Route
+              path="/learner/dashboard"
+              element={
+                <LearnerLayout>
+                  <LearnerDashboardPage />
+                </LearnerLayout>
+              }
+            />
+             <Route
+              path="/learner/*"
+              element={
+                <LearnerLayout>
+                  <div style={{ padding: '20px' }}>
+                    <h2>Feature coming soon!</h2>
+                    <p>We are working hard to bring you this feature.</p>
+                  </div>
+                </LearnerLayout>
               }
             />
             <Route

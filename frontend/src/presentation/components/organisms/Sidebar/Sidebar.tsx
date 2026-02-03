@@ -27,7 +27,7 @@ interface MenuItem {
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  role: "ADMIN" | "MENTOR";
+  role: "ADMIN" | "MENTOR" | "USER";
 }
 
 const adminMenuItems: MenuItem[] = [
@@ -131,9 +131,49 @@ const mentorMenuItems: MenuItem[] = [
     label: "Quản lý từ vựng",
     icon: <ShieldCheck size={20} strokeWidth={2} />,
   },
+  {
+    path: "/mentor/vocabularymanagement",
+    label: "Quản lý từ vựng",
+    icon: <ShieldCheck size={20} strokeWidth={2} />,
+  },
 ];
+
+// Learner
+const learnerMenuItems: MenuItem[] = [
+  {
+    path: "/learner/dashboard",
+    label: "Tổng quan",
+    icon: <LayoutDashboard size={20} strokeWidth={2} />,
+  },
+  {
+    path: "/learner/courses",
+    label: "Khóa học của tôi",
+    icon: <BookOpen size={20} strokeWidth={2} />,
+  },
+  {
+    path: "/learner/schedule",
+    label: "Lịch học",
+    icon: <Users size={20} strokeWidth={2} />,
+  },
+  {
+    path: "/learner/achievements",
+    label: "Thành tích",
+    icon: <Receipt size={20} strokeWidth={2} />, // Using Receipt as temporary icon for achievements
+  },
+  {
+    path: "/learner/settings",
+    label: "Cài đặt",
+    icon: <ShieldCheck size={20} strokeWidth={2} />,
+  },
+];
+
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, role }) => {
-  const menuItems = role === "ADMIN" ? adminMenuItems : mentorMenuItems;
+  let menuItems = adminMenuItems;
+  if (role === "MENTOR") {
+    menuItems = mentorMenuItems;
+  } else if (role === "USER") {
+    menuItems = learnerMenuItems;
+  }
 
   return (
     <>
@@ -174,9 +214,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, role }) => {
               <>
                 <ShieldCheck size={16} strokeWidth={2.5} /> Quản trị viên
               </>
-            ) : (
+            ) : role === "MENTOR" ? (
               <>
                 <GraduationCap size={16} strokeWidth={2.5} /> Giảng viên
+              </>
+            ) : (
+              <>
+                <Users size={16} strokeWidth={2.5} /> Học viên
               </>
             )}
           </div>

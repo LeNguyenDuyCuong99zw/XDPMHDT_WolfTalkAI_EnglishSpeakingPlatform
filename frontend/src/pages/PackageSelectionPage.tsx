@@ -29,7 +29,7 @@ interface Subscription {
 
 const PackageSelectionPage: React.FC = () => {
   const navigate = useNavigate();
-  const { userId } = useParams<{ userId: string }>();
+  // Remove userId from URL params - get from authenticated user instead
   const [packages, setPackages] = useState<Package[]>([]);
   const [currentSubscription, setCurrentSubscription] =
     useState<Subscription | null>(null);
@@ -47,10 +47,19 @@ const PackageSelectionPage: React.FC = () => {
 
   useEffect(() => {
     fetchPackages();
-    if (userId) {
-      fetchCurrentSubscription();
+    // Check for authenticated user to fetch their subscription
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        if (user.id) {
+          fetchCurrentSubscription(user.id);
+        }
+      } catch (e) {
+        console.error('Error parsing user:', e);
+      }
     }
-  }, [userId]);
+  }, []);
 
   const fetchPackages = async () => {
     try {
@@ -97,49 +106,65 @@ const PackageSelectionPage: React.FC = () => {
     }
   };
 
-  const fetchCurrentSubscription = async () => {
+  const fetchCurrentSubscription = async (userId: number) => {
     try {
-      const subscription = await getActiveSubscription(Number(userId));
-      if (subscription) {
-        setCurrentSubscription(subscription);
-      }
+      const subscription = await getActiveSubscription(userId);
+      setCurrentSubscription(subscription);
     } catch (err) {
-      console.error("Lỗi khi tải subscription hiện tại:", err);
+      console.error("Error fetching current subscription:", err);
+      // Not critical if this fails
     }
   };
 
-  const handleSelectPackage = async (
+  const handleSelectPackage = (
     packageId: number,
     packageCode: string,
-    billingCycle: string,
+    billingCycle: "MONTHLY" | "ANNUAL",
   ) => {
-    if (!userId) {
-      navigate("/login");
+    // Find package details
+    const selectedPackage = packages.find(pkg => pkg.id === packageId);
+    if (!selectedPackage) {
+      alert("Không tìm thấy gói học");
       return;
     }
 
-    try {
-      setPurchasing(true);
-      await createSubscription(
-        Number(userId),
-        packageId,
-        billingCycle as "MONTHLY" | "ANNUAL" | "ONE_TIME",
-      );
+    const price = billingCycle === 'MONTHLY' 
+      ? selectedPackage.monthlyPrice 
+      : selectedPackage.annualPrice;
 
-      // Cập nhật subscription hiện tại
-      setCurrentSubscription({ packageCode });
-
-      // Hiển thị thông báo thành công
-      alert(`Đã nâng cấp lên gói ${packageCode} thành công!`);
-
-      // Chuyển hướng đến trang dashboard
-      navigate("/dashboard");
-    } catch (err) {
-      alert("Lỗi khi mua gói. Vui lòng thử lại.");
-      console.error(err);
-    } finally {
-      setPurchasing(false);
+    // Check authentication before proceeding
+    const token = localStorage.getItem('accessToken');
+    const userStr = localStorage.getItem('user');
+    
+    if (!token || !userStr) {
+      // Save FULL pending selection for after login
+      sessionStorage.setItem('pendingPackageSelection', JSON.stringify({
+        id: packageId,
+        packageCode,
+        packageName: selectedPackage.packageName,
+        price,
+        billingCycle,
+        hasMentor: selectedPackage.hasMentor,
+        mentorHoursPerMonth: selectedPackage.mentorHoursPerMonth
+      }));
+      navigate("/learning/login", {
+        state: { message: "Vui lòng đăng nhập để tiếp tục đăng ký" }
+      });
+      return;
     }
+
+    // Navigate to payment page with complete package info
+    navigate('/payment', {
+      state: {
+        id: packageId,
+        packageCode,
+        packageName: selectedPackage.packageName,
+        price,
+        billingCycle,
+        hasMentor: selectedPackage.hasMentor,
+        mentorHoursPerMonth: selectedPackage.mentorHoursPerMonth
+      }
+    });
   };
 
   const filteredPackages = packages.filter((pkg) => {

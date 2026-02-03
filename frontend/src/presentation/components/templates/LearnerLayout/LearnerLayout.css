@@ -1,0 +1,37 @@
+/* src/presentation/components/templates/LearnerLayout/LearnerLayout.css */
+.learner-layout {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f6f8fd 0%, #f1f4f9 100%);
+  color: #1e293b; /* Default text color dark slate */
+}
+
+
+.learner-layout__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Prevent flex item from overflowing */
+  transition: margin-left 0.3s ease;
+}
+
+.learner-layout__main {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .learner-layout__content {
+    margin-left: 280px; /* Match sidebar width */
+  }
+}
+
+@media (max-width: 768px) {
+  .learner-layout__main {
+    padding: 16px;
+  }
+}

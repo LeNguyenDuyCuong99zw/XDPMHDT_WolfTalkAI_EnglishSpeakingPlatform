@@ -1,7 +1,7 @@
 export enum UserRole {
   ADMIN = 'Admin',
   MENTOR = 'Mentor',
-  LEARNER = 'Learner',
+  USER = 'User',
 }
 
 export enum UserStatus {
@@ -36,7 +36,7 @@ export class User {
   }
 
   isLearner(): boolean {
-    return this.role === UserRole.LEARNER;
+    return this.role === UserRole.USER;
   }
 
   activate(): void {

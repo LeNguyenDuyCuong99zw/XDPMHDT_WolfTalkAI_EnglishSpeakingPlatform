@@ -226,8 +226,15 @@ const DashboardPage: React.FC = () => {
             <button className="action-btn">LUYỆN TẬP</button>
           </div>
 
-          <div className="action-card" onClick={() => navigate("/speaking")}>
-            <div className="action-icon">🎤</div>
+          <div className="action-card" onClick={() => navigate("/pronunciation")}>
+            <div className="action-icon">
+              <dotlottie-wc
+                src="https://lottie.host/c68888aa-ea2a-4bd7-86c9-550a42dfb957/Ex1gv8p1lN.lottie"
+                style={{ width: "80px", height: "80px" }}
+                autoplay
+                loop
+              />
+            </div>
             <h3>Luyện nói</h3>
             <p>Cải thiện phát âm</p>
             <button className="action-btn">BẮT ĐẦU</button>

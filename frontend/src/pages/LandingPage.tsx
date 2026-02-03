@@ -186,17 +186,17 @@ const LandingPage: React.FC = () => {
   return (
     <div className="landing-page">
       {/* ===== BANNER PHÍA TRÊN - GIỮ NGUYÊN ===== */}
-      <header className="header">
-        <div className="header-container">
-          <div className="logo">
-            <img src={logoWolf} alt="WolfTalk Logo" className="logo-wolf" />
-            <span className="logo-text">WolfTalk</span>
+      <header className="landing-header">
+        <div className="landing-header-container">
+          <div className="landing-logo">
+            <img src={logoWolf} alt="WolfTalk Logo" className="landing-logo-wolf" />
+            <span className="landing-logo-text">WolfTalk</span>
           </div>
-          <div className="language-selector">
+          <div className="landing-language-selector">
             <label htmlFor="language-select">{content.languageLabel}</label>
             <select
               id="language-select"
-              className="language-dropdown"
+              className="landing-language-dropdown"
               aria-label="Chọn ngôn ngữ hiển thị"
               value={displayLanguage}
               onChange={handleDisplayLanguageChange}

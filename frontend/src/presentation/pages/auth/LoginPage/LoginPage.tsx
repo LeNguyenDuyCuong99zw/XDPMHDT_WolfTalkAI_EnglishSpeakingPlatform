@@ -24,12 +24,14 @@ export const LoginPage: React.FC = () => {
       const user = await login({ email, password }); // <-- user trả về từ use case
       console.log("User from login():", user);
 
-      if (user.role === "MENTOR") {
-        navigate("/mentor/learners");
-      } else if (user.role === "ADMIN") {
+      if (user.role === "ADMIN") {
         navigate("/admin/dashboard");
+      } else if (user.role === "MENTOR") {
+        navigate("/mentor/dashboard");
+      } else if (user.role === "USER") {
+        navigate("/learner/dashboard");
       } else {
-        setError("Invalid user role");
+        navigate("/learner/dashboard");
       }
     } catch (err: any) {
       console.error("Login failed:", err);

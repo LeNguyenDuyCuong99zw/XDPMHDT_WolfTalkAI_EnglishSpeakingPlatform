@@ -70,6 +70,8 @@ public class SecurityConfig {
                         // Leaderboard endpoints
                         .requestMatchers(HttpMethod.GET, "/api/leaderboard/**").permitAll() // Allow public access for viewing
                         .requestMatchers(HttpMethod.POST, "/api/leaderboard/award-xp").permitAll() // Allow internal service call
+                        // Mentor endpoints - require ROLE_MENTOR or ROLE_ADMIN
+                        .requestMatchers("/api/mentor/**").hasAnyRole("MENTOR", "ADMIN")
                         // Admin endpoints - require ROLE_ADMIN
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

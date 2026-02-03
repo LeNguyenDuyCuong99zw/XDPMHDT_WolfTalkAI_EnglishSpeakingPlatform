@@ -115,6 +115,24 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  # Learner Assessment Service
+  learner-assessment-service:
+    build: ./learner-assessment-service
+    container_name: wolftalk-assessment-service
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5433/wolftalk_db
+      - SPRING_DATASOURCE_USERNAME=wolftalk
+      - SPRING_DATASOURCE_PASSWORD=wolftalk9999
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - eureka-server
+    networks:
+      - wolftalk-microservices
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
 
 
 volumes:
