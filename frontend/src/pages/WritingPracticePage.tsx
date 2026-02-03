@@ -365,6 +365,7 @@ const WritingPracticePage: React.FC = () => {
           font-size: 14px;
           font-family: inherit;
           resize: vertical;
+          color: #1e293b;
         }
 
         .writing-editor:focus {

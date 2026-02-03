@@ -396,6 +396,8 @@ const GrammarExercisesPage: React.FC = () => {
           border-radius: 8px;
           cursor: pointer;
           transition: all 0.2s;
+          color: #1e293b;
+          font-size: 14px;
         }
 
         .option-label:hover {
