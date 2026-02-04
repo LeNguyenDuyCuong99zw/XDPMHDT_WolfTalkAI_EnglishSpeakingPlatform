@@ -1,0 +1,61 @@
+WOLFTALK - checklist
+
+■ Vai trò Admin
+
+- [x] Đăng nhập / Đăng xuất.
+- [x] Kích hoạt / vô hiệu hóa tài khoản.
+- [x] Trang tổng quan (Dashboard).
+- [x] Quản lý tài khoản người dùng (xem danh sách, bật/tắt tài khoản).
+- [x] Quản lý danh sách mentor.
+- [x] Cung cấp danh sách kỹ năng mentor để người học lựa chọn.
+- [ ] Quản lý các gói dịch vụ và chính sách giá.
+- [ ] Cung cấp dịch vụ hỗ trợ người học.
+- [ ] Kiểm duyệt phản hồi và bình luận.
+- [ ] Quản lý việc mua gói dịch vụ của người học.
+- [ ] Xem lịch sử mua gói dịch vụ.
+- [x] Tạo và quản lý các chính sách hệ thống.
+- [x] Xem thống kê và báo cáo tổng hợp.
+
+■ Vai trò Learner
+
+- [x] Đăng nhập / Đăng xuất.
+- [x] Thực hiện bài kiểm tra đánh giá trình độ tiếng Anh và phát âm ban đầu.
+- [x] Tạo và tùy chỉnh hồ sơ học tập, thiết lập mục tiêu và sở thích.
+- [x] Tìm kiếm, so sánh và mua các gói dịch vụ.
+- [ ] Lựa chọn gói học có hoặc không có mentor.
+- [ ] Nâng cấp / hạ cấp gói đăng ký.
+- [x] Truy cập chương trình học thích ứng và lộ trình học cá nhân hóa.
+- [x] Luyện nói với người học khác có sự hỗ trợ của AI.
+- [x] Lựa chọn chủ đề và kịch bản hội thoại (du lịch, kinh doanh, sinh hoạt hằng ngày,…).
+- [x] Nhận sửa lỗi ngữ pháp, từ vựng và chấm điểm phát âm.
+- [x] Theo dõi tiến độ học tập thông qua biểu đồ, bản đồ nhiệt và xu hướng.
+- [x] Tham gia thử thách nói, bảng xếp hạng, phần thưởng và theo dõi chuỗi ngày học (streak).
+- [ ] Lựa chọn các chủ đề hoặc lĩnh vực chuyên ngành để luyện tập hội thoại chuyên sâu.
+- [x] Nhận báo cáo hiệu suất hàng tuần / hàng tháng.
+
+ ■ Vai trò Mentor
+
+- [x] Đăng nhập / Đăng xuất.
+- [ ] Tổ chức đánh giá và phân loại trình độ người học.
+- [x] Cung cấp tài liệu phù hợp khi người học cần.
+- [x] Chỉ ra lỗi phát âm, ngữ pháp và cách dùng từ chưa tự nhiên.
+- [ ] Hướng dẫn cách diễn đạt rõ ràng và tự tin hơn.
+- [ ] Đưa ra phản hồi ngay sau mỗi buổi luyện tập để giúp người học cải thiện nhanh chóng.
+- [ ] Đề xuất chủ đề và các tình huống giao tiếp thực tế.
+- [ ] Gợi ý phương pháp học từ vựng, collocations và thành ngữ.
+- [ ] Chia sẻ kinh nghiệm giao tiếp với người bản ngữ.
+
+---------------------------------------------------------------
+- [x] Firebase 
+- [x] Websocket + OCSF
+- [x] Docker
+- [ ] chương 4 
+- [ ] công nghệ MQ : Kafka w4  và RabbitMQ
+- [ ] chương 5 
+- [x] API Gateway 
+- [ ] chương 6 
+- [ ] Chương 7
+- [ ] Chương 8 
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
