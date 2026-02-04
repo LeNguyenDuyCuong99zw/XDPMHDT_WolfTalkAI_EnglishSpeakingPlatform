@@ -1,0 +1,175 @@
+/* src/presentation/pages/mentor/AssessmentPage/components/AssignAssessmentModal.css */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.assign-modal {
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.modal-header {
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.close-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.assessment-label {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: #475569;
+}
+
+.assessment-label strong {
+  color: #0f172a;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+}
+
+.learners-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.learner-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.learner-item:hover {
+  background: #f8fafc;
+}
+
+.learner-item.selected {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.learner-details .name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.learner-details .email {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.learner-item.selected .checkbox {
+  border-color: #3b82f6;
+  background: #3b82f6;
+}
+
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+}
+
+.selection-count {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.confirm-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.confirm-btn:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.confirm-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}

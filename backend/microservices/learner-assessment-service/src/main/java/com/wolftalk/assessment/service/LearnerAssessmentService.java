@@ -4,6 +4,7 @@ import com.wolftalk.assessment.dto.LearnerAssessmentDTO;
 import com.wolftalk.assessment.dto.StartAssessmentResponse;
 import com.wolftalk.assessment.dto.SubmitAnswerRequest;
 import com.wolftalk.assessment.dto.SubmitAssessmentResponse;
+import com.wolftalk.assessment.dto.AssessmentResultDTO;
 import com.wolftalk.assessment.entity.*;
 import com.wolftalk.assessment.repository.*;
 import lombok.RequiredArgsConstructor;

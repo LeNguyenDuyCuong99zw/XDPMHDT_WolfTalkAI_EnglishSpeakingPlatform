@@ -13,6 +13,7 @@ import {
   Filter,
 } from 'lucide-react';
 import './MentorDashboardPage.css';
+import { AssignToLearnerModal } from './components/AssignToLearnerModal';
 
 export const MentorDashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -21,6 +22,10 @@ export const MentorDashboardPage: React.FC = () => {
   const [packageFilter, setPackageFilter] = useState<string>('ALL');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Assign Modal State
+  const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
+  const [selectedLearner, setSelectedLearner] = useState<{id: number, name: string} | null>(null);
 
   // Fetch data on mount and when filter changes
   useEffect(() => {
@@ -253,7 +258,16 @@ export const MentorDashboardPage: React.FC = () => {
                       </span>
                     </td>
                     <td>
-                      <button className="btn-action btn-action--primary">
+                      <button 
+                        className="btn-action btn-action--primary"
+                        onClick={() => {
+                          setSelectedLearner({ 
+                            id: typeof learner.id === 'string' ? parseInt(learner.id) : learner.id, 
+                            name: learner.fullName 
+                          });
+                          setIsAssignModalOpen(true);
+                        }}
+                      >
                         Assign Test
                       </button>
                     </td>
@@ -299,8 +313,19 @@ export const MentorDashboardPage: React.FC = () => {
             </div>
           </div>
           <div className="mentor-dashboard__chart-placeholder mentor-dashboard__chart-placeholder--bar" />
+
         </div>
       </section>
+
+      {/* Assign Modal */}
+      {selectedLearner && (
+        <AssignToLearnerModal
+          isOpen={isAssignModalOpen}
+          onClose={() => setIsAssignModalOpen(false)}
+          learnerId={selectedLearner.id}
+          learnerName={selectedLearner.name}
+        />
+      )}
     </div>
   );
 };

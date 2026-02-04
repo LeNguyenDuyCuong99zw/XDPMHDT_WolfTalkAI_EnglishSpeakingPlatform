@@ -1,0 +1,87 @@
+/* src/presentation/pages/mentor/MentorDashboardPage/components/AssignToLearnerModal.css */
+
+.assessments-list-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.assessment-item-c {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.assessment-item-c:hover {
+  background: #f8fafc;
+}
+
+.assessment-item-c.selected {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+
+.assessment-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+}
+
+.assessment-item-c.selected .assessment-icon {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.assessment-details {
+  flex: 1;
+}
+
+.assessment-details .title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.assessment-details .info {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.radio-circle {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assessment-item-c.selected .radio-circle {
+  border-color: #3b82f6;
+}
+
+.radio-dot {
+  width: 10px;
+  height: 10px;
+  background: #3b82f6;
+  border-radius: 50%;
+}
+
+.description-label {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: #64748b;
+}

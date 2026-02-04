@@ -1,6 +1,6 @@
 # Quick test for Gemini API key
-$apiKey = "AIzaSyC53Otwcfc6RIv2wRz-NmOWikbXhNPM_LY"
-$model = "gemini-1.5-flash"
+$apiKey = "AIzaSyB_YRM4zKSv6cgsld6bu69cDC5vIC8wAg8"
+$model = "gemini-2.5-flash"
 
 Write-Host "Testing Gemini API with key: $($apiKey.Substring(0,20))..." -ForegroundColor Cyan
 

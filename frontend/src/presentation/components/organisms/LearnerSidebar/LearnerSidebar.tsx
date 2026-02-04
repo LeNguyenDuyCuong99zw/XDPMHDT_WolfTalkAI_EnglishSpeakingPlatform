@@ -29,8 +29,8 @@ const learnerMenuItems: MenuItem[] = [
     icon: <LayoutDashboard size={20} strokeWidth={2} />,
   },
   {
-    path: "/learner/courses",
-    label: "Khóa học của tôi",
+    path: "/learner/assessments",
+    label: "Bài kiểm tra",
     icon: <BookOpen size={20} strokeWidth={2} />,
   },
   {

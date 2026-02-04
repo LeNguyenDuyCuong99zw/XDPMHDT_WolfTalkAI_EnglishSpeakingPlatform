@@ -25,7 +25,9 @@ import { ConversationPracticePage } from "./presentation/pages/mentor/Conversati
 import { LiveSessionPage } from "./presentation/pages/mentor/LiveSessionPage/LiveSessionPage";
 import { ProgressTrackingPage } from "./presentation/pages/mentor/ProgressTrackingPage/ProgressTrackingPage";
 import { PronunciationAnalysisPage } from "./presentation/pages/mentor/PronunciationAnalysisPage/PronunciationAnalysisPage";
+
 import { VocabularyManagementPage } from "./presentation/pages/mentor/VocabularyManagementPage/VocabularyManagementPage";
+import { GradingPage } from "./presentation/pages/mentor/GradingPage/GradingPage";
 
 /**
  * Admin & Mentor routes for http://localhost:3001

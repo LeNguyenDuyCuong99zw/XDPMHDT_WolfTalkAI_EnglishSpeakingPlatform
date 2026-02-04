@@ -12,10 +12,34 @@ import {
   Calendar,
   ArrowRight
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import './LearnerDashboardPage.css';
 
 export const LearnerDashboardPage: React.FC = () => {
   const { user } = useAuth();
+  const [latestAssessment, setLatestAssessment] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const fetchAssessments = async () => {
+      try {
+        const data = await import('../../../../services/learnerAssessmentAPI').then(m => m.learnerAssessmentAPI.getLearnerAssessments());
+        // Find first active assessment (ASSIGNED or IN_PROGRESS)
+        const active = data.find((a: any) => a.status === 'ASSIGNED' || a.status === 'IN_PROGRESS');
+        setLatestAssessment(active || null);
+      } catch (error) {
+        console.error("Error fetching assessments for dashboard:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAssessments();
+  }, []);
+
+  const handleStart = (id: number) => {
+    navigate(`/learner/assessment/${id}/take`);
+  };
 
   return (
     <div className="learner-dashboard1">
@@ -93,7 +117,7 @@ export const LearnerDashboardPage: React.FC = () => {
         {/* Left Column */}
         <div className="learner-dashboard__content-left1">
           
-          {/* Next Lesson Card */}
+          {/* Next Lesson / Assessment Card */}
           <section className="glass-card1 next-lesson-card1">
             <div className="card-header1">
               <div className="header-icon1">
@@ -103,20 +127,28 @@ export const LearnerDashboardPage: React.FC = () => {
                 <h3>Continue Learning</h3>
                 <p>Pick up where you left off</p>
               </div>
-              <button className="btn-continue1">
-                Resume <ArrowRight size={16} />
+              <button className="btn-continue1" onClick={() => latestAssessment ? handleStart(latestAssessment.assessmentId) : navigate('/learner/assessments')}>
+                {latestAssessment ? 'Resume' : 'View All'} <ArrowRight size={16} />
               </button>
             </div>
             
             <div className="lesson-progress-info1">
-              <div className="lesson-details1">
-                <span className="lesson-tag1">Unit 4 • Vocabulary</span>
-                <h4>Travel & Airport Essentials</h4>
-                <div className="progress-bar-container1">
-                  <div className="progress-bar1" style={{ width: '65%' }}></div>
+              {latestAssessment ? (
+                <div className="lesson-details1">
+                  <span className="lesson-tag1">{latestAssessment.level} • Assessment</span>
+                  <h4>{latestAssessment.title}</h4>
+                  <div className="progress-bar-container1">
+                    <div className="progress-bar1" style={{ width: latestAssessment.status === 'IN_PROGRESS' ? '50%' : '0%' }}></div>
+                  </div>
+                  <span className="progress-text1">{latestAssessment.status === 'IN_PROGRESS' ? 'In Progress' : 'Not Started'}</span>
                 </div>
-                <span className="progress-text1">65% Completed</span>
-              </div>
+              ) : (
+                <div className="lesson-details1">
+                  <span className="lesson-tag1">Overview</span>
+                  <h4>No active assessments</h4>
+                  <p style={{fontSize: '0.9rem', color: '#666'}}>Check your assessments list for completed items or wait for new assignments.</p>
+                </div>
+              )}
             </div>
           </section>
 
@@ -126,7 +158,7 @@ export const LearnerDashboardPage: React.FC = () => {
               <h3><Target size={20} /> Recommended for you</h3>
               <a href="#" className="view-all1">View all</a>
             </div>
-            
+            {/* ... keeping recommendations as placeholders ... */}
             <div className="activity-list1">
               <div className="activity-item1">
                 <div className="activity-icon1 bg-blue-100 text-blue-600">
@@ -135,17 +167,6 @@ export const LearnerDashboardPage: React.FC = () => {
                 <div className="activity-info1">
                   <h4>Daily Conversation Practice</h4>
                   <p>Speak for 5 mins about your day</p>
-                </div>
-                <button className="btn-action1">Start</button>
-              </div>
-
-              <div className="activity-item1">
-                <div className="activity-icon1 bg-purple-100 text-purple-600">
-                  <Trophy size={18} />
-                </div>
-                <div className="activity-info1">
-                  <h4>Weekly Quiz Challenge</h4>
-                  <p>Test your knowledge from Unit 3</p>
                 </div>
                 <button className="btn-action1">Start</button>
               </div>
@@ -162,7 +183,6 @@ export const LearnerDashboardPage: React.FC = () => {
               </select>
             </div>
             <div className="chart-placeholder1">
-              {/* Placeholder for a chart library like Recharts */}
               <div className="chart-bars1">
                 {[40, 65, 30, 85, 50, 70, 45].map((height, i) => (
                   <div key={i} className="chart-bar-col1">

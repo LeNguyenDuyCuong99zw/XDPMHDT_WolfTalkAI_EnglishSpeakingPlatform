@@ -1,4 +1,4 @@
-$apiKey = "AIzaSyD6A-t0ckg8cm2Sf6nmrkSmEoKyJwS5ATQ"
+$apiKey = "AIzaSyB_YRM4zKSv6cgsld6bu69cDC5vIC8wAg8"
 $models = @(
     "gemini-2.5-flash",
     "gemini-2.5-pro",

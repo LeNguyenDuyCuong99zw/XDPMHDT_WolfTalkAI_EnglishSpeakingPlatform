@@ -46,6 +46,9 @@ import ReadingComprehensionPage from "./pages/ReadingComprehensionPage";
 import GrammarExercisesPage from "./pages/GrammarExercisesPage";
 import AILearningIndexPage from "./pages/AILearningIndexPage";
 import { PronunciationPractice } from "./pronunciation";
+import { LearnerAssessmentsPage } from "./presentation/pages/learner/LearnerAssessmentsPage/LearnerAssessmentsPage";
+import { TakeAssessmentPage } from "./presentation/pages/learner/TakeAssessmentPage/TakeAssessmentPage";
+import { AssessmentResultPage } from "./presentation/pages/learner/AssessmentResultPage/AssessmentResultPage";
 
 import { useState, useEffect } from "react";
 
@@ -161,7 +164,6 @@ function App() {
               }
             />
 
-            {/* NEW Learner Dashboard Routes */}
             <Route
               path="/learner/dashboard"
               element={
@@ -170,15 +172,24 @@ function App() {
                 </LearnerLayout>
               }
             />
-             <Route
-              path="/learner/*"
+            <Route
+              path="/learner/assessments"
               element={
                 <LearnerLayout>
-                  <div style={{ padding: '20px' }}>
-                    <h2>Feature coming soon!</h2>
-                    <p>We are working hard to bring you this feature.</p>
-                  </div>
+                  <LearnerAssessmentsPage />
                 </LearnerLayout>
+              }
+            />
+            <Route
+              path="/learner/assessment/:assessmentId/take"
+              element={
+                <TakeAssessmentPage />
+              }
+            />
+            <Route
+              path="/learner/assessment/:attemptId/result"
+              element={
+                <AssessmentResultPage />
               }
             />
             <Route

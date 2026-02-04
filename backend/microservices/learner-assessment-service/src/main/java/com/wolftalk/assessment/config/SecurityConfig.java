@@ -21,8 +21,10 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:5173",
                 "http://localhost:3000",
+                "http://localhost:3001",
                 "http://127.0.0.1:5173",
-                "http://127.0.0.1:3000"));
+                "http://127.0.0.1:3000",
+                "http://127.0.0.1:3001"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
@@ -42,7 +44,7 @@ public class SecurityConfig {
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/actuator/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/assessments/**").permitAll()
+                .requestMatchers("/api/**").permitAll()
                 .anyRequest().authenticated());
 
         return http.build();

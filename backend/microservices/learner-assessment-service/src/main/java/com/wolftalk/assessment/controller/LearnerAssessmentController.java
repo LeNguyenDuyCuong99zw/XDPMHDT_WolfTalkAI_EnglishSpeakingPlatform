@@ -14,7 +14,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/learner/assessments")
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
 public class LearnerAssessmentController {
 

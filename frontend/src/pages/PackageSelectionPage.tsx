@@ -272,6 +272,12 @@ const PackageSelectionPage: React.FC = () => {
           <p className="subtitle">
             Nâng cấp tài khoản của bạn để mở khóa tất cả các tính năng cao cấp
           </p>
+          <p className="login-prompt" style={{ marginTop: '10px', fontSize: '0.95rem', color: '#666' }}>
+            Đã có tài khoản hoặc đã mua gói?{' '}
+            <a href="/learning/login" style={{ color: '#0066cc', textDecoration: 'none', fontWeight: 500 }}>
+              Đăng nhập ngay
+            </a>
+          </p>
         </div>
 
         {error && <div className="error-message">{error}</div>}

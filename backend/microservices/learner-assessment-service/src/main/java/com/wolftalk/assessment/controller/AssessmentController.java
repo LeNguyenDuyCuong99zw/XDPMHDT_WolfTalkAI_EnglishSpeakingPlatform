@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/assessments")
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
 public class AssessmentController {
 

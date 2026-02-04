@@ -2,10 +2,19 @@ package com.wolftalk.assessment.service;
 
 import com.wolftalk.assessment.dto.AssignAssessmentRequest;
 import com.wolftalk.assessment.dto.AssignAssessmentResponse;
+import com.wolftalk.assessment.dto.SubmissionDTO;
+import com.wolftalk.assessment.dto.SubmissionDetailDTO;
+import com.wolftalk.assessment.dto.GradeSubmissionRequest;
 import com.wolftalk.assessment.entity.Assessment;
 import com.wolftalk.assessment.entity.LearnerAssessmentAssignment;
+import com.wolftalk.assessment.entity.LearnerAssessment;
+import com.wolftalk.assessment.entity.LearnerAnswer;
+import com.wolftalk.assessment.entity.AssessmentQuestion;
 import com.wolftalk.assessment.repository.AssessmentRepository;
 import com.wolftalk.assessment.repository.LearnerAssessmentAssignmentRepository;
+import com.wolftalk.assessment.repository.LearnerAssessmentRepository;
+import com.wolftalk.assessment.repository.LearnerAnswerRepository;
+import com.wolftalk.assessment.repository.AssessmentQuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +32,9 @@ public class MentorAssessmentService {
 
     private final AssessmentRepository assessmentRepository;
     private final LearnerAssessmentAssignmentRepository assignmentRepository;
+    private final LearnerAssessmentRepository learnerAssessmentRepository;
+    private final LearnerAnswerRepository learnerAnswerRepository;
+    private final AssessmentQuestionRepository questionRepository;
 
     /**
      * Gán bài kiểm tra cho nhiều học viên
